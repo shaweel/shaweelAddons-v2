@@ -1,15 +1,10 @@
 package me.shaweel.shaweeladdons;
 
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public class ShaweelAddons implements ModInitializer {
-	public static final String MOD_ID = "shaweeladdons";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+public class ShaweelAddons implements ClientModInitializer {
 	@Override
-	public void onInitialize() {
-		LOGGER.info("Hello World!");
+	public void onInitializeClient() {
+		ModCommands.initialize();
 	}
 }

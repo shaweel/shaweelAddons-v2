@@ -15,7 +15,7 @@
 	"icon": "assets/shaweeladdons/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
+		"client": [
 			"me.shaweel.shaweeladdons.ShaweelAddons"
 		]
 	},

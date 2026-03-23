@@ -78,3 +78,19 @@ publishing {
 		// retrieving dependencies.
 	}
 }
+
+def localProperties = new Properties()
+def localPropertiesFile = file("local.properties")
+if (localPropertiesFile.exists()) {
+	localPropertiesFile.withInputStream {localProperties.load(it)}
+}
+
+loom {
+	runs {
+		client {
+			if (localProperties.hotswapAgentPath) {
+				vmArgs "-XX:+AllowEnhancedClassRedefinition"
+			}
+		}
+	}
+}

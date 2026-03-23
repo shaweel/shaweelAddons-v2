@@ -1,0 +1,11 @@
+{
+	"providers": [{
+		"type": "ttf",
+		"file": "shaweeladdons:adwaitasans.ttf",
+		"height": 9.0,
+		"ascent": 7,
+		"oversample": 6,
+		"shift": [0, 1],
+		"skip": ""
+	}]
+}

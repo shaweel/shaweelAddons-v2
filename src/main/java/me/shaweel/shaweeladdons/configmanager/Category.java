@@ -1,65 +1,159 @@
 package me.shaweel.shaweeladdons.configmanager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.Text;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class Category {
-	private static List<String> categories = new ArrayList<>();
+	private static List<Category> categories = new ArrayList<>();
 	public List<Feature> children = new ArrayList<>();
 
-	private final int margin = 6;
+	private final String name;
+	private final int index;
+
+	private static final int textSize = 9;
+
+	private static final int margin = 6;
+	private static final int xPadding = 40;
+	private static final int yPadding = 4;
+	private static final int activatedPadding = 2;
+
 	private final int y = margin;
 	private int x;
-	public final int xPadding = 20;
-	public final int yPadding = 4;
-	public final int activatedPadding = 2;
-	public final int squareMinX;
-	public final int squareMaxX;
-	public final int squareMinY;
-	public final int squareMaxY;
-	public final int textX;
-	public final int textY;
 
-	public Category(ConfigGui configGui, GuiGraphics graphics, String name) {
-		if (!categories.contains(name)) categories.add(name);
-		final int index = categories.indexOf(name);
+	private static HashMap<String, Boolean> expandedMap = new HashMap<>();
+	private boolean expanded = false;
+
+	private int squareMinX;
+	private int squareMaxX;
+	private final int squareMinY = y;
+	private int squareMaxY;
+
+	private int textX;
+	private int textY;
+
+	public Category(String name) {
+		this.name = name;
+		this.expanded = expandedMap.getOrDefault(name, false);
+
+		boolean alreadyExists = false;
+
+		for (Category category : categories) {
+			if (category.name.equals(this.name)) alreadyExists = true;
+		}
+
+		if (!alreadyExists) categories.add(this);
+		this.index = categories.indexOf(this);
+	}
+
+	public void render(ConfigGui configGui, GuiGraphics graphics) {
+		Log.debug(String.format("Rendering category \"%s\"", this.name));
+
 		this.x = margin * (index + 1);
 
-		for (String category : categories) {
+		for (Category category : categories) {
 			if (categories.indexOf(category) >= index) break;
-			this.x += getWidestStringWidth(configGui) + this.xPadding*2;
+			this.x += getWidestStringWidth(configGui) + xPadding;
 		}
 
 		this.squareMinX = this.x;
-		this.squareMinY = this.y;
-		this.squareMaxX = this.x + this.xPadding*2 + getWidestStringWidth(configGui);
-		this.squareMaxY = this.y + this.yPadding*2 + configGui.lineHeight;
+		this.squareMaxX = this.x + xPadding + getWidestStringWidth(configGui);
+		this.squareMaxY = this.y + yPadding*2 + textSize;
 
-		this.textX = (this.squareMaxX+this.squareMinX)/2 - Text.getStringWidth(name)/2;
-		this.textY = this.y + this.yPadding;
+		this.textX = (this.squareMaxX+this.squareMinX)/2 - Text.getStringWidth(this.name)/2;
+		this.textY = this.y + yPadding;
 
 		graphics.fill(squareMinX, squareMinY, squareMaxX, squareMaxY, configGui.backgroundColor);
-		graphics.fill(squareMinX, squareMaxY, squareMaxX, squareMaxY+activatedPadding, configGui.primaryColor);
 
-		Text.drawString(graphics, name, textX, textY, configGui.textColor);
+		if (expanded) {
+			renderAllFeatures(configGui, graphics);
+		} else {
+			graphics.fill(squareMinX, squareMaxY, squareMaxX, squareMaxY+activatedPadding, configGui.primaryColor);
+		}
+
+		Text.drawString(graphics, this.name, textSize, textX, textY, configGui.textColor);
+	}
+
+	public static void clearCategories() {
+		for (Category category : categories) {
+			expandedMap.put(category.name, category.expanded);
+		}
+		categories.clear();
+	}
+
+	public void toggleExpand() {
+		expanded = !expanded;
+	}
+
+	private void renderAllFeatures(ConfigGui configGui, GuiGraphics graphics) {
+		int lastY = this.squareMaxY;
+		for (Feature child : this.children) {
+			child.render(configGui, graphics, lastY);
+			lastY = child.getSquareMaxY();
+		}
+	}
+
+	public int getSquareMinX() {
+		return this.squareMinX;
+	}
+
+	public int getSquareMaxX() {
+		return this.squareMaxX;
+	}
+
+	public int getSquareMinY() {
+		return this.squareMinY;
+	}
+
+	public int getSquareMaxY() {
+		return this.squareMaxY;
+	}
+
+	public int getXPadding() {
+		return xPadding;
+	}
+
+	public int getYPadding() {
+		return yPadding;
+	}
+
+	public int getTextX() {
+		return this.textX;
+	}
+
+	public int getTextY() {
+		return this.textY;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public boolean isInside(double x, double y) {
+		return (x > this.squareMinX && x < this.squareMaxX && y > this.squareMinY && y < this.squareMaxY);
+	}
+
+	public static List<Category> getAllCategories() {
+		return categories;
 	}
 
 	public void registerChild(Feature child) {
-		children.add(child);
+		this.children.add(child);
 	}
 
 	public List<Feature> getChildren() {
-		return children;
+		return this.children;
 	}
 
 	private static int getWidestStringWidth(ConfigGui configGui) {
 		int widest = 0;
 
-		for (String category : categories) {
-			int width = Text.getStringWidth(category);
+		for (Category category : categories) {
+			int width = Text.getStringWidth(category.name);
 			if (width > widest) widest = width;
 		}
 		

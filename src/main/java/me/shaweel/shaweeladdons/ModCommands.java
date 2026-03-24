@@ -24,7 +24,7 @@ public class ModCommands {
 	 */
 	private static void registerMainCommand(CommandDispatcher<FabricClientCommandSource> dispatcher, String commandName) {
 		dispatcher.register(ClientCommandManager.literal(commandName)
-		.then(ClientCommandManager.literal("debugMode").executes(context -> debugModeCommand(context)))
+		.then(ClientCommandManager.literal("debugmode").executes(context -> debugModeCommand(context)))
 		.then(ClientCommandManager.literal("config").executes(context -> configCommand(context)))
 		.executes(context -> configCommand(context)));
 	}

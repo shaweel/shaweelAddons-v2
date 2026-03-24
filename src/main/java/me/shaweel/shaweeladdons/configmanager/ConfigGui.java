@@ -1,9 +1,8 @@
 package me.shaweel.shaweeladdons.configmanager;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
 public class ConfigGui extends Screen {
@@ -12,9 +11,10 @@ public class ConfigGui extends Screen {
 	public final int primaryColor = 0xffffcfda;
 	public final int backgroundColor = 0xff141414;
 	public final int textColor = 0xffffffff;
-	public final int lineHeight = 9;
 
-	public final Font font = Minecraft.getInstance().font;
+	private Category generalCategory;
+	private Category dungeonsCategory;
+	private Category idekCategory;
 
 	public ConfigGui() {
 		super(Component.literal("shaweelAddonsConfigGui"));
@@ -23,15 +23,49 @@ public class ConfigGui extends Screen {
 	@Override
 	protected void init() {
 		super.init();
+		
+		Category.clearCategories();
+		this.generalCategory = new Category("General");
+		this.dungeonsCategory = new Category("Dungeons");
+		this.idekCategory = new Category("Idek atp");
+
+		new Feature("potato1", this.generalCategory);
+		new Feature("potato2", this.generalCategory);
+
+		new Feature("potato3", this.dungeonsCategory);
+		new Feature("potato4", this.dungeonsCategory);
+
+		new Feature("potato5", this.idekCategory);
+		new Feature("potato6", this.idekCategory);
 	}
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 		graphics.fill(0, 0, this.width, this.height, 0x00000000);
-		Category generalCategory = new Category(this, graphics, "General");
-		new Feature(this, graphics, "Feature1", generalCategory);
-		new Category(this, graphics, "Dungeons");
-		new Category(this, graphics, "Idek atp");
+
+		this.generalCategory.render(this, graphics);
+		this.dungeonsCategory.render(this, graphics);
+		this.idekCategory.render(this, graphics);
+
 		super.render(graphics, mouseX, mouseY, delta);
+	}
+
+	@Override
+	public boolean mouseClicked(MouseButtonEvent event, boolean consumed) {
+		if (consumed) return super.mouseClicked(event, consumed);
+
+		if (event.button() != 1) return super.mouseClicked(event, consumed);
+
+		Category hoveredCategory = null;
+		for (Category category : Category.getAllCategories()) {
+			if (category.isInside(event.x(), event.y())) hoveredCategory = category;
+		}
+
+		if (hoveredCategory == null) return super.mouseClicked(event, consumed);
+
+		hoveredCategory.toggleExpand();
+		consumed = true;
+
+		return super.mouseClicked(event, consumed);
 	}
 }

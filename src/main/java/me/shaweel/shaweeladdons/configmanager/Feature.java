@@ -1,7 +1,5 @@
 package me.shaweel.shaweeladdons.configmanager;
 
-
-import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.Text;
 import net.minecraft.client.gui.GuiGraphics;
 
@@ -9,7 +7,8 @@ public class Feature {
 	private String name;
 	private Category parent;
 
-	private static final int textSize = 7;
+	private static final int fontSize = 7;
+	private static final float fontWeight = 2.0f;
 
 	private int squareMinX;
 	private int squareMaxX;
@@ -27,18 +26,16 @@ public class Feature {
 	}
 
 	public void render(ConfigGui configGui, GuiGraphics graphics, int y) {
-		Log.debug(String.format("Rendering feature \"%s\" in category \"%s\"", this.name, this.parent.getName()));
-
 		this.squareMinX = parent.getSquareMinX();
 		this.squareMaxX = parent.getSquareMaxX();
 		this.squareMinY = y;
-		this.squareMaxY = y + this.parent.getYPadding()*2 + textSize;
+		this.squareMaxY = y + this.parent.getYPadding()*2 + fontSize;
 
-		this.textX = (this.squareMaxX+this.squareMinX)/2 - Text.getStringWidth(this.name)/2;
+		this.textX = (this.squareMaxX+this.squareMinX)/2 - Text.getStringWidth(this.name, fontSize, fontWeight)/2;
 		this.textY = y + this.parent.getYPadding();
 
 		graphics.fill(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, configGui.backgroundColor);
-		Text.drawString(graphics, this.name, textSize, this.textX, this.textY, configGui.textColor);
+		Text.drawString(graphics, this.name, fontSize, fontWeight, this.textX, this.textY, configGui.textColor);
 	}
 
 	public int getSquareMinX() {

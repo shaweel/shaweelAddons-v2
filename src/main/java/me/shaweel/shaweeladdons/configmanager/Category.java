@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.Text;
 import net.minecraft.client.gui.GuiGraphics;
 
@@ -15,7 +14,8 @@ public class Category {
 	private final String name;
 	private final int index;
 
-	private static final int textSize = 9;
+	private static final int fontSize = 9;
+	private static final float fontWeight = 2.0f;
 
 	private static final int margin = 6;
 	private static final int xPadding = 40;
@@ -51,8 +51,6 @@ public class Category {
 	}
 
 	public void render(ConfigGui configGui, GuiGraphics graphics) {
-		Log.debug(String.format("Rendering category \"%s\"", this.name));
-
 		this.x = margin * (index + 1);
 
 		for (Category category : categories) {
@@ -62,9 +60,9 @@ public class Category {
 
 		this.squareMinX = this.x;
 		this.squareMaxX = this.x + xPadding + getWidestStringWidth(configGui);
-		this.squareMaxY = this.y + yPadding*2 + textSize;
+		this.squareMaxY = this.y + yPadding*2 + fontSize;
 
-		this.textX = (this.squareMaxX+this.squareMinX)/2 - Text.getStringWidth(this.name)/2;
+		this.textX = (this.squareMaxX+this.squareMinX)/2 - Text.getStringWidth(this.name, fontSize, fontWeight)/2;
 		this.textY = this.y + yPadding;
 
 		graphics.fill(squareMinX, squareMinY, squareMaxX, squareMaxY, configGui.backgroundColor);
@@ -75,7 +73,7 @@ public class Category {
 			graphics.fill(squareMinX, squareMaxY, squareMaxX, squareMaxY+activatedPadding, configGui.primaryColor);
 		}
 
-		Text.drawString(graphics, this.name, textSize, textX, textY, configGui.textColor);
+		Text.drawString(graphics, this.name, fontSize, fontWeight, textX, textY, configGui.textColor);
 	}
 
 	public static void clearCategories() {
@@ -153,7 +151,7 @@ public class Category {
 		int widest = 0;
 
 		for (Category category : categories) {
-			int width = Text.getStringWidth(category.name);
+			int width = Text.getStringWidth(category.name, fontSize, fontWeight);
 			if (width > widest) widest = width;
 		}
 		

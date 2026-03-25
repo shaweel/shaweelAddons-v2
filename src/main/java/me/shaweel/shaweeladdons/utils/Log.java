@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
 public class Log {
-	static boolean debugMode = false;
+	private static boolean debugMode = false;
 	/**
 	 * Prints a message with the [shaweelAddons] prefix to chat
 	 * @param message the message to print

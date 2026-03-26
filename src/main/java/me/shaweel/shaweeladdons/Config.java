@@ -1,6 +1,6 @@
 package me.shaweel.shaweeladdons;
 
-import me.shaweel.shaweeladdons.configmanager.ConfigGui;
+import me.shaweel.shaweeladdons.config.ConfigGui;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 public class Config {

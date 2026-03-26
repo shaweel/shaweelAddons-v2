@@ -1,5 +1,6 @@
-package me.shaweel.shaweeladdons.configmanager;
+package me.shaweel.shaweeladdons.config.widgets;
 
+import me.shaweel.shaweeladdons.config.ConfigGui;
 import me.shaweel.shaweeladdons.utils.Text;
 import net.minecraft.client.gui.GuiGraphics;
 

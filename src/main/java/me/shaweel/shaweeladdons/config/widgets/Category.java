@@ -1,9 +1,10 @@
-package me.shaweel.shaweeladdons.configmanager;
+package me.shaweel.shaweeladdons.config.widgets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.shaweel.shaweeladdons.config.ConfigGui;
 import me.shaweel.shaweeladdons.utils.Text;
 import net.minecraft.client.gui.GuiGraphics;
 

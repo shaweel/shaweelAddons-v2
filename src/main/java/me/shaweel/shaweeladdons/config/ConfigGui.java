@@ -1,5 +1,7 @@
-package me.shaweel.shaweeladdons.configmanager;
+package me.shaweel.shaweeladdons.config;
 
+import me.shaweel.shaweeladdons.config.widgets.Category;
+import me.shaweel.shaweeladdons.config.widgets.Feature;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -50,7 +52,7 @@ public class ConfigGui extends Screen {
 		super.render(graphics, mouseX, mouseY, delta);
 	}
 
-	@Override
+	/*@Override
 	public boolean mouseClicked(MouseButtonEvent event, boolean consumed) {
 		if (consumed) return super.mouseClicked(event, consumed);
 
@@ -67,5 +69,5 @@ public class ConfigGui extends Screen {
 		consumed = true;
 
 		return super.mouseClicked(event, consumed);
-	}
+	}*/
 }

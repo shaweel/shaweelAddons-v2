@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.shaweel.shaweeladdons.config.ConfigGui;
-import me.shaweel.shaweeladdons.utils.Text;
+import me.shaweel.shaweeladdons.config.NanoVG.NanoVGPiPRenderer;
+import me.shaweel.shaweeladdons.config.NanoVG.NanoVGRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class Category {
@@ -13,29 +14,29 @@ public class Category {
 	public List<Feature> children = new ArrayList<>();
 
 	private final String name;
-	private final int index;
+	private final float index;
 
 	private static final int fontSize = 9;
-	private static final float fontWeight = 2.0f;
+	private static final int fontWeight = 700;
 
-	private static final int margin = 6;
-	private static final int xPadding = 40;
-	private static final int yPadding = 4;
-	private static final int activatedPadding = 2;
+	private static final float margin = 6;
+	private static final float xPadding = 40;
+	private static final float yPadding = 4;
+	private static final float activatedPadding = 2;
 
-	private final int y = margin;
-	private int x;
+	private final float y = margin;
+	private float x;
 
 	private static HashMap<String, Boolean> expandedMap = new HashMap<>();
 	private boolean expanded = false;
 
-	private int squareMinX;
-	private int squareMaxX;
-	private final int squareMinY = y;
-	private int squareMaxY;
+	private float squareMinX;
+	private float squareMaxX;
+	private final float squareMinY = y;
+	private float squareMaxY;
 
-	private int textX;
-	private int textY;
+	private float textX;
+	private float textY;
 
 	public Category(String name) {
 		this.name = name;
@@ -51,7 +52,7 @@ public class Category {
 		this.index = categories.indexOf(this);
 	}
 
-	public void render(ConfigGui configGui, GuiGraphics graphics) {
+	public void render(ConfigGui configGui) {
 		this.x = margin * (index + 1);
 
 		for (Category category : categories) {
@@ -63,18 +64,28 @@ public class Category {
 		this.squareMaxX = this.x + xPadding + getWidestStringWidth(configGui);
 		this.squareMaxY = this.y + yPadding*2 + fontSize;
 
-		this.textX = (this.squareMaxX+this.squareMinX)/2 - Text.getStringWidth(this.name, fontSize, fontWeight)/2;
+		this.textX = (this.squareMaxX+this.squareMinX)/2 - NanoVGRenderer.getStringWidth(this.name, fontSize, fontWeight)/2;
 		this.textY = this.y + yPadding;
 
-		graphics.fill(squareMinX, squareMinY, squareMaxX, squareMaxY, configGui.backgroundColor);
+		NanoVGRenderer.drawRect(squareMinX, squareMinY, squareMaxX, squareMaxY, configGui.backgroundColor);
 
 		if (expanded) {
-			renderAllFeatures(configGui, graphics);
+			renderAllFeatures(configGui);
 		} else {
-			graphics.fill(squareMinX, squareMaxY, squareMaxX, squareMaxY+activatedPadding, configGui.primaryColor);
+			NanoVGRenderer.drawRect(squareMinX, squareMaxY, squareMaxX, squareMaxY+activatedPadding, configGui.primaryColor);
 		}
 
-		Text.drawString(graphics, this.name, fontSize, fontWeight, textX, textY, configGui.textColor);
+		NanoVGRenderer.drawString(this.name, textX, textY, fontSize, fontWeight, configGui.textColor);
+	}
+
+	public static void renderAll(ConfigGui configGui, GuiGraphics guiGraphics) {
+		NanoVGPiPRenderer.drawNanoVG(guiGraphics, () -> renderPip(configGui));
+	}
+
+	private static void renderPip(ConfigGui configGui) {
+		for (Category category : categories) {
+			category.render(configGui);
+		}
 	}
 
 	public static void clearCategories() {
@@ -88,43 +99,43 @@ public class Category {
 		expanded = !expanded;
 	}
 
-	private void renderAllFeatures(ConfigGui configGui, GuiGraphics graphics) {
-		int lastY = this.squareMaxY;
+	private void renderAllFeatures(ConfigGui configGui) {
+		float lastY = this.squareMaxY - 1;
 		for (Feature child : this.children) {
-			child.render(configGui, graphics, lastY);
-			lastY = child.getSquareMaxY();
+			child.render(configGui, lastY);
+			lastY = child.getSquareMaxY() - 1;
 		}
 	}
 
-	public int getSquareMinX() {
+	public float getSquareMinX() {
 		return this.squareMinX;
 	}
 
-	public int getSquareMaxX() {
+	public float getSquareMaxX() {
 		return this.squareMaxX;
 	}
 
-	public int getSquareMinY() {
+	public float getSquareMinY() {
 		return this.squareMinY;
 	}
 
-	public int getSquareMaxY() {
+	public float getSquareMaxY() {
 		return this.squareMaxY;
 	}
 
-	public int getXPadding() {
+	public float getXPadding() {
 		return xPadding;
 	}
 
-	public int getYPadding() {
+	public float getYPadding() {
 		return yPadding;
 	}
 
-	public int getTextX() {
+	public float getTextX() {
 		return this.textX;
 	}
 
-	public int getTextY() {
+	public float getTextY() {
 		return this.textY;
 	}
 
@@ -148,11 +159,11 @@ public class Category {
 		return this.children;
 	}
 
-	private static int getWidestStringWidth(ConfigGui configGui) {
-		int widest = 0;
+	private static float getWidestStringWidth(ConfigGui configGui) {
+		float widest = 0;
 
 		for (Category category : categories) {
-			int width = Text.getStringWidth(category.name, fontSize, fontWeight);
+			float width = NanoVGRenderer.getStringWidth(category.name, fontSize, fontWeight);
 			if (width > widest) widest = width;
 		}
 		

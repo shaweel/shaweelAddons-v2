@@ -12,6 +12,7 @@ public class ConfigGui extends Screen {
 
 	public final int primaryColor = 0xffffcfda;
 	public final int backgroundColor = 0xff141414;
+	public final int seperatorColor = 0xff2a2a2a;
 	public final int textColor = 0xffffffff;
 
 	private Category generalCategory;
@@ -42,17 +43,13 @@ public class ConfigGui extends Screen {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		graphics.fill(0, 0, this.width, this.height, 0x00000000);
-
-		this.generalCategory.render(this, graphics);
-		this.dungeonsCategory.render(this, graphics);
-		this.idekCategory.render(this, graphics);
-
-		super.render(graphics, mouseX, mouseY, delta);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+		guiGraphics.fill(0, 0, this.width, this.height, 0x00000000);
+		Category.renderAll(this, guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, delta);
 	}
 
-	/*@Override
+	@Override
 	public boolean mouseClicked(MouseButtonEvent event, boolean consumed) {
 		if (consumed) return super.mouseClicked(event, consumed);
 
@@ -69,5 +66,5 @@ public class ConfigGui extends Screen {
 		consumed = true;
 
 		return super.mouseClicked(event, consumed);
-	}*/
+	}
 }

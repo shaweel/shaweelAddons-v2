@@ -1,3 +1,5 @@
+import org.gradle.internal.os.OperatingSystem
+
 plugins {
 	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
 	id 'maven-publish'
@@ -8,6 +10,20 @@ group = project.maven_group
 
 base {
 	archivesName = project.archives_base_name
+}
+
+switch (OperatingSystem.current()) {
+	case OperatingSystem.LINUX:
+		project.ext.lwjglNatives = "natives-linux"
+		break
+	case OperatingSystem.WINDOWS:
+		project.ext.lwjglNatives = "natives-windows"
+		break
+	case OperatingSystem.MAC_OS:
+		project.ext.lwjglNatives = System.getProperty("os.arch").contains("aarch64")
+			? "natives-macos-arm64"
+			: "natives-macos"
+		break
 }
 
 repositories {
@@ -25,10 +41,10 @@ dependencies {
 		parchment("org.parchmentmc.data:parchment-1.21.10:2025.10.12@zip")
 	}
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
+
+	include implementation("org.lwjgl:lwjgl-nanovg:${project.nanovg_version}")
+	runtimeOnly "org.lwjgl:lwjgl-nanovg:${project.nanovg_version}:${lwjglNatives}"
 }
 
 processResources {

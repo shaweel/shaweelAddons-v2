@@ -1,23 +1,29 @@
 package me.shaweel.shaweeladdons.config.widgets;
 
 import me.shaweel.shaweeladdons.config.ConfigGui;
-import me.shaweel.shaweeladdons.utils.Text;
-import net.minecraft.client.gui.GuiGraphics;
+import me.shaweel.shaweeladdons.config.NanoVG.NanoVGRenderer;
 
 public class Feature {
 	private String name;
 	private Category parent;
 
 	private static final int fontSize = 7;
-	private static final float fontWeight = 2.0f;
+	private static final int fontWeight = 700;
+	private static final float seperatorSize = 0.5f;
+	private static final float seperatorPadding = 3f;
 
-	private int squareMinX;
-	private int squareMaxX;
-	private int squareMinY;
-	private int squareMaxY;
+	private float seperatorMinX;
+	private float seperatorMaxX;
+	private float seperatorMinY;
+	private float seperatorMaxY;
 
-	private int textX;
-	private int textY;
+	private float squareMinX;
+	private float squareMaxX;
+	private float squareMinY;
+	private float squareMaxY;
+
+	private float textX;
+	private float textY;
 
 	public Feature(String name, Category parent) {
 		this.name = name;
@@ -26,40 +32,48 @@ public class Feature {
 		this.parent.registerChild(this);
 	}
 
-	public void render(ConfigGui configGui, GuiGraphics graphics, int y) {
+	public void render(ConfigGui configGui, float y) {
+		this.seperatorMinY = y;
+		this.seperatorMaxY = y + seperatorSize;
+
 		this.squareMinX = parent.getSquareMinX();
 		this.squareMaxX = parent.getSquareMaxX();
-		this.squareMinY = y;
-		this.squareMaxY = y + this.parent.getYPadding()*2 + fontSize;
+		this.squareMinY = seperatorMaxY;
+		this.squareMaxY = seperatorMaxY + this.parent.getYPadding()*2 + fontSize;
 
-		this.textX = (this.squareMaxX+this.squareMinX)/2 - Text.getStringWidth(this.name, fontSize, fontWeight)/2;
+		this.seperatorMinX = squareMinX + seperatorPadding;
+		this.seperatorMaxX = squareMaxX - seperatorPadding;
+
+		this.textX = (this.squareMaxX+this.squareMinX)/2 - NanoVGRenderer.getStringWidth(this.name, fontSize, fontWeight)/2;
 		this.textY = y + this.parent.getYPadding();
 
-		graphics.fill(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, configGui.backgroundColor);
-		Text.drawString(graphics, this.name, fontSize, fontWeight, this.textX, this.textY, configGui.textColor);
+		NanoVGRenderer.drawRect(this.seperatorMinX, this.seperatorMinY, this.seperatorMaxX, this.seperatorMaxY, 
+			configGui.seperatorColor);
+		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, configGui.backgroundColor);
+		NanoVGRenderer.drawString(this.name, this.textX, this.textY, fontSize, fontWeight, configGui.textColor);
 	}
 
-	public int getSquareMinX() {
+	public float getSquareMinX() {
 		return squareMinX;
 	}
 
-	public int getSquareMaxX() {
+	public float getSquareMaxX() {
 		return squareMaxX;
 	}
 
-	public int getSquareMinY() {
+	public float getSquareMinY() {
 		return squareMinY;
 	}
 
-	public int getSquareMaxY() {
+	public float getSquareMaxY() {
 		return squareMaxY;
 	}
 
-	public int getTextX() {
+	public float getTextX() {
 		return textX;
 	}
 
-	public int getTextY() {
+	public float getTextY() {
 		return textY;
 	}
 

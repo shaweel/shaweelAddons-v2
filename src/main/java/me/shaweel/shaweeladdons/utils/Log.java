@@ -1,11 +1,13 @@
 package me.shaweel.shaweeladdons.utils;
 
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
 public class Log {
-	private static boolean debugMode = false;
+	private final static boolean isDevelopmentEnvironment = FabricLoader.getInstance().isDevelopmentEnvironment();
+	private static boolean debugMode = isDevelopmentEnvironment;
 	/**
 	 * Prints a message with the [shaweelAddons] prefix to chat
 	 * @param message the message to print
@@ -39,7 +41,18 @@ public class Log {
 		Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §4[ERROR] §7"+message), false);
 	}
 
+	/**
+	 * Prints a message with the [shaweelAddons] [WARN] prefix to chat
+	 * @param message the message to print
+	 */
+	public static void warn(String message) {
+		Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §6[WARNING] §7"+message), false);
+	}
+
 	public static void toggleDebugMode() {
+		if (!isDevelopmentEnvironment) {
+			warn("You're currently not in a development environment. Debug Mode is meant to be used when debugging the mod and is not intended for normal use.");
+		}
 		if (debugMode) {
 			debugMode = false;
 			pseudoDebug("Debug mode has been §cdeactivated");

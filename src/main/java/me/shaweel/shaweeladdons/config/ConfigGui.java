@@ -51,20 +51,7 @@ public class ConfigGui extends Screen {
 
 	@Override
 	public boolean mouseClicked(MouseButtonEvent event, boolean consumed) {
-		if (consumed) return super.mouseClicked(event, consumed);
-
-		if (event.button() != 1) return super.mouseClicked(event, consumed);
-
-		Category hoveredCategory = null;
-		for (Category category : Category.getAllCategories()) {
-			if (category.isInside(event.x(), event.y())) hoveredCategory = category;
-		}
-
-		if (hoveredCategory == null) return super.mouseClicked(event, consumed);
-
-		hoveredCategory.toggleExpand();
-		consumed = true;
-
+		consumed = Mouse.handleMouseClick(this, event, consumed);
 		return super.mouseClicked(event, consumed);
 	}
 }

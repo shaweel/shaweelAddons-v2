@@ -1,4 +1,4 @@
-## 1. ~/.minecraft/config/shaweeladdons saving
+## 1. rewrite that one god damn method
 ## 2. Dynamic feature bottom bar color
 ## 3. Add possible children to Feature
 - SwitchButton

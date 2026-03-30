@@ -1,11 +1,11 @@
 package me.shaweel.shaweeladdons.config.widgets;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
+import me.shaweel.shaweeladdons.config.ConfigFile;
 import me.shaweel.shaweeladdons.config.ConfigGui;
 import me.shaweel.shaweeladdons.config.ConfigWidget;
 import me.shaweel.shaweeladdons.utils.Easing;
@@ -14,7 +14,7 @@ import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGPiPRenderer;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class Category extends ConfigWidget<ConfigGui> {
+public class Category extends ConfigWidget<ConfigGui, Void> {
 	private static List<Category> categories = new ArrayList<>();
 	public List<Feature> children = new ArrayList<>();
 
@@ -34,8 +34,6 @@ public class Category extends ConfigWidget<ConfigGui> {
 	private float y;
 	private float x;
 
-	private static HashMap<String, Boolean> expandedMap = new HashMap<>();
-
 	private float squareMinX;
 	private float squareMaxX;
 	private float squareMinY;
@@ -50,9 +48,9 @@ public class Category extends ConfigWidget<ConfigGui> {
 	private float lastLowestPoint;
 	private float expandGoal;
 
-	private boolean expanded = false;
-	private boolean expanding = false;
-	private boolean collapsing = false;
+	private Boolean expanded = false;
+	private Boolean expanding = false;
+	private Boolean collapsing = false;
 
 	private void calculateCoordinates() {
 		this.x = MARGIN * (index + 1);
@@ -73,12 +71,12 @@ public class Category extends ConfigWidget<ConfigGui> {
 		this.textY = this.y + Y_PADDING;
 	}
 	
-	public Category(ConfigGui configGui, String name) {
+	public Category(String name, ConfigGui parent) {
 		this.name = name;
-		this.expanded = expandedMap.getOrDefault(name, false);
-		this.parent = configGui;
+		this.parent = parent;
+		this.expanded = Boolean.TRUE.equals(ConfigFile.readFromConfig(name + ".expanded"));
 
-		boolean alreadyExists = false;
+		Boolean alreadyExists = false;
 
 		for (Category category : categories) {
 			if (category.name.equals(this.name)) alreadyExists = true;
@@ -183,28 +181,12 @@ public class Category extends ConfigWidget<ConfigGui> {
 		});
 	}
 
-	private void saveExpandedStatus() {
-		boolean expanded = this.expanded;
-
-		if (this.expanding) {
-			expanded = true;
-		} else if (this.collapsing) {
-			expanded = false;
-		}
-
-		expandedMap.put(this.name, expanded);
-	}
-
 	public static void clearCategories() {
-		for (Category category : categories) {
-			category.saveExpandedStatus();
-		}
-
 		categories.clear();
 	}
 
 	@Override
-	public boolean onClick(int button) {
+	public Boolean onClick(int button) {
 		if (button != GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
 			return false;
 		}
@@ -222,12 +204,23 @@ public class Category extends ConfigWidget<ConfigGui> {
 			this.collapsing = false;
 		}
 
+		ConfigFile.updateConfig();
 		return true;
 	}
 
 	@Override
-	public boolean isInHitbox(double x, double y) {
+	public Boolean isInHitbox(double x, double y) {
 		return (x > this.squareMinX && x < this.squareMaxX && y > this.squareMinY && y < this.squareMaxY);
+	}
+
+	@Override
+	public Void getValue() {
+		return null;
+	}
+
+	@Override
+	public Boolean getExpanded() {
+		return this.expanded && !this.collapsing || this.expanding;
 	}
 
 	private float getLowestExpandedPoint() {
@@ -282,6 +275,7 @@ public class Category extends ConfigWidget<ConfigGui> {
 		return this.textY;
 	}
 
+	@Override
 	public String getName() {
 		return this.name;
 	}

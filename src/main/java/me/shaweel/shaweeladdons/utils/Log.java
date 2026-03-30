@@ -6,8 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
 public class Log {
-	private final static boolean isDevelopmentEnvironment = FabricLoader.getInstance().isDevelopmentEnvironment();
-	private static boolean debugMode = isDevelopmentEnvironment;
+	private final static Boolean isDevelopmentEnvironment = FabricLoader.getInstance().isDevelopmentEnvironment();
+	private static Boolean debugMode = isDevelopmentEnvironment;
 	/**
 	 * Prints a message with the [shaweelAddons] prefix to chat.
 	 * @param message the message to print

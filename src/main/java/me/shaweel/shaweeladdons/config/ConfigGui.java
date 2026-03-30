@@ -13,7 +13,7 @@ public class ConfigGui extends Screen {
 	public final int backgroundColor = 0xff141414;
 	public final int textColor = 0xffffffff;
 
-	private boolean openConfig = false;
+	private Boolean openConfig = false;
 
 	private Category generalCategory;
 	private Category dungeonsCategory;
@@ -38,9 +38,9 @@ public class ConfigGui extends Screen {
 		super.init();
 		
 		Category.clearCategories();
-		this.generalCategory = new Category(this, "General");
-		this.dungeonsCategory = new Category(this, "Dungeons");
-		this.idekCategory = new Category(this, "Idek atp");
+		this.generalCategory = new Category("General", this);
+		this.dungeonsCategory = new Category("Dungeons", this);
+		this.idekCategory = new Category("idek atp", this);
 
 		new Feature("Click GUI", this.generalCategory);
 		new Feature("Placeholder", this.generalCategory);

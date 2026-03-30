@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
+import me.shaweel.shaweeladdons.config.ConfigFile;
 import me.shaweel.shaweeladdons.config.ConfigGui;
 import me.shaweel.shaweeladdons.config.ConfigWidget;
 import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
-public class Feature extends ConfigWidget<Category> {
+public class Feature extends ConfigWidget<Category, Boolean> {
 	private String name;
 	private int index;
 	private Category parent;
@@ -33,18 +34,19 @@ public class Feature extends ConfigWidget<Category> {
 	private float lastOpacity = 0;
 
 	private long lastToggleTime;
-	private boolean toggled = false;
-	private boolean enabling = false;
-	private boolean disabling = false;
+	private Boolean toggled = false;
+	private Boolean enabling = false;
+	private Boolean disabling = false;
 
 	private float toggleGoal;
 
 	public Feature(String name, Category parent) {
 		this.name = name;
-		this.parent = parent;
+		this.parent = parent;		
+		this.toggled = Boolean.TRUE.equals(ConfigFile.readFromConfig(parent.getName() + "." + name + ".value"));
 		this.configGui = this.parent.getParent();
 
-		boolean alreadyExists = false;
+		Boolean alreadyExists = false;
 
 		for (Feature feature : this.parent.getChildren()) {
 			if (feature.name.equals(this.name)) alreadyExists = true;
@@ -128,7 +130,7 @@ public class Feature extends ConfigWidget<Category> {
 	}
 
 	@Override
-	public boolean onClick(int button) {
+	public Boolean onClick(int button) {
 		if (button != GLFW.GLFW_MOUSE_BUTTON_LEFT) {
 			return false;
 		}
@@ -146,13 +148,29 @@ public class Feature extends ConfigWidget<Category> {
 			this.disabling = false;
 		}
 
+		ConfigFile.updateConfig();
 		return true;
 	}
 
 	@Override
-	public boolean isInHitbox(double x, double y) {
+	public List<ConfigWidget<?, ?>> getChildren() {
+		return null;
+	}		
+
+	@Override
+	public Boolean isInHitbox(double x, double y) {
 		return (x > this.squareMinX && x < this.squareMaxX &&
 			y > this.squareMinY && y < this.squareMaxY && y < this.parent.getLowestPoint());
+	}
+
+	@Override
+	public Boolean getValue() {
+		return this.toggled && !this.disabling || this.enabling;
+	}
+
+	@Override
+	public Boolean getExpanded() {
+		return null;
 	}
 
 	public float getStringWidth(String string) {
@@ -183,16 +201,12 @@ public class Feature extends ConfigWidget<Category> {
 		return this.textY;
 	}
 
+	@Override
 	public String getName() {
 		return this.name;
 	}
 
 	public Category getParent() {
 		return this.parent;
-	}
-
-	@Override
-	public List<ConfigWidget<?>> getChildren() {
-		return null;
 	}
 }

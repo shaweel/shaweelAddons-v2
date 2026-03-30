@@ -16,12 +16,18 @@ jobs:
         with:
           java-version: "21"
           distribution: "temurin"
+
       - name: Build the shaweelAddons .jar file
         run: | 
           chmod +x ./gradlew
           ./gradlew build
+
+      - name: Fetch modVersion from gradle.properties
+        run: |
+          echo "MOD_VERSION=$(./gradlew properties -q | grep '^modVersion:' | awk '{print $2}')" >> $GITHUB_ENV
+
       - name: Upload the shaweelAddons .jar file
         uses: actions/upload-artifact@v6
         with:
-          name: "shaweelAddons build #${{ github.run_number }}"
-          path: build/libs/
+          name: "shaweelAddons-v${{ env.MOD_VERSION }}-build${{ github.run_number }}"
+          path: build/libs/shaweeladdons-${{ env.MOD_VERSION }}.jar

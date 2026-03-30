@@ -1,3 +1,11 @@
-1. Move mouse behaviour to shaweeladdons.config.Mouse.initialize
-2. Add animations to expanding/collapsing Categories using GuiGraphics Scissors
-3. Add toggling of features including saving to .minecraft/config/shaweelAddons and animation
+## 1. ~/.minecraft/config/shaweeladdons saving
+## 2. Dynamic feature bottom bar color
+## 3. Add possible children to Feature
+- SwitchButton
+- CollapsibleGroup - same possible children as Feature excluding CollapsibleGroup
+- InputBox
+- KeybindButton
+- Button
+- ColorButton
+- Dropdown
+- Slider

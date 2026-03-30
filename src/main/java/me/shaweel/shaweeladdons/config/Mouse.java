@@ -1,10 +1,36 @@
 package me.shaweel.shaweeladdons.config;
 
+import java.util.List;
+
 import me.shaweel.shaweeladdons.config.widgets.Category;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 
 public class Mouse {
+	/**
+	 * Gets the hovered ConfigWidget in x and y
+	 * @param widgets The widgets to search through
+	 * @param x
+	 * @param y
+	 * @return The hovered ConfigWidget, null if there isn't any
+	 */
+	private static ConfigWidget<?> getHoveredConfigWidget(List<? extends ConfigWidget<?>> widgets, double x, double y) {
+		if (widgets == null) return null;
+		
+		for (ConfigWidget<?> widget : widgets) {
+			if (widget.isInHitbox(x, y)) {
+				return widget;
+			}
+
+			ConfigWidget<?> foundWidget = getHoveredConfigWidget(widget.getChildren(), x, y);
+			if (foundWidget != null) {
+				return foundWidget;
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * Handles a mouseClicked event from a Screen.
 	 * @param screen
@@ -15,17 +41,11 @@ public class Mouse {
 	public static boolean handleMouseClick(Screen screen, MouseButtonEvent event, boolean consumed) {
 		if (consumed) return true;
 
-		if (event.button() != 1) return false;
+		ConfigWidget<?> hoveredConfigWidget = getHoveredConfigWidget(Category.getAllCategories(), event.x(), event.y());
 
-		Category hoveredCategory = null;
-		for (Category category : Category.getAllCategories()) {
-			if (category.isInside(event.x(), event.y())) hoveredCategory = category;
+		if (hoveredConfigWidget != null) {
+			return hoveredConfigWidget.onClick(event.button());
 		}
-
-		if (hoveredCategory == null) return false;
-
-		hoveredCategory.toggleExpand();
-
-		return true;
+		return false;
 	}
 }

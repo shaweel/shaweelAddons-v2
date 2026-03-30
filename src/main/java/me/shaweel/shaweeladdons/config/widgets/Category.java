@@ -4,43 +4,79 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.lwjgl.glfw.GLFW;
+
 import me.shaweel.shaweeladdons.config.ConfigGui;
-import me.shaweel.shaweeladdons.config.NanoVG.NanoVGPiPRenderer;
-import me.shaweel.shaweeladdons.config.NanoVG.NanoVGRenderer;
+import me.shaweel.shaweeladdons.config.ConfigWidget;
+import me.shaweel.shaweeladdons.utils.Easing;
+import me.shaweel.shaweeladdons.utils.Log;
+import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGPiPRenderer;
+import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class Category {
+public class Category extends ConfigWidget<ConfigGui> {
 	private static List<Category> categories = new ArrayList<>();
 	public List<Feature> children = new ArrayList<>();
 
+	private final ConfigGui parent;
 	private final String name;
 	private final float index;
 
-	private static final int fontSize = 9;
-	private static final int fontWeight = 700;
+	private static final int FONT_SIZE = 12;
+	private static final int FONT_WEIGHT = 700;
 
-	private static final float margin = 6;
-	private static final float xPadding = 40;
-	private static final float yPadding = 4;
-	private static final float activatedPadding = 2;
+	private static final float MARGIN = 7f;
+	private static final float X_PADDING = 30;
+	private static final float Y_PADDING = 3;
+	private static final float INDICATOR_LINE_Y = 2;
+	private static final float ANIMATION_DURATION = 300;
 
-	private final float y = margin;
+	private float y;
 	private float x;
 
 	private static HashMap<String, Boolean> expandedMap = new HashMap<>();
-	private boolean expanded = false;
 
 	private float squareMinX;
 	private float squareMaxX;
-	private final float squareMinY = y;
+	private float squareMinY;
 	private float squareMaxY;
 
 	private float textX;
 	private float textY;
 
-	public Category(String name) {
+	private float lowestPoint = Float.POSITIVE_INFINITY;
+
+	private long lastExpandTime;
+	private float lastLowestPoint;
+	private float expandGoal;
+
+	private boolean expanded = false;
+	private boolean expanding = false;
+	private boolean collapsing = false;
+
+	private void calculateCoordinates() {
+		this.x = MARGIN * (index + 1);
+
+		for (Category category : categories) {
+			if (categories.indexOf(category) >= this.index) break;
+			this.x += getWidestStringWidth() + X_PADDING;
+		}
+
+		this.y = MARGIN;
+
+		this.squareMinX = this.x;
+		this.squareMaxX = this.x + X_PADDING + getWidestStringWidth();
+		this.squareMinY = this.y;
+		this.squareMaxY = this.y + Y_PADDING*2 + FONT_SIZE;
+
+		this.textX = (this.squareMaxX+this.squareMinX)/2 - NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT)/2;
+		this.textY = this.y + Y_PADDING;
+	}
+	
+	public Category(ConfigGui configGui, String name) {
 		this.name = name;
 		this.expanded = expandedMap.getOrDefault(name, false);
+		this.parent = configGui;
 
 		boolean alreadyExists = false;
 
@@ -48,62 +84,169 @@ public class Category {
 			if (category.name.equals(this.name)) alreadyExists = true;
 		}
 
-		if (!alreadyExists) categories.add(this);
+		if (alreadyExists) {
+			Log.error("You've made a duplicate Category, this is highly discouraged. EXPECT EVERYTHING TO BREAK!");
+		}
+
+		categories.add(this);
 		this.index = categories.indexOf(this);
+
+		this.calculateCoordinates();
 	}
 
-	public void render(ConfigGui configGui) {
-		this.x = margin * (index + 1);
+	/**
+	 * @return The widest string width in all of the Category
+	 */
+	private static float getWidestStringWidth() {
+		//TODO refactor later
+		float widest = 0;
 
 		for (Category category : categories) {
-			if (categories.indexOf(category) >= index) break;
-			this.x += getWidestStringWidth(configGui) + xPadding;
+			for (Feature feature : category.children) {
+				float width = feature.getStringWidth(feature.getName());
+				if (width > widest) widest = width;
+			}
+			float width = category.getStringWidth(category.name);
+			if (width > widest) widest = width;
 		}
+		
+		return widest;
+	}
 
-		this.squareMinX = this.x;
-		this.squareMaxX = this.x + xPadding + getWidestStringWidth(configGui);
-		this.squareMaxY = this.y + yPadding*2 + fontSize;
+	private void expandOrCollapse() {
+		final long elapsed = System.currentTimeMillis() - lastExpandTime;
+		final float progress = Math.min(elapsed / ANIMATION_DURATION, 1f);
 
-		this.textX = (this.squareMaxX+this.squareMinX)/2 - NanoVGRenderer.getStringWidth(this.name, fontSize, fontWeight)/2;
-		this.textY = this.y + yPadding;
-
-		NanoVGRenderer.drawRect(squareMinX, squareMinY, squareMaxX, squareMaxY, configGui.backgroundColor);
-
-		if (expanded) {
-			renderAllFeatures(configGui);
+		final float easedProgress;
+		if (this.expanding) {
+			easedProgress = Easing.easeInCubic(progress);
+		} else if (this.collapsing) {
+			easedProgress = Easing.easeOutCubic(progress);
 		} else {
-			NanoVGRenderer.drawRect(squareMinX, squareMaxY, squareMaxX, squareMaxY+activatedPadding, configGui.primaryColor);
+			Log.error("Unexpected scenario, expandOrCollapse() was called when neither expanding nor collapsing are true");
+			return;
 		}
 
-		NanoVGRenderer.drawString(this.name, textX, textY, fontSize, fontWeight, configGui.textColor);
-	}
-
-	public static void renderAll(ConfigGui configGui, GuiGraphics guiGraphics) {
-		NanoVGPiPRenderer.drawNanoVG(guiGraphics, () -> renderPip(configGui));
-	}
-
-	private static void renderPip(ConfigGui configGui) {
-		for (Category category : categories) {
-			category.render(configGui);
+		if (progress >= 1) {
+			this.expanded = expanding;
+			this.expanding = false;
+			this.collapsing = false;
+			lowestPoint = expandGoal;
 		}
+
+		this.lowestPoint = this.lastLowestPoint + (this.expandGoal - this.lastLowestPoint) * easedProgress;
+	}
+
+	private void drawMainRectangle() {
+		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, this.parent.backgroundColor);
+	}
+
+	private void drawCategoryName() {
+		NanoVGRenderer.drawString(this.name, this.textX, this.textY, FONT_SIZE, FONT_WEIGHT, this.parent.textColor);
+	}
+
+	private void drawIndicatorLine() {
+		NanoVGRenderer.drawRect(this.squareMinX, this.lowestPoint - 1, this.squareMaxX, this.lowestPoint - 1 + INDICATOR_LINE_Y,
+			this.parent.primaryColor);
+	}
+
+	private void render() {
+		calculateCoordinates();
+
+		drawMainRectangle();
+		drawCategoryName();
+
+		if (expanding || collapsing) {
+			expandOrCollapse();
+		} else if (!expanded) {
+			this.lowestPoint = getLowestUnexpandedPoint();
+		} else if (expanded) {
+			this.lowestPoint = getLowestExpandedPoint();
+		}
+
+		if (expanding || collapsing || expanded) {
+			renderAllFeatures();
+		}
+
+		drawIndicatorLine();
+	}
+
+	/**
+	 * Renders all Categories in a GuiGraphics context
+	 * @param guiGraphics
+	 */
+	public static void renderAllCategories(GuiGraphics guiGraphics) {
+		NanoVGPiPRenderer.drawNanoVG(guiGraphics, () -> {
+			for (Category category : categories) {
+				category.render();
+			}
+		});
+	}
+
+	private void saveExpandedStatus() {
+		boolean expanded = this.expanded;
+
+		if (this.expanding) {
+			expanded = true;
+		} else if (this.collapsing) {
+			expanded = false;
+		}
+
+		expandedMap.put(this.name, expanded);
 	}
 
 	public static void clearCategories() {
 		for (Category category : categories) {
-			expandedMap.put(category.name, category.expanded);
+			category.saveExpandedStatus();
 		}
+
 		categories.clear();
 	}
 
-	public void toggleExpand() {
-		expanded = !expanded;
+	@Override
+	public boolean onClick(int button) {
+		if (button != GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+			return false;
+		}
+
+		this.lastExpandTime = System.currentTimeMillis();
+		this.lastLowestPoint = lowestPoint;
+
+		if (expanded && !collapsing || expanding) {
+			this.expandGoal = this.squareMaxY;
+			this.expanding = false;
+			this.collapsing = true;
+		} else {
+			this.expandGoal = getLowestExpandedPoint();
+			this.expanding = true;
+			this.collapsing = false;
+		}
+
+		return true;
 	}
 
-	private void renderAllFeatures(ConfigGui configGui) {
-		float lastY = this.squareMaxY - 1;
+	@Override
+	public boolean isInHitbox(double x, double y) {
+		return (x > this.squareMinX && x < this.squareMaxX && y > this.squareMinY && y < this.squareMaxY);
+	}
+
+	private float getLowestExpandedPoint() {
+		float lowestExpandedPoint = this.squareMaxY;
+		for (Feature child : children) {
+			float lowestChildPoint = child.getSquareMaxY();
+			if (lowestChildPoint > lowestExpandedPoint) lowestExpandedPoint = lowestChildPoint;
+		}
+
+		return lowestExpandedPoint;
+	}
+
+	private float getLowestUnexpandedPoint() {
+		return this.squareMaxY;
+	}
+
+	private void renderAllFeatures() {
 		for (Feature child : this.children) {
-			child.render(configGui, lastY);
-			lastY = child.getSquareMaxY() - 1;
+			child.render();
 		}
 	}
 
@@ -124,11 +267,11 @@ public class Category {
 	}
 
 	public float getXPadding() {
-		return xPadding;
+		return X_PADDING;
 	}
 
 	public float getYPadding() {
-		return yPadding;
+		return Y_PADDING;
 	}
 
 	public float getTextX() {
@@ -143,8 +286,8 @@ public class Category {
 		return this.name;
 	}
 
-	public boolean isInside(double x, double y) {
-		return (x > this.squareMinX && x < this.squareMaxX && y > this.squareMinY && y < this.squareMaxY);
+	public float getLowestPoint() {
+		return this.lowestPoint;
 	}
 
 	public static List<Category> getAllCategories() {
@@ -155,19 +298,18 @@ public class Category {
 		this.children.add(child);
 	}
 
+	@Override
 	public List<Feature> getChildren() {
 		return this.children;
 	}
+	
+	@Override
+	public ConfigGui getParent() {
+		return this.parent;
+	}
 
-	private static float getWidestStringWidth(ConfigGui configGui) {
-		float widest = 0;
-
-		for (Category category : categories) {
-			float width = NanoVGRenderer.getStringWidth(category.name, fontSize, fontWeight);
-			if (width > widest) widest = width;
-		}
-		
-		return widest;
+	public float getStringWidth(String string) {
+		return NanoVGRenderer.getStringWidth(string, FONT_SIZE, FONT_WEIGHT);
 	}
 }
   

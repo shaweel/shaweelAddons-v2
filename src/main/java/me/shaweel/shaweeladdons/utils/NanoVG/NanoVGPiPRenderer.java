@@ -1,4 +1,4 @@
-package me.shaweel.shaweeladdons.config.NanoVG;
+package me.shaweel.shaweeladdons.utils.NanoVG;
 
 
 import org.joml.Matrix3x2f;

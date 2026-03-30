@@ -1,4 +1,4 @@
-package me.shaweel.shaweeladdons.config.NanoVG;
+package me.shaweel.shaweeladdons.utils.NanoVG;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 import static org.lwjgl.nanovg.NanoVGGL3.*;
@@ -64,6 +64,35 @@ public class NanoVGRenderer {
 		nvgEndFrame(vg);
 	}
 
+	public static void applyScissor(float minX, float minY, float maxX, float maxY) {
+		final WidthHeight widthHeight = getWidthAndHeight(minX, minY, maxX, maxY);
+		final float width = widthHeight.width;
+		final float height = widthHeight.height;
+
+		nvgScissor(vg, minX, minY, width, height);
+	}
+
+	public static void resetScissor() {
+		nvgResetScissor(vg);
+	}
+
+	public record WidthHeight(float width, float height) {}
+
+	private static WidthHeight getWidthAndHeight(float minX, float minY, float maxX, float maxY) {
+		if (maxX < minX) {
+			Log.error(String.format("maxX cannot be smaller than minX (%s < %s)", maxX, minX));
+			return new WidthHeight(0, 0);
+		}
+		if (maxY < minY) {
+			Log.error(String.format("maxY cannot be smaller than minY (%s < %s)", maxY, minY));
+			return new WidthHeight(0, 0);
+		}
+		final float width = maxX-minX;
+		final float height = maxY-minY;
+
+		return new WidthHeight(width, height);
+	}
+
 	private static void applyColor(int color) {
 		final float a = ((color >> 24) & 0xFF) / 255f;
 		final float r = ((color >> 16) & 0xFF) / 255f;
@@ -73,14 +102,9 @@ public class NanoVGRenderer {
 	}
 
 	public static void drawRect(float minX, float minY, float maxX, float maxY, int color) {
-		if (maxX < minX) {
-			Log.error("maxX cannot be smaller than minX");
-		}
-		if (maxY < minY) {
-			Log.error("maxY cannot be smaller than minY");
-		}
-		final float width = maxX-minX;
-		final float height = maxY-minY;
+		final WidthHeight widthHeight = getWidthAndHeight(minX, minY, maxX, maxY);
+		final float width = widthHeight.width;
+		final float height = widthHeight.height;
 		
 		applyColor(color);
 		nvgBeginPath(vg);

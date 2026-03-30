@@ -1,6 +1,6 @@
 package me.shaweel.shaweeladdons;
 
-import me.shaweel.shaweeladdons.config.NanoVG.NanoVGPiPRenderer;
+import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGPiPRenderer;
 import net.fabricmc.api.ClientModInitializer;
 
 public class ShaweelAddons implements ClientModInitializer {

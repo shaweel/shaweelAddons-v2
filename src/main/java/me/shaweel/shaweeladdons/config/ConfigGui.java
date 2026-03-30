@@ -2,18 +2,18 @@ package me.shaweel.shaweeladdons.config;
 
 import me.shaweel.shaweeladdons.config.widgets.Category;
 import me.shaweel.shaweeladdons.config.widgets.Feature;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
 public class ConfigGui extends Screen {
-	public static ConfigGui instance;
-
-	public final int primaryColor = 0xffffcfda;
+	public final int primaryColor = 0xff3c093c;
 	public final int backgroundColor = 0xff141414;
-	public final int seperatorColor = 0xff2a2a2a;
 	public final int textColor = 0xffffffff;
+
+	private boolean openConfig = false;
 
 	private Category generalCategory;
 	private Category dungeonsCategory;
@@ -21,6 +21,16 @@ public class ConfigGui extends Screen {
 
 	public ConfigGui() {
 		super(Component.literal("shaweelAddonsConfigGui"));
+
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			if (!this.openConfig || client.screen != null) return;
+			this.openConfig = false;
+			client.setScreen(this);
+		});
+	}
+
+	public void open() {
+		this.openConfig = true;
 	}
 
 	@Override
@@ -28,24 +38,24 @@ public class ConfigGui extends Screen {
 		super.init();
 		
 		Category.clearCategories();
-		this.generalCategory = new Category("General");
-		this.dungeonsCategory = new Category("Dungeons");
-		this.idekCategory = new Category("Idek atp");
+		this.generalCategory = new Category(this, "General");
+		this.dungeonsCategory = new Category(this, "Dungeons");
+		this.idekCategory = new Category(this, "Idek atp");
 
-		new Feature("potato1", this.generalCategory);
-		new Feature("potato2", this.generalCategory);
+		new Feature("Click GUI", this.generalCategory);
+		new Feature("Placeholder", this.generalCategory);
 
-		new Feature("potato3", this.dungeonsCategory);
-		new Feature("potato4", this.dungeonsCategory);
+		new Feature("idk", this.dungeonsCategory);
+		new Feature("potato", this.dungeonsCategory);
 
-		new Feature("potato5", this.idekCategory);
-		new Feature("potato6", this.idekCategory);
+		new Feature("potatoe", this.idekCategory);
+		new Feature("emojis no work :(", this.idekCategory);
 	}
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
 		guiGraphics.fill(0, 0, this.width, this.height, 0x00000000);
-		Category.renderAll(this, guiGraphics);
+		Category.renderAllCategories(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, delta);
 	}
 

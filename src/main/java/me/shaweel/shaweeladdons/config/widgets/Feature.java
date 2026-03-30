@@ -1,21 +1,25 @@
 package me.shaweel.shaweeladdons.config.widgets;
 
+import java.util.List;
+
+import org.lwjgl.glfw.GLFW;
+
 import me.shaweel.shaweeladdons.config.ConfigGui;
-import me.shaweel.shaweeladdons.config.NanoVG.NanoVGRenderer;
+import me.shaweel.shaweeladdons.config.ConfigWidget;
+import me.shaweel.shaweeladdons.utils.Log;
+import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
-public class Feature {
+public class Feature extends ConfigWidget<Category> {
 	private String name;
+	private int index;
 	private Category parent;
+	private ConfigGui configGui;
 
-	private static final int fontSize = 7;
-	private static final int fontWeight = 700;
-	private static final float seperatorSize = 0.5f;
-	private static final float seperatorPadding = 3f;
+	private static final int fontSize = 9;
+	private static final int fontWeight = 600;
+	private static final float toggleAnimationDuration = 50;
 
-	private float seperatorMinX;
-	private float seperatorMaxX;
-	private float seperatorMinY;
-	private float seperatorMaxY;
+	private float y;
 
 	private float squareMinX;
 	private float squareMaxX;
@@ -25,59 +29,170 @@ public class Feature {
 	private float textX;
 	private float textY;
 
+	private float opacity = 0;
+	private float lastOpacity = 0;
+
+	private long lastToggleTime;
+	private boolean toggled = false;
+	private boolean enabling = false;
+	private boolean disabling = false;
+
+	private float toggleGoal;
+
 	public Feature(String name, Category parent) {
 		this.name = name;
 		this.parent = parent;
+		this.configGui = this.parent.getParent();
+
+		boolean alreadyExists = false;
+
+		for (Feature feature : this.parent.getChildren()) {
+			if (feature.name.equals(this.name)) alreadyExists = true;
+		}
+
+		if (alreadyExists) {
+			Log.error("You've made a duplicate Feature, this is highly discouraged. EXPECT EVERYTHING TO BREAK!");
+		}
 
 		this.parent.registerChild(this);
+		this.index = this.parent.getChildren().indexOf(this);
+
+		this.calculateCoordinates();
 	}
 
-	public void render(ConfigGui configGui, float y) {
-		this.seperatorMinY = y;
-		this.seperatorMaxY = y + seperatorSize;
+	private void calculateCoordinates() {
+		this.y = this.parent.getSquareMaxY() - 1;
 
-		this.squareMinX = parent.getSquareMinX();
-		this.squareMaxX = parent.getSquareMaxX();
-		this.squareMinY = seperatorMaxY;
-		this.squareMaxY = seperatorMaxY + this.parent.getYPadding()*2 + fontSize;
+		for (Feature feature : this.parent.getChildren()) {
+			if (this.parent.getChildren().indexOf(feature) >= this.index) break;
+			this.y += this.parent.getYPadding()*2 + fontSize - 1;
+		}
 
-		this.seperatorMinX = squareMinX + seperatorPadding;
-		this.seperatorMaxX = squareMaxX - seperatorPadding;
+		this.squareMinX = this.parent.getSquareMinX();
+		this.squareMaxX = this.parent.getSquareMaxX();
+		this.squareMinY = this.y;
+		this.squareMaxY = this.y + this.parent.getYPadding()*2 + fontSize;
 
 		this.textX = (this.squareMaxX+this.squareMinX)/2 - NanoVGRenderer.getStringWidth(this.name, fontSize, fontWeight)/2;
-		this.textY = y + this.parent.getYPadding();
+		this.textY = this.y + this.parent.getYPadding();
+	}
 
-		NanoVGRenderer.drawRect(this.seperatorMinX, this.seperatorMinY, this.seperatorMaxX, this.seperatorMaxY, 
-			configGui.seperatorColor);
-		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, configGui.backgroundColor);
-		NanoVGRenderer.drawString(this.name, this.textX, this.textY, fontSize, fontWeight, configGui.textColor);
+	private void applyLowestPointScissor() {
+		NanoVGRenderer.applyScissor(this.squareMinX, this.parent.getSquareMinY(), this.squareMaxX, this.parent.getLowestPoint());
+	}
+
+	private void drawMainRectangle() {
+		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY,
+			 this.configGui.backgroundColor);
+	}
+
+	private void drawToggledRectangle() {
+		int toggledColor = (this.configGui.primaryColor & 0x00FFFFFF) | ((int) this.opacity << 24);
+		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, toggledColor);
+	}
+
+	private void drawFeatureName() {
+		NanoVGRenderer.drawString(this.name, this.textX, this.textY, fontSize, fontWeight, this.configGui.textColor);
+	}
+
+	public void render() {
+		calculateCoordinates();
+
+		if (enabling || disabling) { 
+			enableOrDisable();
+		} else if (!toggled) {
+			this.opacity = 0;
+		} else if (toggled) {
+			this.opacity = 255;
+		}
+
+		applyLowestPointScissor();
+		drawMainRectangle();
+		drawToggledRectangle();
+		drawFeatureName();
+		NanoVGRenderer.resetScissor();
+	}
+
+	private void enableOrDisable() {
+		final long elapsed = System.currentTimeMillis() - lastToggleTime;
+		final float progress = Math.min(elapsed / toggleAnimationDuration, 1f);
+
+		if (progress >= 1) {
+			this.toggled = enabling;
+			this.enabling = false;
+			this.disabling = false;
+			opacity = toggleGoal;
+		}
+
+		this.opacity = this.lastOpacity + (this.toggleGoal - this.opacity) * progress;
+	}
+
+	@Override
+	public boolean onClick(int button) {
+		if (button != GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+			return false;
+		}
+
+		this.lastToggleTime = System.currentTimeMillis();
+		this.lastOpacity = opacity;
+
+		if (toggled && !disabling || enabling) {
+			this.toggleGoal = 0;
+			this.enabling = false;
+			this.disabling = true;
+		} else {
+			this.toggleGoal = 255;
+			this.enabling = true;
+			this.disabling = false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean isInHitbox(double x, double y) {
+		return (x > this.squareMinX && x < this.squareMaxX &&
+			y > this.squareMinY && y < this.squareMaxY && y < this.parent.getLowestPoint());
+	}
+
+	public float getStringWidth(String string) {
+		return NanoVGRenderer.getStringWidth(string, fontSize, fontWeight);
 	}
 
 	public float getSquareMinX() {
-		return squareMinX;
+		return this.squareMinX;
 	}
 
 	public float getSquareMaxX() {
-		return squareMaxX;
+		return this.squareMaxX;
 	}
 
 	public float getSquareMinY() {
-		return squareMinY;
+		return this.squareMinY;
 	}
 
 	public float getSquareMaxY() {
-		return squareMaxY;
+		return this.squareMaxY;
 	}
 
 	public float getTextX() {
-		return textX;
+		return this.textX;
 	}
 
 	public float getTextY() {
-		return textY;
+		return this.textY;
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
+	}
+
+	public Category getParent() {
+		return this.parent;
+	}
+
+	@Override
+	public List<ConfigWidget<?>> getChildren() {
+		return null;
 	}
 }

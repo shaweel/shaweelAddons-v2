@@ -16,6 +16,8 @@ public abstract class ConfigWidget<P, T> {
 
 	public abstract T getValue();
 
+	public abstract T getDefaultValue();
+
 	public abstract Boolean getExpanded();
 
 	public abstract String getName();

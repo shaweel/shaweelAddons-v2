@@ -220,6 +220,11 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 	}
 
 	@Override
+	public Void getDefaultValue() {
+		return null;
+	}
+
+	@Override
 	public Boolean getExpanded() {
 		return this.expanded && !this.collapsing || this.expanding;
 	}

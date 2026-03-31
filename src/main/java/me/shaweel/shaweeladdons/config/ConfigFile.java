@@ -21,7 +21,7 @@ public class ConfigFile {
 	private static Map<String, Object> config = new HashMap<>();
 
 	@SuppressWarnings("unchecked")
-	private static Map<String, Object> parsePath(String path, int minusDepth) {
+	private static Map<String, Object> parsePathToConfig(String path, int minusDepth) {
 		String[] pathArray = path.split("\\.");
 		pathArray = path.isEmpty() ? new String[0] : Arrays.copyOf(pathArray, pathArray.length - minusDepth);
 
@@ -36,6 +36,8 @@ public class ConfigFile {
 
 		return map;
 	}
+
+	private static ConfigWidget<?, ?> parsePathToWidget
 
 	public static void updateConfig() {
 		updateConfig(Category.getAllCategories(), "");
@@ -52,7 +54,7 @@ public class ConfigFile {
 			return;
 		}
 
-		Map<String, Object> map = parsePath(path, 0);
+		Map<String, Object> map = parsePathToConfig(path, 0);
 
 		for (ConfigWidget<?, ?> widget : widgets) {
 			String entry = widget.getName();
@@ -92,12 +94,18 @@ public class ConfigFile {
 		}
 	}
 
+	private static Object getDefaultValue(String path) {
+		
+	}
+
 	public static Object readFromConfig(String path) {
-		Map<String, Object> map = parsePath(path, 1);
-		if (map == null) return null;
+		Map<String, Object> map = parsePathToConfig(path, 1);
+		if (map == null) return getDefaultValue(path);
 		
 		String[] pathArray = path.split("\\.");
-		return map.get(pathArray[pathArray.length - 1]);
+		Object result = map.get(pathArray[pathArray.length - 1]);
+		if (result == null) return getDefaultValue(path);
+		return result; 
 	}
 
 	static {

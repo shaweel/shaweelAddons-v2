@@ -34,7 +34,7 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	private float lastOpacity = 0;
 
 	private long lastToggleTime;
-	private Boolean toggled = false;
+	private Boolean toggled = getDefaultValue();
 	private Boolean enabling = false;
 	private Boolean disabling = false;
 
@@ -166,6 +166,11 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	@Override
 	public Boolean getValue() {
 		return this.toggled && !this.disabling || this.enabling;
+	}
+
+	@Override
+	public Boolean getDefaultValue() {
+		return false;
 	}
 
 	@Override

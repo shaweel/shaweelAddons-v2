@@ -1,0 +1,33 @@
+# Features planned for shaweelAddons-v2 on Fabric 1.21.10
+- Party Finder Highlight
+- Couldn't Find Notifier
+- Crypt Reminder
+- SS Reset Alert
+- Quiz Timer—very important
+- Item Protection—very important
+- Carrying Utilities
+- Copy Chat Message
+- Hide Armor
+- Block Overlay
+- Entity Overlay
+- Compact Maxor
+- Compact Storm
+- Compact Terminals
+- Mask Popped Alert—very important
+- Wish Alert—very important
+- Low Health Alert—very important
+- Chat Stars
+- Hide Action Bar
+- Party Commands for all Hypixel languages
+- Cyrillic Commands
+- Mimic—very important
+- Boss Spawn Alert—very important
+- Miniboss Spawn Alert—very important
+- Katana Hud
+- Splits—very important
+- Purple and Yellow Pad—very important
+- Croesus Overlay
+- Shitterlist—quite important
+- Dynamic /recipe command
+- Leaped to alerts—very important
+- Hide tooltips when switching items

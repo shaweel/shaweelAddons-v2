@@ -19,4 +19,6 @@ public abstract class ConfigWidget<P, T> {
 	public abstract Boolean getExpanded();
 
 	public abstract String getName();
+
+	public abstract float getContentWidth();
 }

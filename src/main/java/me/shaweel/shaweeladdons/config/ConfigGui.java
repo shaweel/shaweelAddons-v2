@@ -1,5 +1,7 @@
 package me.shaweel.shaweeladdons.config;
 
+import java.util.List;
+
 import me.shaweel.shaweeladdons.config.widgets.Category;
 import me.shaweel.shaweeladdons.config.widgets.Feature;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -63,5 +65,19 @@ public class ConfigGui extends Screen {
 	public boolean mouseClicked(MouseButtonEvent event, boolean consumed) {
 		consumed = Mouse.handleMouseClick(this, event, consumed);
 		return super.mouseClicked(event, consumed);
+	}
+
+	public static float getWidestContentWidth() {
+		return getWidestContentWidth(Category.getAllCategories());
+	}
+
+	private static float getWidestContentWidth(List<? extends ConfigWidget<?, ?>> widgets) {
+		float widest = 0;
+
+		for (ConfigWidget<?, ?> widget : widgets) {
+			
+		}
+
+		return widest;
 	}
 }

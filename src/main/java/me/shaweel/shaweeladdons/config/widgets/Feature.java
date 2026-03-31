@@ -16,9 +16,9 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	private Category parent;
 	private ConfigGui configGui;
 
-	private static final int fontSize = 9;
-	private static final int fontWeight = 600;
-	private static final float toggleAnimationDuration = 50;
+	private static final int FONT_SIZE = 9;
+	private static final int FONT_WEIGHT = 600;
+	private static final float ANIMATION_DURATION = 50;
 
 	private float y;
 
@@ -67,15 +67,15 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 
 		for (Feature feature : this.parent.getChildren()) {
 			if (this.parent.getChildren().indexOf(feature) >= this.index) break;
-			this.y += this.parent.getYPadding()*2 + fontSize - 1;
+			this.y += this.parent.getYPadding()*2 + FONT_SIZE - 1;
 		}
 
 		this.squareMinX = this.parent.getSquareMinX();
 		this.squareMaxX = this.parent.getSquareMaxX();
 		this.squareMinY = this.y;
-		this.squareMaxY = this.y + this.parent.getYPadding()*2 + fontSize;
+		this.squareMaxY = this.y + this.parent.getYPadding()*2 + FONT_SIZE;
 
-		this.textX = (this.squareMaxX+this.squareMinX)/2 - NanoVGRenderer.getStringWidth(this.name, fontSize, fontWeight)/2;
+		this.textX = (this.squareMaxX+this.squareMinX)/2 - NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT)/2;
 		this.textY = this.y + this.parent.getYPadding();
 	}
 
@@ -94,7 +94,7 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	}
 
 	private void drawFeatureName() {
-		NanoVGRenderer.drawString(this.name, this.textX, this.textY, fontSize, fontWeight, this.configGui.textColor);
+		NanoVGRenderer.drawString(this.name, this.textX, this.textY, FONT_SIZE, FONT_WEIGHT, this.configGui.textColor);
 	}
 
 	public void render() {
@@ -117,7 +117,7 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 
 	private void enableOrDisable() {
 		final long elapsed = System.currentTimeMillis() - lastToggleTime;
-		final float progress = Math.min(elapsed / toggleAnimationDuration, 1f);
+		final float progress = Math.min(elapsed / ANIMATION_DURATION, 1f);
 
 		if (progress >= 1) {
 			this.toggled = enabling;
@@ -173,8 +173,9 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 		return null;
 	}
 
-	public float getStringWidth(String string) {
-		return NanoVGRenderer.getStringWidth(string, fontSize, fontWeight);
+	@Override
+	public float getContentWidth() {
+		return NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT);
 	}
 
 	public float getSquareMinX() {

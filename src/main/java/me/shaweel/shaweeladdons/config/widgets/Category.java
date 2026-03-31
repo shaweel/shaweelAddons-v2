@@ -57,13 +57,13 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 
 		for (Category category : categories) {
 			if (categories.indexOf(category) >= this.index) break;
-			this.x += getWidestStringWidth() + X_PADDING;
+			this.x += this.parent.getWidestContentWidth() + X_PADDING;
 		}
 
 		this.y = MARGIN;
 
 		this.squareMinX = this.x;
-		this.squareMaxX = this.x + X_PADDING + getWidestStringWidth();
+		this.squareMaxX = this.x + X_PADDING + this.parent.getWidestContentWidth();
 		this.squareMinY = this.y;
 		this.squareMaxY = this.y + Y_PADDING*2 + FONT_SIZE;
 
@@ -95,7 +95,8 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 	/**
 	 * @return The widest string width in all of the Category
 	 */
-	private static float getWidestStringWidth() {
+	/*
+	private statc float getWidestStringWidth() {
 		//TODO refactor later
 		float widest = 0;
 
@@ -109,7 +110,7 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 		}
 		
 		return widest;
-	}
+	} */
 
 	private void expandOrCollapse() {
 		final long elapsed = System.currentTimeMillis() - lastExpandTime;
@@ -302,8 +303,9 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 		return this.parent;
 	}
 
-	public float getStringWidth(String string) {
-		return NanoVGRenderer.getStringWidth(string, FONT_SIZE, FONT_WEIGHT);
+	@Override
+	public float getContentWidth() {
+		return NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT);
 	}
 }
   

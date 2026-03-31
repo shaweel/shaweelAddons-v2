@@ -31,3 +31,5 @@
 - Dynamic /recipe command
 - Leaped to alerts—very important
 - Hide tooltips when switching items
+- Dungeon Map—unimportant
+- Most if not all features that I use of Skyblocker and Devonian(cuz i hate those mods)

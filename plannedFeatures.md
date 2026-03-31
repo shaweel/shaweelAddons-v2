@@ -32,4 +32,5 @@
 - Leaped to alerts—very important
 - Hide tooltips when switching items
 - Dungeon Map—unimportant
-- Most if not all features that I use of Skyblocker and Devonian(cuz i hate those mods)
+- Most if not all features that I use of Devonian(cuz i hate that mod)
+  - I also considered from Skyblocker but some features of Skyblocker rely on the high user base which I don't find realistic in my mod 

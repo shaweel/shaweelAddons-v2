@@ -1,4 +1,5 @@
 ## 1. rewrite that one god damn method
+hover
 ## 2. Dynamic feature bottom bar color
 ## 3. Add possible children to Feature
 - SwitchButton

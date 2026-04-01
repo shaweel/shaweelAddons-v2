@@ -1,6 +1,7 @@
+# TODO
 ## Add possible children to Feature
 - SwitchButton
-- CollapsibleGroup - same possible children as Feature excluding CollapsibleGroup
+- ExpandableGroup - same possible children as Feature excluding CollapsibleGroup
 - InputBox
 - KeybindButton
 - Button

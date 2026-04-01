@@ -1,7 +1,9 @@
 package me.shaweel.shaweeladdons.config.widgets;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+
 
 import org.lwjgl.glfw.GLFW;
 
@@ -241,6 +243,8 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 	}
 
 	private void renderAllFeatures() {
+		this.sortFeatures();
+
 		for (Feature child : this.children) {
 			child.render();
 		}
@@ -278,6 +282,10 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 	public float getLowestPoint() {
 		return this.lowestPoint;
 	}
+
+	private void sortFeatures() {
+		this.children.sort(Comparator.comparingDouble(Feature::getContentWidth).reversed());
+	} 
 
 	public static List<Category> getAllCategories() {
 		return categories;

@@ -63,8 +63,7 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	private void calculateCoordinates() {
 		this.y = this.parent.getSquareMaxY() - 1;
 
-		for (Feature feature : this.parent.getChildren()) {
-			if (this.parent.getChildren().indexOf(feature) >= this.index) break;
+		for (int index = 0; index < this.parent.getChildren().indexOf(this); index++) {
 			this.y += ConfigGui.getYPadding()*2 + FONT_SIZE - 1;
 		}
 
@@ -95,7 +94,7 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	}
 
 	public void render() {
-		calculateCoordinates();
+		this.calculateCoordinates();
 
 		if (enabling || disabling) { 
 			enableOrDisable();

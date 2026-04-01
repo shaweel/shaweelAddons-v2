@@ -29,18 +29,12 @@ public class ConfigFile {
 		for (String entry : pathArray) {
 			map = (Map<String, Object>) map.get(entry);
 			if (map == null) {
-				Log.debug(String.format("Invalid path: %s, this can either be fine or detrimental", path));
 				return null;
 			}
 		}
 
 		return map;
 	}
-
-	//TODO finish this method
-	/*private static ConfigWidget<?, ?> parsePathToWidget() {
-		
-	}*/
 
 	public static void updateConfig() {
 		updateConfig(Category.getAllCategories(), "");
@@ -97,20 +91,13 @@ public class ConfigFile {
 		}
 	}
 
-	//TODO finish this method
-	/*private static Object getDefaultValue(String path) {
-		
-	}*/
-
-	//TODO uncomment when getDefaultValue() is done
-	public static Object readFromConfig(String path) {
+	public static Object readFromConfig(String path, Object defaultObject) {
 		Map<String, Object> map = parsePathToConfig(path, 1);
-		//if (map == null) return getDefaultValue(path);
-		if (map == null) return null;
+		if (map == null) return defaultObject;
 		
 		String[] pathArray = path.split("\\.");
 		Object result = map.get(pathArray[pathArray.length - 1]);
-		//if (result == null) return getDefaultValue(path);
+		if (result == null) return defaultObject;
 		return result; 
 	}
 

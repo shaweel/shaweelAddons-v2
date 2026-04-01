@@ -33,7 +33,7 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	private float lastOpacity = 0;
 
 	private long lastToggleTime;
-	private Boolean toggled = getDefaultValue();
+	private Boolean toggled = false;
 	private Boolean enabling = false;
 	private Boolean disabling = false;
 
@@ -42,7 +42,7 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	public Feature(String name, Category parent) {
 		this.name = name;
 		this.parent = parent;		
-		this.toggled = Boolean.TRUE.equals(ConfigFile.readFromConfig(parent.getName() + "." + name + ".value"));
+		this.toggled = (boolean) ConfigFile.readFromConfig(parent.getName() + "." + name + ".value", false);
 
 		Boolean alreadyExists = false;
 
@@ -63,7 +63,10 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	private void calculateCoordinates() {
 		this.y = this.parent.getSquareMaxY() - 1;
 
-		for (int index = 0; index < this.parent.getChildren().indexOf(this); index++) {
+		this.index = this.parent.getChildren().indexOf(this);
+
+		for (Feature feature : this.parent.getChildren()) {
+			if (this.parent.getChildren().indexOf(feature) >= this.index) break;
 			this.y += ConfigGui.getYPadding()*2 + FONT_SIZE - 1;
 		}
 
@@ -151,7 +154,7 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	@Override
 	public List<ConfigWidget<?, ?>> getChildren() {
 		return null;
-	}		
+	}
 
 	@Override
 	public Boolean isInHitbox(double x, double y) {
@@ -162,11 +165,6 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	@Override
 	public Boolean getValue() {
 		return this.toggled && !this.disabling || this.enabling;
-	}
-
-	@Override
-	public Boolean getDefaultValue() {
-		return false;
 	}
 
 	@Override

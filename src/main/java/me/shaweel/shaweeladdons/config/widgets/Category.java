@@ -74,7 +74,7 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 	public Category(String name, ConfigGui parent) {
 		this.name = name;
 		this.parent = parent;
-		this.expanded = Boolean.TRUE.equals(ConfigFile.readFromConfig(name + ".expanded"));
+		this.expanded = (boolean) ConfigFile.readFromConfig(name + ".expanded", false);
 
 		Boolean alreadyExists = false;
 
@@ -91,26 +91,6 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 
 		this.calculateCoordinates();
 	}
-
-	/**
-	 * @return The widest string width in all of the Category
-	 */
-	/*
-	private statc float getWidestStringWidth() {
-		//TODO refactor later
-		float widest = 0;
-
-		for (Category category : categories) {
-			for (Feature feature : category.children) {
-				float width = feature.getStringWidth(feature.getName());
-				if (width > widest) widest = width;
-			}
-			float width = category.getStringWidth(category.name);
-			if (width > widest) widest = width;
-		}
-		
-		return widest;
-	} */
 
 	private void expandOrCollapse() {
 		final long elapsed = System.currentTimeMillis() - lastExpandTime;
@@ -219,11 +199,6 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 	}
 
 	@Override
-	public Void getDefaultValue() {
-		return null;
-	}
-
-	@Override
 	public Boolean getExpanded() {
 		return this.expanded && !this.collapsing || this.expanding;
 	}
@@ -292,7 +267,23 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 	}
 
 	public void registerChild(Feature child) {
+		if (!(child instanceof Feature)) {
+			Log.error("Categories may only have Features as their children");
+			return;
+		}
+
 		this.children.add(child);
+	}
+
+	public static Category findFirstCategory(String name) {
+		for (Category category : categories) {
+			if (category.name == name) {
+				return category;
+			}
+		}
+
+		Log.error(String.format("Category \"%s\" doesn't exist", name));
+		return null;
 	}
 
 	@Override

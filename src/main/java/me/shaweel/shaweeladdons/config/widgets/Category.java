@@ -125,7 +125,9 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 	}
 
 	private void drawIndicatorLine() {
-		NanoVGRenderer.drawRect(this.squareMinX, this.lowestPoint - 1, this.squareMaxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, ConfigGui.getPrimaryColor());
+		NanoVGRenderer.drawRect(this.squareMinX, this.lowestPoint - 1, this.squareMaxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, ConfigGui.getBackgroundColor());
+		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.children.getLast().getOpacity() << 24);
+		NanoVGRenderer.drawRect(this.squareMinX, this.lowestPoint - 1, this.squareMaxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, toggledColor);
 	}
 
 	private void render() {
@@ -145,7 +147,6 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 		if (expanding || collapsing || expanded) {
 			renderAllFeatures();
 		}
-
 		drawIndicatorLine();
 	}
 

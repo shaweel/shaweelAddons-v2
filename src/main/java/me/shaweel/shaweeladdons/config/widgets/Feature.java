@@ -201,6 +201,10 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 		return this.textY;
 	}
 
+	public float getOpacity() {
+		return opacity;
+	}
+
 	@Override
 	public String getName() {
 		return this.name;

@@ -17,7 +17,7 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	private ConfigGui configGui;
 
 	private static final int FONT_SIZE = 9;
-	private static final int FONT_WEIGHT = 600;
+	private static final int FONT_WEIGHT = 500;
 	private static final float ANIMATION_DURATION = 50;
 
 	private float y;

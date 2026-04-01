@@ -22,8 +22,8 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 	private final String name;
 	private final float index;
 
-	private static final int FONT_SIZE = 12;
-	private static final int FONT_WEIGHT = 700;
+	private static final int FONT_SIZE = 12; 
+	private static final int FONT_WEIGHT = 400;
 
 	private static final float MARGIN = 7f;
 	private static final float X_PADDING = 30;

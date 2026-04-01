@@ -18,7 +18,7 @@ public class NanoVGRenderer {
 	private static long vg;
 	private static NVGColor nvgColor = NVGColor.malloc();
 	private static final Set<Integer> validWeights = Set.of(100, 200, 300, 400, 500, 600, 700, 800, 900);
-	private static int[] adwaitaSans = new int[9];
+	private static int[] notoSerif = new int[9];
 
 	private static int loadttf(String ttf) {
 		try (InputStream stream = Minecraft.getInstance().getResourceManager()
@@ -26,11 +26,12 @@ public class NanoVGRenderer {
 			byte[] bytes = stream.readAllBytes();
 			ByteBuffer byteBuffer = BufferUtils.createByteBuffer(bytes.length);
 			byteBuffer.put(bytes).flip();
+
 			final int font = nvgCreateFontMem(vg, ttf, byteBuffer, true);
 			if (font == -1) Log.error(String.format("Failed to load the %s font", ttf));
 			return font;
 		} catch (Exception exception) {
-			Log.error(String.format("Failed to read the %s.ttf file. Exception: ", ttf, exception.getMessage()));
+			Log.error(String.format("Failed to read the %s.ttf file. Exception: %s", ttf, exception.getMessage()));
 			return -1;
 		}
 	}
@@ -39,15 +40,15 @@ public class NanoVGRenderer {
 		vg = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 		if (vg == -1L || vg == 0L) Log.error("Failed to initialize NanoVG");
 
-		adwaitaSans[0] = loadttf("adwaitasans-100");
-		adwaitaSans[1] = loadttf("adwaitasans-200");
-		adwaitaSans[2] = loadttf("adwaitasans-300");
-		adwaitaSans[3] = loadttf("adwaitasans-400");
-		adwaitaSans[4] = loadttf("adwaitasans-500");
-		adwaitaSans[5] = loadttf("adwaitasans-600");
-		adwaitaSans[6] = loadttf("adwaitasans-700");
-		adwaitaSans[7] = loadttf("adwaitasans-800");
-		adwaitaSans[8] = loadttf("adwaitasans-900");
+		notoSerif[0] = loadttf("noto_serif/100");
+		notoSerif[1] = loadttf("noto_serif/200");
+		notoSerif[2] = loadttf("noto_serif/300");
+		notoSerif[3] = loadttf("noto_serif/400");
+		notoSerif[4] = loadttf("noto_serif/500");
+		notoSerif[5] = loadttf("noto_serif/600");
+		notoSerif[6] = loadttf("noto_serif/700");
+		notoSerif[7] = loadttf("noto_serif/800");
+		notoSerif[8] = loadttf("noto_serif/900");
 	}
 	
 	public static void beginFrame() {
@@ -120,7 +121,7 @@ public class NanoVGRenderer {
 		}
 		
 		nvgFontSize(vg, size);
-		nvgFontFaceId(vg, adwaitaSans[weight/100-1]);
+		nvgFontFaceId(vg, notoSerif[weight/100-1]);
 		applyColor(color);
 		nvgFillColor(vg, nvgColor);
 		nvgText(vg, x, y, string);
@@ -132,7 +133,7 @@ public class NanoVGRenderer {
 			return 0;
 		}
 		nvgFontSize(vg, size);
-		nvgFontFaceId(vg, adwaitaSans[weight/100-1]);
+		nvgFontFaceId(vg, notoSerif[weight/100-1]);
 		float[] bounds = new float[4];
 		nvgTextBounds(vg, 0, 0, string, bounds);
 		return bounds[2] - bounds[0];

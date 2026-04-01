@@ -14,7 +14,6 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	private String name;
 	private int index;
 	private Category parent;
-	private ConfigGui configGui;
 
 	private static final int FONT_SIZE = 9;
 	private static final int FONT_WEIGHT = 500;
@@ -44,7 +43,6 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 		this.name = name;
 		this.parent = parent;		
 		this.toggled = Boolean.TRUE.equals(ConfigFile.readFromConfig(parent.getName() + "." + name + ".value"));
-		this.configGui = this.parent.getParent();
 
 		Boolean alreadyExists = false;
 
@@ -67,16 +65,16 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 
 		for (Feature feature : this.parent.getChildren()) {
 			if (this.parent.getChildren().indexOf(feature) >= this.index) break;
-			this.y += this.parent.getYPadding()*2 + FONT_SIZE - 1;
+			this.y += ConfigGui.getYPadding()*2 + FONT_SIZE - 1;
 		}
 
 		this.squareMinX = this.parent.getSquareMinX();
 		this.squareMaxX = this.parent.getSquareMaxX();
 		this.squareMinY = this.y;
-		this.squareMaxY = this.y + this.parent.getYPadding()*2 + FONT_SIZE;
+		this.squareMaxY = this.y + ConfigGui.getYPadding()*2 + FONT_SIZE;
 
 		this.textX = (this.squareMaxX+this.squareMinX)/2 - NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT)/2;
-		this.textY = this.y + this.parent.getYPadding();
+		this.textY = this.y + ConfigGui.getYPadding();
 	}
 
 	private void applyLowestPointScissor() {
@@ -84,17 +82,16 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	}
 
 	private void drawMainRectangle() {
-		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY,
-			 this.configGui.backgroundColor);
+		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, ConfigGui.getBackgroundColor());
 	}
 
 	private void drawToggledRectangle() {
-		int toggledColor = (this.configGui.primaryColor & 0x00FFFFFF) | ((int) this.opacity << 24);
+		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.opacity << 24);
 		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, toggledColor);
 	}
 
 	private void drawFeatureName() {
-		NanoVGRenderer.drawString(this.name, this.textX, this.textY, FONT_SIZE, FONT_WEIGHT, this.configGui.textColor);
+		NanoVGRenderer.drawString(this.name, this.textX, this.textY, FONT_SIZE, FONT_WEIGHT, ConfigGui.getTextColor());
 	}
 
 	public void render() {

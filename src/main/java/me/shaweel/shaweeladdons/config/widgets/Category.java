@@ -26,8 +26,6 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 	private static final int FONT_WEIGHT = 400;
 
 	private static final float MARGIN = 7f;
-	private static final float X_PADDING = 30;
-	private static final float Y_PADDING = 3;
 	private static final float INDICATOR_LINE_Y = 2;
 	private static final float ANIMATION_DURATION = 300;
 
@@ -57,18 +55,18 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 
 		for (Category category : categories) {
 			if (categories.indexOf(category) >= this.index) break;
-			this.x += this.parent.getWidestContentWidth() + X_PADDING;
+			this.x += this.parent.getWidestContentWidth() + ConfigGui.getXPadding();
 		}
 
 		this.y = MARGIN;
 
 		this.squareMinX = this.x;
-		this.squareMaxX = this.x + X_PADDING + this.parent.getWidestContentWidth();
+		this.squareMaxX = this.x + ConfigGui.getXPadding() + this.parent.getWidestContentWidth();
 		this.squareMinY = this.y;
-		this.squareMaxY = this.y + Y_PADDING*2 + FONT_SIZE;
+		this.squareMaxY = this.y + ConfigGui.getYPadding()*2 + FONT_SIZE;
 
 		this.textX = (this.squareMaxX+this.squareMinX)/2 - NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT)/2;
-		this.textY = this.y + Y_PADDING;
+		this.textY = this.y + ConfigGui.getYPadding();
 	}
 	
 	public Category(String name, ConfigGui parent) {
@@ -137,16 +135,15 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 	}
 
 	private void drawMainRectangle() {
-		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, this.parent.backgroundColor);
+		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, ConfigGui.getBackgroundColor());
 	}
 
 	private void drawCategoryName() {
-		NanoVGRenderer.drawString(this.name, this.textX, this.textY, FONT_SIZE, FONT_WEIGHT, this.parent.textColor);
+		NanoVGRenderer.drawString(this.name, this.textX, this.textY, FONT_SIZE, FONT_WEIGHT, ConfigGui.getTextColor());
 	}
 
 	private void drawIndicatorLine() {
-		NanoVGRenderer.drawRect(this.squareMinX, this.lowestPoint - 1, this.squareMaxX, this.lowestPoint - 1 + INDICATOR_LINE_Y,
-			this.parent.primaryColor);
+		NanoVGRenderer.drawRect(this.squareMinX, this.lowestPoint - 1, this.squareMaxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, ConfigGui.getPrimaryColor());
 	}
 
 	private void render() {
@@ -263,14 +260,6 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 
 	public float getSquareMaxY() {
 		return this.squareMaxY;
-	}
-
-	public float getXPadding() {
-		return X_PADDING;
-	}
-
-	public float getYPadding() {
-		return Y_PADDING;
 	}
 
 	public float getTextX() {

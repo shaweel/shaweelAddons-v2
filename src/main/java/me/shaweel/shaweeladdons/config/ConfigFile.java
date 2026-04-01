@@ -37,7 +37,10 @@ public class ConfigFile {
 		return map;
 	}
 
-	private static ConfigWidget<?, ?> parsePathToWidget
+	//TODO finish this method
+	/*private static ConfigWidget<?, ?> parsePathToWidget() {
+		
+	}*/
 
 	public static void updateConfig() {
 		updateConfig(Category.getAllCategories(), "");
@@ -94,17 +97,20 @@ public class ConfigFile {
 		}
 	}
 
-	private static Object getDefaultValue(String path) {
+	//TODO finish this method
+	/*private static Object getDefaultValue(String path) {
 		
-	}
+	}*/
 
+	//TODO uncomment when getDefaultValue() is done
 	public static Object readFromConfig(String path) {
 		Map<String, Object> map = parsePathToConfig(path, 1);
-		if (map == null) return getDefaultValue(path);
+		//if (map == null) return getDefaultValue(path);
+		if (map == null) return null;
 		
 		String[] pathArray = path.split("\\.");
 		Object result = map.get(pathArray[pathArray.length - 1]);
-		if (result == null) return getDefaultValue(path);
+		//if (result == null) return getDefaultValue(path);
 		return result; 
 	}
 

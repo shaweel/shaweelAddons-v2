@@ -11,9 +11,12 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
 public class ConfigGui extends Screen {
-	public final int primaryColor = 0xff3c093c;
-	public final int backgroundColor = 0xff141414;
-	public final int textColor = 0xffffffff;
+	private static final int PRIMARY_COLOR = 0xff3c093c;
+	private static final int BACKGROUND_COLOR = 0xff141414;
+	private static final int TEXT_COLOR = 0xffffffff;
+
+	private static final float X_PADDING = 15;
+	private static final float Y_PADDING = 3;
 
 	private Boolean openConfig = false;
 
@@ -67,17 +70,44 @@ public class ConfigGui extends Screen {
 		return super.mouseClicked(event, consumed);
 	}
 
-	public static float getWidestContentWidth() {
+	public float getWidestContentWidth() {
 		return getWidestContentWidth(Category.getAllCategories());
 	}
 
-	private static float getWidestContentWidth(List<? extends ConfigWidget<?, ?>> widgets) {
+	private float getWidestContentWidth(List<? extends ConfigWidget<?, ?>> widgets) {
+		if (widgets == null) {
+			return Float.NEGATIVE_INFINITY;
+		}
+		
 		float widest = 0;
 
 		for (ConfigWidget<?, ?> widget : widgets) {
-			
+			float width = Math.max(widget.getContentWidth(), getWidestContentWidth(widget.getChildren()));
+			if (width > widest) {
+				widest = width;
+			}
 		}
 
 		return widest;
+	}
+
+	public static float getXPadding() {
+		return X_PADDING;
+	}
+
+	public static float getYPadding() {
+		return Y_PADDING;
+	}
+
+	public static int getBackgroundColor() {
+		return BACKGROUND_COLOR;
+	}
+
+	public static int getPrimaryColor() {
+		return PRIMARY_COLOR;
+	}
+
+	public static int getTextColor() {
+		return TEXT_COLOR;
 	}
 }

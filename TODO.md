@@ -1,7 +1,7 @@
-## 1. rewrite that one god damn method
-hover
-## 2. Dynamic feature bottom bar color
-## 3. Add possible children to Feature
+## 1. Sort by width
+## 2. Start using parsePathToWidget() and default values for ConfigWidgets
+## 3. Dynamic feature bottom bar color
+## 4. Add possible children to Feature
 - SwitchButton
 - CollapsibleGroup - same possible children as Feature excluding CollapsibleGroup
 - InputBox

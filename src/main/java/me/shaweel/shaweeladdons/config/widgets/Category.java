@@ -126,8 +126,12 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 
 	private void drawIndicatorLine() {
 		NanoVGRenderer.drawRect(this.squareMinX, this.lowestPoint - 1, this.squareMaxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, ConfigGui.getBackgroundColor());
-		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.children.getLast().getOpacity() << 24);
+
+		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.children.getLast().getToggledOpacity() << 24);
 		NanoVGRenderer.drawRect(this.squareMinX, this.lowestPoint - 1, this.squareMaxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, toggledColor);
+
+		int hoveredColor = (ConfigGui.getHoveredColor() & 0x00FFFFFF) | ((int) this.children.getLast().getHoveredOpacity() << 24);
+		NanoVGRenderer.drawRect(this.squareMinX, this.lowestPoint - 1, this.squareMaxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, hoveredColor);
 	}
 
 	private void render() {
@@ -187,6 +191,16 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 
 		ConfigFile.updateConfig();
 		return true;
+	}
+
+	@Override
+	public void onHoverEnter() {
+		return;
+	}
+
+	@Override
+	public void onHoverExit() {
+		return;
 	}
 
 	@Override

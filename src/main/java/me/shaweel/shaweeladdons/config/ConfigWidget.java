@@ -9,6 +9,8 @@ public abstract class ConfigWidget<P, T> {
 	 * @return <code>Boolean</code> Whether the click was consumed or not
 	 */
 	public abstract Boolean onClick(int button);
+	public abstract void onHoverEnter();
+	public abstract void onHoverExit();
 	public abstract Boolean isInHitbox(double x, double y);
 
 	public abstract List<? extends ConfigWidget<?, ?>> getChildren();

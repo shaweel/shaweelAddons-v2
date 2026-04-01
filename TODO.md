@@ -1,6 +1,5 @@
-## 1. Dynamic feature bottom bar color
-## 2. Hover event on Features
-## 3. Add possible children to Feature
+## 1. Hover event on Features
+## 2. Add possible children to Feature
 - SwitchButton
 - CollapsibleGroup - same possible children as Feature excluding CollapsibleGroup
 - InputBox

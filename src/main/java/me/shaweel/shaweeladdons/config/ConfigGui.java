@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 public class ConfigGui extends Screen {
 	private static final int PRIMARY_COLOR = 0xff3c093c;
 	private static final int BACKGROUND_COLOR = 0xff141414;
+	private static final int HOVERED_COLOR = 0xffffffff;
 	private static final int TEXT_COLOR = 0xffffffff;
 
 	private static final float X_PADDING = 15;
@@ -70,6 +71,11 @@ public class ConfigGui extends Screen {
 		return super.mouseClicked(event, consumed);
 	}
 
+	@Override
+	public void mouseMoved(double x, double y) {
+		Mouse.handleMouseMove(x, y);
+	}
+
 	public float getWidestContentWidth() {
 		return getWidestContentWidth(Category.getAllCategories());
 	}
@@ -109,5 +115,9 @@ public class ConfigGui extends Screen {
 
 	public static int getTextColor() {
 		return TEXT_COLOR;
+	}
+
+	public static int getHoveredColor() {
+		return HOVERED_COLOR;
 	}
 }

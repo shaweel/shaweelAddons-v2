@@ -17,6 +17,7 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 
 	private static final int FONT_SIZE = 9;
 	private static final int FONT_WEIGHT = 500;
+	private static final float MAX_HOVERED_OPACITY = 20;
 	private static final float ANIMATION_DURATION = 50;
 
 	private float y;
@@ -29,15 +30,21 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	private float textX;
 	private float textY;
 
-	private float opacity = 0;
-	private float lastOpacity = 0;
-
+	private float toggledOpacity = 0;
+	private float lastToggledOpacity = 0;
 	private long lastToggleTime;
 	private Boolean toggled = false;
 	private Boolean enabling = false;
 	private Boolean disabling = false;
-
 	private float toggleGoal;
+
+	private float hoveredOpacity = 0;
+	private float lastHoveredOpacity = 0;
+	private long lastHoverTime;
+	private Boolean hovered = false;
+	private Boolean enteringHover = false;
+	private Boolean exitingHover = false;
+	private float hoverGoal;
 
 	public Feature(String name, Category parent) {
 		this.name = name;
@@ -88,8 +95,13 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 	}
 
 	private void drawToggledRectangle() {
-		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.opacity << 24);
+		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.toggledOpacity << 24);
 		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, toggledColor);
+	}
+
+	private void drawHoveredRectangle() {
+		int hoveredColor = (ConfigGui.getHoveredColor() & 0x00FFFFFF) | ((int) this.hoveredOpacity << 24);
+		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, hoveredColor);
 	}
 
 	private void drawFeatureName() {
@@ -102,14 +114,23 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 		if (enabling || disabling) { 
 			enableOrDisable();
 		} else if (!toggled) {
-			this.opacity = 0;
+			this.toggledOpacity = 0;
 		} else if (toggled) {
-			this.opacity = 255;
+			this.toggledOpacity = 255;
+		}
+
+		if (enteringHover || exitingHover) { 
+			hoverOrUnhover();
+		} else if (!hovered) {
+			this.hoveredOpacity = 0;
+		} else if (hovered) {
+			this.hoveredOpacity = MAX_HOVERED_OPACITY;
 		}
 
 		applyLowestPointScissor();
 		drawMainRectangle();
 		drawToggledRectangle();
+		drawHoveredRectangle();
 		drawFeatureName();
 		NanoVGRenderer.resetScissor();
 	}
@@ -119,13 +140,27 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 		final float progress = Math.min(elapsed / ANIMATION_DURATION, 1f);
 
 		if (progress >= 1) {
-			this.toggled = enabling;
+			this.toggled = this.enabling;
 			this.enabling = false;
 			this.disabling = false;
-			opacity = toggleGoal;
+			this.toggledOpacity = this.toggleGoal;
 		}
 
-		this.opacity = this.lastOpacity + (this.toggleGoal - this.opacity) * progress;
+		this.toggledOpacity = this.lastToggledOpacity + (this.toggleGoal - this.toggledOpacity) * progress;
+	}
+
+	private void hoverOrUnhover() {
+		final long elapsed = System.currentTimeMillis() - lastHoverTime;
+		final float progress = Math.min(elapsed / ANIMATION_DURATION, 1f);
+
+		if (progress >= 1) {
+			this.hovered = this.enteringHover;
+			this.enteringHover = false;
+			this.exitingHover = false;
+			this.hoveredOpacity = this.hoverGoal;
+		}
+
+		this.hoveredOpacity = this.lastHoveredOpacity + (this.hoverGoal - this.hoveredOpacity) * progress;
 	}
 
 	@Override
@@ -135,7 +170,7 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 		}
 
 		this.lastToggleTime = System.currentTimeMillis();
-		this.lastOpacity = opacity;
+		this.lastToggledOpacity = toggledOpacity;
 
 		if (toggled && !disabling || enabling) {
 			this.toggleGoal = 0;
@@ -149,6 +184,26 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 
 		ConfigFile.updateConfig();
 		return true;
+	}
+
+	@Override
+	public void onHoverEnter() {
+		this.lastHoverTime = System.currentTimeMillis();
+		this.lastHoveredOpacity = hoveredOpacity;
+
+		this.hoverGoal = MAX_HOVERED_OPACITY;
+		this.enteringHover = true;
+		this.exitingHover = false;
+	}
+
+	@Override
+	public void onHoverExit() {
+		this.lastHoverTime = System.currentTimeMillis();
+		this.lastHoveredOpacity = hoveredOpacity;
+
+		this.hoverGoal = 0;
+		this.enteringHover = false;
+		this.exitingHover = true;
 	}
 
 	@Override
@@ -201,8 +256,12 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 		return this.textY;
 	}
 
-	public float getOpacity() {
-		return opacity;
+	public float getToggledOpacity() {
+		return toggledOpacity;
+	}
+
+	public float getHoveredOpacity() {
+		return hoveredOpacity;
 	}
 
 	@Override

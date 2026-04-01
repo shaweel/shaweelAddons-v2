@@ -51,4 +51,29 @@ public class Mouse {
 		}
 		return false;
 	}
+
+	private static ConfigWidget<?, ?> lastHoveredConfigWidget = null;
+
+	/**
+	 * Handles a mouseHovered event from a Screen.
+	 * @param screen
+	 * @param event
+	 * @param consumed
+	 * @return <code>boolean</code> Whether the hover was consumed or not
+	 */
+	public static void handleMouseMove(double x, double y) {		
+		ConfigWidget<?, ?> hoveredConfigWidget = getHoveredConfigWidget(x, y);
+
+		if (hoveredConfigWidget != lastHoveredConfigWidget) {
+			if (lastHoveredConfigWidget != null) {
+				lastHoveredConfigWidget.onHoverExit();
+			}
+
+			if (hoveredConfigWidget != null) {
+				hoveredConfigWidget.onHoverEnter();
+			}
+			
+			lastHoveredConfigWidget = hoveredConfigWidget;
+		}
+	}
 }

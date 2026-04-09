@@ -16,7 +16,7 @@ import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGPiPRenderer;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class Category extends ConfigWidget<ConfigGui, Void> {
+public class Category implements ConfigWidget<ConfigGui, Void> {
 	private static List<Category> categories = new ArrayList<>();
 	public List<Feature> children = new ArrayList<>();
 
@@ -282,11 +282,6 @@ public class Category extends ConfigWidget<ConfigGui, Void> {
 	}
 
 	public void registerChild(Feature child) {
-		if (!(child instanceof Feature)) {
-			Log.error("Categories may only have Features as their children");
-			return;
-		}
-
 		this.children.add(child);
 	}
 

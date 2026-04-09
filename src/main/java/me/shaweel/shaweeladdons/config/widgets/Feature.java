@@ -1,19 +1,15 @@
 package me.shaweel.shaweeladdons.config.widgets;
 
-import java.util.List;
-
 import org.lwjgl.glfw.GLFW;
 
 import me.shaweel.shaweeladdons.config.ConfigFile;
 import me.shaweel.shaweeladdons.config.ConfigGui;
-import me.shaweel.shaweeladdons.config.ConfigWidget;
+import me.shaweel.shaweeladdons.config.ExpandableWidgetWithLastLayerChildren;
 import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
-public class Feature extends ConfigWidget<Category, Boolean> {
-	private String name;
+public class Feature extends ExpandableWidgetWithLastLayerChildren {
 	private int index;
-	private Category parent;
 
 	private static final int FONT_SIZE = 9;
 	private static final int FONT_WEIGHT = 500;
@@ -163,7 +159,6 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 		this.hoveredOpacity = this.lastHoveredOpacity + (this.hoverGoal - this.hoveredOpacity) * progress;
 	}
 
-	@Override
 	public Boolean onClick(int button) {
 		if (button != GLFW.GLFW_MOUSE_BUTTON_LEFT) {
 			return false;
@@ -186,7 +181,6 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 		return true;
 	}
 
-	@Override
 	public void onHoverEnter() {
 		this.lastHoverTime = System.currentTimeMillis();
 		this.lastHoveredOpacity = hoveredOpacity;
@@ -196,7 +190,6 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 		this.exitingHover = false;
 	}
 
-	@Override
 	public void onHoverExit() {
 		this.lastHoverTime = System.currentTimeMillis();
 		this.lastHoveredOpacity = hoveredOpacity;
@@ -206,28 +199,19 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 		this.exitingHover = true;
 	}
 
-	@Override
-	public List<ConfigWidget<?, ?>> getChildren() {
-		return null;
-	}
-
-	@Override
 	public Boolean isInHitbox(double x, double y) {
 		return (x > this.squareMinX && x < this.squareMaxX &&
 			y > this.squareMinY && y < this.squareMaxY && y < this.parent.getLowestPoint());
 	}
 
-	@Override
 	public Boolean getValue() {
 		return this.toggled && !this.disabling || this.enabling;
 	}
 
-	@Override
 	public Boolean getExpanded() {
 		return null;
 	}
 
-	@Override
 	public float getContentWidth() {
 		return NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT);
 	}
@@ -262,14 +246,5 @@ public class Feature extends ConfigWidget<Category, Boolean> {
 
 	public float getHoveredOpacity() {
 		return hoveredOpacity;
-	}
-
-	@Override
-	public String getName() {
-		return this.name;
-	}
-
-	public Category getParent() {
-		return this.parent;
 	}
 }

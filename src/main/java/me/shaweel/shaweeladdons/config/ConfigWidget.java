@@ -2,7 +2,7 @@ package me.shaweel.shaweeladdons.config;
 
 import java.util.List;
 
-public abstract class ConfigWidget<P, T> {
+public interface ConfigWidget<P, T> {
 	/**
 	 * Handles a mouse click
 	 * @param button The mouse button which was clicked

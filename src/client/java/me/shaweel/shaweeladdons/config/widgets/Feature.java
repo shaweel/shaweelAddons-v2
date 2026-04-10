@@ -4,18 +4,20 @@ import org.lwjgl.glfw.GLFW;
 
 import me.shaweel.shaweeladdons.config.ConfigFile;
 import me.shaweel.shaweeladdons.config.ConfigGui;
-import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerChildren;
+import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgetren;
+import me.shaweel.shaweeladdons.config.widgetTypes.LastLayerWidget;
 import me.shaweel.shaweeladdons.utils.Animation;
 import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
-public class Feature extends ExpandableConfigWidgetWithLastLayerChildren {
+public class Feature extends ExpandableConfigWidgetWithLastLayerWidgetren {
 	private int index;
 
 	private static final int FONT_SIZE = 9;
 	private static final int FONT_WEIGHT = 500;
 	private static final float MAX_HOVERED_OPACITY = 20;
 	private static final float ANIMATION_DURATION = 50;
+	private static final float EXPAND_ANIMATION_DURATION = 250;
 
 	private float minX;
 	private float maxX;
@@ -34,7 +36,9 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerChildren {
 	private Animation hoveringAnimation = new Animation(0, 0, 0, null);
 	private Animation unhoveringAnimation = new Animation(0, 0, 0, null);
 
+	private float lowestPoint;
 	private Boolean expanded = false;
+	private Animation expandingAnimation = new Animation(0, 0, 0, null);
 
 	public Feature(String name, Category parent) {
 		this.name = name;
@@ -54,8 +58,6 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerChildren {
 
 		this.parent.registerChild(this);
 		this.index = this.parent.getChildren().indexOf(this);
-
-		this.calculateCoordinates();
 	}
 
 	@Override
@@ -67,9 +69,8 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerChildren {
 
 		this.minY = this.parent.getMaxY() - 1;
 
-		for (Feature feature : this.parent.getChildren()) {
-			if (this.parent.getChildren().indexOf(feature) >= this.index) break;
-			this.minY += ConfigGui.getYPadding()*2 + FONT_SIZE - 1;
+		for (int i = 0; i < index; i++) {
+			this.minY += (this.parent.getChildren().get(i).getLowestPoint() - this.parent.getChildren().get(i).getMinY()) - 1;
 		}
 
 		this.maxY = this.minY + ConfigGui.getYPadding()*2 + FONT_SIZE;
@@ -88,6 +89,16 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerChildren {
 		} else if (!this.toggled && !this.unhoveringAnimation.isRunning()) {
 			this.hoveredOpacity = 0;
 		}
+
+		if (this.expanded && !this.expandingAnimation.isRunning()) {
+			this.lowestPoint = this.getLowestExpandedPoint();
+		} else if (!this.expanded && !this.expandingAnimation.isRunning()) {
+			this.lowestPoint = this.getLowestUnexpandedPoint();
+		}
+	}
+
+	public float getLowestPoint() {
+		return this.lowestPoint;
 	}
 
 	private void applyLowestPointScissor() {
@@ -112,33 +123,58 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerChildren {
 		NanoVGRenderer.drawString(this.name, this.textX, this.textY, FONT_SIZE, FONT_WEIGHT, ConfigGui.getTextColor());
 	}
 
+	private void renderAllChildren() {
+		for (LastLayerWidget<?> child : this.children) {
+			child.render();
+		}
+	}
+
 	@Override
 	public void render() {
+		this.expandingAnimation.update();
 		this.hoveringAnimation.update();
 		this.unhoveringAnimation.update();
 		this.togglingAnimation.update();
 		this.calculateCoordinates();
 
-		applyLowestPointScissor();
-		drawMainRectangle();
-		drawToggledRectangle();
-		drawHoveredRectangle();
-		drawFeatureName();
+		this.applyLowestPointScissor();
+		this.drawMainRectangle();
+		this.drawToggledRectangle();
+		this.drawHoveredRectangle();
+		this.drawFeatureName();
+		this.renderAllChildren();
+
 		NanoVGRenderer.resetScissor();
 	}
 
-	@Override
-	public Boolean onClick(int button) {
-		if (button != GLFW.GLFW_MOUSE_BUTTON_LEFT) {
-			return false;
-		}
-
+	private void onLeftClick() {
 		this.toggled = !this.toggled;
 		this.togglingAnimation = new Animation(this.toggledOpacity, this.toggled ? 255 : 0, ANIMATION_DURATION, value -> this.toggledOpacity = value);
 		this.togglingAnimation.start();
 
 		ConfigFile.updateConfig();
-		return true;
+	}
+
+	private void onRightClick() {
+		this.expanded = !this.expanded;
+		this.expandingAnimation = new Animation(this.lowestPoint, this.expanded ? this.getLowestExpandedPoint() : this.getLowestUnexpandedPoint(), 
+		EXPAND_ANIMATION_DURATION, value -> this.lowestPoint = value);
+		this.expandingAnimation.start();
+
+		ConfigFile.updateConfig();
+	}
+
+	@Override
+	public Boolean onClick(int button) {
+		if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+			onLeftClick();
+			return true;
+		} else if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+			onRightClick();
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -205,5 +241,19 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerChildren {
 
 	public float getHoveredOpacity() {
 		return hoveredOpacity;
+	}
+
+	private float getLowestExpandedPoint() {
+		float lowestExpandedPoint = this.maxY;
+		for (LastLayerWidget<?> child : this.children) {
+			float lowestChildPoint = child.getMaxY();
+			if (lowestChildPoint > lowestExpandedPoint) lowestExpandedPoint = lowestChildPoint;
+		}
+
+		return lowestExpandedPoint;
+	}
+
+	private float getLowestUnexpandedPoint() {
+		return this.maxY;
 	}
 }

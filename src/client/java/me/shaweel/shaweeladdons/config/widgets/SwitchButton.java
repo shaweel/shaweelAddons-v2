@@ -1,23 +1,28 @@
 package me.shaweel.shaweeladdons.config.widgets;
 
 
+import java.util.List;
+
 import me.shaweel.shaweeladdons.config.ConfigGui;
 import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
-import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerChildren;
+import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgetren;
 import me.shaweel.shaweeladdons.config.widgetTypes.LastLayerWidget;
 import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
 public class SwitchButton extends LastLayerWidget<Boolean> {
-	private static final int FONT_SIZE = 8;
+	private static final int FONT_SIZE = 7;
 	private static final int FONT_WEIGHT = 400;
 
 	private float minX;
 	private float maxX;
 	private float minY;
 	private float maxY;
+
+	private float textX;
+	private float textY;
 	
-	public SwitchButton(String name, ExpandableConfigWidgetWithLastLayerChildren parent) {
+	public SwitchButton(String name, ExpandableConfigWidgetWithLastLayerWidgetren parent) {
 		super(name, parent);
 	}
 
@@ -45,8 +50,7 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 	@Override
 	public float getContentWidth() {
-		Log.error("Unimplemented method 'getContentWidth'");
-		return 0f;
+		return NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT);
 	}
 
 	@Override
@@ -56,22 +60,29 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 		this.minY = this.parent.getMaxY() - 1;
 
-		for (ConfigWidget<?, ?> child : this.parent.getChildren()) {
-			if (this.parent.getChildren().indexOf(child) >= index) break;
-			this.minY += ConfigGui.getXPadding() * 2 + FONT_SIZE - 1;
+		for (int i = 0; i < index; i++) {
+			this.minY += ConfigGui.getYPadding() * 2 + FONT_SIZE - 1;
 		}
 
-		this.maxY = this.minY + ConfigGui.getXPadding() * 2 + FONT_SIZE;
+		this.maxY = this.minY + ConfigGui.getYPadding() * 2 + FONT_SIZE;
+
+		this.textX = this.minX + ConfigGui.getOptionPadding();
+		this.textY = this.minY + ConfigGui.getYPadding();
 	}
 
 	private void renderRectangle() {
-		NanoVGRenderer.drawRectangle(minX, minY, maxX, maxY, ConfigGui.getBackgroundColor());
+		NanoVGRenderer.drawRectangle(this.minX, this.minY, this.maxX, this.maxY, ConfigGui.getBackgroundColor());
+	}
+
+	private void renderName() {
+		NanoVGRenderer.drawString(this.name, this.textX, this.textY, FONT_SIZE, FONT_WEIGHT, ConfigGui.getTextColor());
 	}
 
 	@Override
 	public void render() {
 		this.calculateCoordinates();
 		this.renderRectangle();
+		this.renderName();
 	}
 
 
@@ -93,5 +104,10 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 	@Override
 	public float getMaxY() {
 		return this.maxY;
+	}
+
+	@Override
+	public List<ConfigWidget<?, ?>> getChildren() {
+		return null;
 	}
 }

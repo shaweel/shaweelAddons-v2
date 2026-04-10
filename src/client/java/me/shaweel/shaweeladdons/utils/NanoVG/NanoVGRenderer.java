@@ -127,15 +127,17 @@ public class NanoVGRenderer {
 		nvgText(vg, x, y, string);
 	}
 
-	public static float getStringWidth(String string, int size, int weight) {
+	public static float getStringWidth(String string, int size, int weight) {		
 		if (!validWeights.contains(weight)) {
 			Log.error(String.format("Invalid weight: %s, valid weights: %s", weight, validWeights));
 			return 0;
 		}
+
 		nvgFontSize(vg, size);
 		nvgFontFaceId(vg, notoSerif[weight/100-1]);
 		float[] bounds = new float[4];
 		nvgTextBounds(vg, 0, 0, string, bounds);
+		
 		return bounds[2] - bounds[0];
 	}
 }

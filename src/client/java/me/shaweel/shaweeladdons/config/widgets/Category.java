@@ -51,16 +51,13 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 		this.minY = ConfigGui.getCornerOffset();
 		this.maxY = this.minY + ConfigGui.getYPadding()*2 + FONT_SIZE;
 
-		this.minX = ConfigGui.getCornerOffset() * (index + 1);
+		this.minX = ConfigGui.getCornerOffset() * (this.index + 1);
 
-		for (Category category : categories) {
-			if (categories.indexOf(category) >= this.index) break;
+		for (int i = 0; i < this.index; i++) {
 			this.minX += this.parent.getWidestContentWidth() + ConfigGui.getXPadding();
 		}
 
 		this.maxX = this.minX + ConfigGui.getXPadding() + this.parent.getWidestContentWidth();
-
-		Log.debug(Float.toString(this.maxX));
 
 		this.textX = (this.maxX+this.minX)/2 - NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT)/2;
 		this.textY = this.minY + ConfigGui.getYPadding();
@@ -68,7 +65,7 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 		if (this.expanded && !this.expandingAnimation.isRunning()) {
 			this.lowestPoint = this.getLowestExpandedPoint();
 		} else if (!this.expanded && !this.expandingAnimation.isRunning()) {
-			this.lowestPoint = this.maxY;
+			this.lowestPoint = this.getLowestUnexpandedPoint();
 		}
 	}
 	
@@ -89,8 +86,6 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 
 		categories.add(this);
 		this.index = categories.indexOf(this);
-
-		this.calculateCoordinates();
 	}
 
 	private void drawMainRectangle() {
@@ -115,14 +110,11 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	public void render() {
 		this.expandingAnimation.update();
 
-		calculateCoordinates();
-
-		drawMainRectangle();
-		drawCategoryName();
-
-		renderAllFeatures();
-
-		drawIndicatorLine();
+		this.calculateCoordinates();
+		this.drawMainRectangle();
+		this.drawCategoryName();
+		this.renderAllFeatures();
+		this.drawIndicatorLine();
 	}
 
 	/**
@@ -178,8 +170,8 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 
 	private float getLowestExpandedPoint() {
 		float lowestExpandedPoint = this.maxY;
-		for (Feature child : children) {
-			float lowestChildPoint = child.getMaxY();
+		for (Feature child : this.children) {
+			float lowestChildPoint = child.getLowestPoint();
 			if (lowestChildPoint > lowestExpandedPoint) lowestExpandedPoint = lowestChildPoint;
 		}
 

@@ -1,11 +1,13 @@
 package me.shaweel.shaweeladdons.config;
 
+import java.util.Arrays;
 import java.util.List;
 
 import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
 import me.shaweel.shaweeladdons.config.widgets.Category;
 import me.shaweel.shaweeladdons.config.widgets.Feature;
 import me.shaweel.shaweeladdons.config.widgets.SwitchButton;
+import me.shaweel.shaweeladdons.utils.Log;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -21,6 +23,7 @@ public class ConfigGui extends Screen {
 	private static final int TEXT_COLOR = 0xffffffff;
 
 	//Padding
+	private static final float OPTION_PADDING = 2;
 	private static final float CORNER_OFFSET = 7;
 	private static final float X_PADDING = 15;
 	private static final float Y_PADDING = 3;
@@ -52,7 +55,7 @@ public class ConfigGui extends Screen {
 		Category dungeonsCategory = new Category("Dungeons", this);
 		Category idekCategory = new Category("idek atp", this);
 
-		new Feature("Click GUI", generalCategory);
+		Feature clickGuiFeature = new Feature("Click GUI", generalCategory);
 		Feature placeholderFeature = new Feature("Placeholder", generalCategory);
 
 		new Feature("idk", dungeonsCategory);
@@ -61,7 +64,20 @@ public class ConfigGui extends Screen {
 		new Feature("potatoe", idekCategory);
 		new Feature("emojis no work :(", idekCategory);
 
-		//new SwitchButton("Test", placeholderFeature);
+		new SwitchButton("Test", placeholderFeature);
+		new SwitchButton("Test2", placeholderFeature);
+		new SwitchButton("Test3", placeholderFeature);
+		new SwitchButton("Test4", placeholderFeature);
+		new SwitchButton("Test5", placeholderFeature);
+		new SwitchButton("Test6", placeholderFeature);
+		new SwitchButton("Test7", placeholderFeature);
+		new SwitchButton("Test8", placeholderFeature);
+		new SwitchButton("Test9", placeholderFeature);
+		new SwitchButton("Test11", placeholderFeature);
+		new SwitchButton("Test12", placeholderFeature);
+		new SwitchButton("Test13", placeholderFeature);
+		new SwitchButton("Test14", placeholderFeature);
+		new SwitchButton("asdsadasdasdsa", clickGuiFeature);
 	}
 
 	@Override
@@ -95,6 +111,7 @@ public class ConfigGui extends Screen {
 
 		for (ConfigWidget<?, ?> widget : widgets) {
 			float width = Math.max(widget.getContentWidth(), getWidestContentWidth(widget.getChildren()));
+
 			if (width > widest) {
 				widest = width;
 			}
@@ -129,5 +146,9 @@ public class ConfigGui extends Screen {
 
 	public static int getHoveredColor() {
 		return HOVERED_COLOR;
+	}
+
+	public static float getOptionPadding() {
+		return OPTION_PADDING;
 	}
 }

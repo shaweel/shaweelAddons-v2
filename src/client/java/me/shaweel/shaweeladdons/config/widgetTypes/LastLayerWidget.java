@@ -1,18 +1,16 @@
 package me.shaweel.shaweeladdons.config.widgetTypes;
 
-import java.util.List;
-
 import me.shaweel.shaweeladdons.config.ConfigFile;
 import me.shaweel.shaweeladdons.utils.Log;
 
-public abstract class LastLayerWidget<T> implements LastLayerChild, ConfigWidget<ExpandableConfigWidgetWithLastLayerChildren, T> {
+public abstract class LastLayerWidget<T> implements ConfigWidget<ExpandableConfigWidgetWithLastLayerWidgetren, T> {
 	protected String name;
 	protected int index;
-	protected ExpandableConfigWidgetWithLastLayerChildren parent;
+	protected ExpandableConfigWidgetWithLastLayerWidgetren parent;
 	protected T value;
 
 	@SuppressWarnings("unchecked")
-	public LastLayerWidget(String name, ExpandableConfigWidgetWithLastLayerChildren parent) {
+	public LastLayerWidget(String name, ExpandableConfigWidgetWithLastLayerWidgetren parent) {
 		this.name = name;
 		this.parent = parent;		
 		this.value = (T) ConfigFile.readFromConfig(parent.getName() + "." + name + ".value", false);
@@ -29,13 +27,6 @@ public abstract class LastLayerWidget<T> implements LastLayerChild, ConfigWidget
 
 		this.parent.registerChild(this);
 		this.index = this.parent.getChildren().indexOf(this);
-
-		this.calculateCoordinates();
-	}
-
-	public List<? extends ConfigWidget<?, ?>> getChildren() {
-		Log.error("LastLayerWidgets do not have children");
-		return null;
 	}
 	
 	public String getName() {
@@ -46,7 +37,7 @@ public abstract class LastLayerWidget<T> implements LastLayerChild, ConfigWidget
 		return value;
 	}
 
-	public ExpandableConfigWidgetWithLastLayerChildren getParent() {
+	public ExpandableConfigWidgetWithLastLayerWidgetren getParent() {
 		return parent;
 	}
 }

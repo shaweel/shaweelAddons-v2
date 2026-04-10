@@ -102,7 +102,7 @@ public class NanoVGRenderer {
 		nvgRGBAf(r, g, b, a, nvgColor);
 	}
 
-	public static void drawRect(float minX, float minY, float maxX, float maxY, int color) {
+	public static void drawRectangle(float minX, float minY, float maxX, float maxY, int color) {
 		final WidthHeight widthHeight = getWidthAndHeight(minX, minY, maxX, maxY);
 		final float width = widthHeight.width;
 		final float height = widthHeight.height;

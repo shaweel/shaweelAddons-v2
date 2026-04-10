@@ -2,8 +2,10 @@ package me.shaweel.shaweeladdons.config;
 
 import java.util.List;
 
+import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
 import me.shaweel.shaweeladdons.config.widgets.Category;
 import me.shaweel.shaweeladdons.config.widgets.Feature;
+import me.shaweel.shaweeladdons.config.widgets.SwitchButton;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -11,19 +13,21 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
 public class ConfigGui extends Screen {
+	//----------------STATIC VARIABLES----------------
+	//Colors
 	private static final int PRIMARY_COLOR = 0xff3c093c;
 	private static final int BACKGROUND_COLOR = 0xff141414;
 	private static final int HOVERED_COLOR = 0xffffffff;
 	private static final int TEXT_COLOR = 0xffffffff;
 
+	//Padding
+	private static final float CORNER_OFFSET = 7;
 	private static final float X_PADDING = 15;
 	private static final float Y_PADDING = 3;
+	//Make these configurable in the future.
 
+	//The actual class starts here... good luck future me
 	private Boolean openConfig = false;
-
-	private Category generalCategory;
-	private Category dungeonsCategory;
-	private Category idekCategory;
 
 	public ConfigGui() {
 		super(Component.literal("shaweelAddonsConfigGui"));
@@ -44,18 +48,20 @@ public class ConfigGui extends Screen {
 		super.init();
 		
 		Category.clearCategories();
-		this.generalCategory = new Category("General", this);
-		this.dungeonsCategory = new Category("Dungeons", this);
-		this.idekCategory = new Category("idek atp", this);
+		Category generalCategory = new Category("General", this);
+		Category dungeonsCategory = new Category("Dungeons", this);
+		Category idekCategory = new Category("idek atp", this);
 
-		new Feature("Click GUI", this.generalCategory);
-		new Feature("Placeholder", this.generalCategory);
+		new Feature("Click GUI", generalCategory);
+		Feature placeholderFeature = new Feature("Placeholder", generalCategory);
 
-		new Feature("idk", this.dungeonsCategory);
-		new Feature("potato", this.dungeonsCategory);
+		new Feature("idk", dungeonsCategory);
+		new Feature("potato", dungeonsCategory);
 
-		new Feature("potatoe", this.idekCategory);
-		new Feature("emojis no work :(", this.idekCategory);
+		new Feature("potatoe", idekCategory);
+		new Feature("emojis no work :(", idekCategory);
+
+		//new SwitchButton("Test", placeholderFeature);
 	}
 
 	@Override
@@ -103,6 +109,10 @@ public class ConfigGui extends Screen {
 
 	public static float getYPadding() {
 		return Y_PADDING;
+	}
+
+	public static float getCornerOffset() {
+		return CORNER_OFFSET;
 	}
 
 	public static int getBackgroundColor() {

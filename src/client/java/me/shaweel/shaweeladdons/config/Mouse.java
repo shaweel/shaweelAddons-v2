@@ -2,6 +2,7 @@ package me.shaweel.shaweeladdons.config;
 
 import java.util.List;
 
+import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
 import me.shaweel.shaweeladdons.config.widgets.Category;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;

@@ -4,71 +4,72 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-
 import org.lwjgl.glfw.GLFW;
 
 import me.shaweel.shaweeladdons.config.ConfigFile;
 import me.shaweel.shaweeladdons.config.ConfigGui;
-import me.shaweel.shaweeladdons.config.ConfigWidget;
-import me.shaweel.shaweeladdons.utils.Easing;
+import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
+import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidget;
 import me.shaweel.shaweeladdons.utils.Log;
+import me.shaweel.shaweeladdons.utils.Animation;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGPiPRenderer;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class Category implements ConfigWidget<ConfigGui, Void> {
+public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfigWidget {
 	private static List<Category> categories = new ArrayList<>();
 	public List<Feature> children = new ArrayList<>();
 
 	private final ConfigGui parent;
 	private final String name;
-	private final float index;
+	private float index;
 
 	private static final int FONT_SIZE = 12; 
 	private static final int FONT_WEIGHT = 400;
 
-	private static final float MARGIN = 7f;
 	private static final float INDICATOR_LINE_Y = 2;
-	private static final float ANIMATION_DURATION = 300;
+	private static final float ANIMATION_DURATION = 250;
 
-	private float y;
-	private float x;
-
-	private float squareMinX;
-	private float squareMaxX;
-	private float squareMinY;
-	private float squareMaxY;
+	private float minX;
+	private float maxX;
+	private float minY;
+	private float maxY;
 
 	private float textX;
 	private float textY;
 
 	private float lowestPoint = Float.POSITIVE_INFINITY;
 
-	private long lastExpandTime;
-	private float lastLowestPoint;
-	private float expandGoal;
+	private Animation expandingAnimation = new Animation(0, 0, 0, null);
 
 	private Boolean expanded = false;
-	private Boolean expanding = false;
-	private Boolean collapsing = false;
 
-	private void calculateCoordinates() {
-		this.x = MARGIN * (index + 1);
+	@Override
+	public void calculateCoordinates() {
+		this.index = categories.indexOf(this);
+
+		this.minY = ConfigGui.getCornerOffset();
+		this.maxY = this.minY + ConfigGui.getYPadding()*2 + FONT_SIZE;
+
+		this.minX = ConfigGui.getCornerOffset() * (index + 1);
 
 		for (Category category : categories) {
 			if (categories.indexOf(category) >= this.index) break;
-			this.x += this.parent.getWidestContentWidth() + ConfigGui.getXPadding();
+			this.minX += this.parent.getWidestContentWidth() + ConfigGui.getXPadding();
 		}
 
-		this.y = MARGIN;
+		this.maxX = this.minX + ConfigGui.getXPadding() + this.parent.getWidestContentWidth();
 
-		this.squareMinX = this.x;
-		this.squareMaxX = this.x + ConfigGui.getXPadding() + this.parent.getWidestContentWidth();
-		this.squareMinY = this.y;
-		this.squareMaxY = this.y + ConfigGui.getYPadding()*2 + FONT_SIZE;
+		Log.debug(Float.toString(this.maxX));
 
-		this.textX = (this.squareMaxX+this.squareMinX)/2 - NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT)/2;
-		this.textY = this.y + ConfigGui.getYPadding();
+		this.textX = (this.maxX+this.minX)/2 - NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT)/2;
+		this.textY = this.minY + ConfigGui.getYPadding();
+
+		if (this.expanded && !this.expandingAnimation.isRunning()) {
+			this.lowestPoint = this.getLowestExpandedPoint();
+		} else if (!this.expanded && !this.expandingAnimation.isRunning()) {
+			this.lowestPoint = this.maxY;
+		}
 	}
 	
 	public Category(String name, ConfigGui parent) {
@@ -92,32 +93,8 @@ public class Category implements ConfigWidget<ConfigGui, Void> {
 		this.calculateCoordinates();
 	}
 
-	private void expandOrCollapse() {
-		final long elapsed = System.currentTimeMillis() - lastExpandTime;
-		final float progress = Math.min(elapsed / ANIMATION_DURATION, 1f);
-
-		final float easedProgress;
-		if (this.expanding) {
-			easedProgress = Easing.easeInCubic(progress);
-		} else if (this.collapsing) {
-			easedProgress = Easing.easeOutCubic(progress);
-		} else {
-			Log.error("Unexpected scenario, expandOrCollapse() was called when neither expanding nor collapsing are true");
-			return;
-		}
-
-		if (progress >= 1) {
-			this.expanded = expanding;
-			this.expanding = false;
-			this.collapsing = false;
-			lowestPoint = expandGoal;
-		}
-
-		this.lowestPoint = this.lastLowestPoint + (this.expandGoal - this.lastLowestPoint) * easedProgress;
-	}
-
 	private void drawMainRectangle() {
-		NanoVGRenderer.drawRect(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, ConfigGui.getBackgroundColor());
+		NanoVGRenderer.drawRectangle(this.minX, this.minY, this.maxX, this.maxY, ConfigGui.getBackgroundColor());
 	}
 
 	private void drawCategoryName() {
@@ -125,32 +102,26 @@ public class Category implements ConfigWidget<ConfigGui, Void> {
 	}
 
 	private void drawIndicatorLine() {
-		NanoVGRenderer.drawRect(this.squareMinX, this.lowestPoint - 1, this.squareMaxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, ConfigGui.getBackgroundColor());
+		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint - 1, this.maxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, ConfigGui.getBackgroundColor());
 
 		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.children.getLast().getToggledOpacity() << 24);
-		NanoVGRenderer.drawRect(this.squareMinX, this.lowestPoint - 1, this.squareMaxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, toggledColor);
+		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint - 1, this.maxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, toggledColor);
 
 		int hoveredColor = (ConfigGui.getHoveredColor() & 0x00FFFFFF) | ((int) this.children.getLast().getHoveredOpacity() << 24);
-		NanoVGRenderer.drawRect(this.squareMinX, this.lowestPoint - 1, this.squareMaxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, hoveredColor);
+		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint - 1, this.maxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, hoveredColor);
 	}
 
-	private void render() {
+	@Override
+	public void render() {
+		this.expandingAnimation.update();
+
 		calculateCoordinates();
 
 		drawMainRectangle();
 		drawCategoryName();
 
-		if (expanding || collapsing) {
-			expandOrCollapse();
-		} else if (!expanded) {
-			this.lowestPoint = getLowestUnexpandedPoint();
-		} else if (expanded) {
-			this.lowestPoint = getLowestExpandedPoint();
-		}
+		renderAllFeatures();
 
-		if (expanding || collapsing || expanded) {
-			renderAllFeatures();
-		}
 		drawIndicatorLine();
 	}
 
@@ -176,18 +147,10 @@ public class Category implements ConfigWidget<ConfigGui, Void> {
 			return false;
 		}
 
-		this.lastExpandTime = System.currentTimeMillis();
-		this.lastLowestPoint = lowestPoint;
-
-		if (expanded && !collapsing || expanding) {
-			this.expandGoal = this.squareMaxY;
-			this.expanding = false;
-			this.collapsing = true;
-		} else {
-			this.expandGoal = getLowestExpandedPoint();
-			this.expanding = true;
-			this.collapsing = false;
-		}
+		this.expanded = !this.expanded;
+		this.expandingAnimation = new Animation(this.lowestPoint, this.expanded ? this.getLowestExpandedPoint() : this.getLowestUnexpandedPoint(), 
+		ANIMATION_DURATION, value -> this.lowestPoint = value);
+		this.expandingAnimation.start();
 
 		ConfigFile.updateConfig();
 		return true;
@@ -205,7 +168,7 @@ public class Category implements ConfigWidget<ConfigGui, Void> {
 
 	@Override
 	public Boolean isInHitbox(double x, double y) {
-		return (x > this.squareMinX && x < this.squareMaxX && y > this.squareMinY && y < this.squareMaxY);
+		return (x > this.minX && x < this.maxX && y > this.minY && y < this.maxY);
 	}
 
 	@Override
@@ -213,15 +176,10 @@ public class Category implements ConfigWidget<ConfigGui, Void> {
 		return null;
 	}
 
-	@Override
-	public Boolean getExpanded() {
-		return this.expanded && !this.collapsing || this.expanding;
-	}
-
 	private float getLowestExpandedPoint() {
-		float lowestExpandedPoint = this.squareMaxY;
+		float lowestExpandedPoint = this.maxY;
 		for (Feature child : children) {
-			float lowestChildPoint = child.getSquareMaxY();
+			float lowestChildPoint = child.getMaxY();
 			if (lowestChildPoint > lowestExpandedPoint) lowestExpandedPoint = lowestChildPoint;
 		}
 
@@ -229,7 +187,7 @@ public class Category implements ConfigWidget<ConfigGui, Void> {
 	}
 
 	private float getLowestUnexpandedPoint() {
-		return this.squareMaxY;
+		return this.maxY;
 	}
 
 	private void renderAllFeatures() {
@@ -240,20 +198,24 @@ public class Category implements ConfigWidget<ConfigGui, Void> {
 		}
 	}
 
-	public float getSquareMinX() {
-		return this.squareMinX;
+	@Override
+	public float getMinX() {
+		return this.minX;
 	}
 
-	public float getSquareMaxX() {
-		return this.squareMaxX;
+	@Override
+	public float getMaxX() {
+		return this.maxX;
 	}
 
-	public float getSquareMinY() {
-		return this.squareMinY;
+	@Override
+	public float getMinY() {
+		return this.minY;
 	}
 
-	public float getSquareMaxY() {
-		return this.squareMaxY;
+	@Override
+	public float getMaxY() {
+		return this.maxY;
 	}
 
 	public float getTextX() {
@@ -267,6 +229,11 @@ public class Category implements ConfigWidget<ConfigGui, Void> {
 	@Override
 	public String getName() {
 		return this.name;
+	}
+
+	@Override
+	public Boolean getExpanded() {
+		return this.expanded;
 	}
 
 	public float getLowestPoint() {

@@ -13,7 +13,9 @@ public class Log {
 	 * @param message the message to print
 	 */
 	public static void info(String message) {
-		Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §7"+message), false);
+		Minecraft.getInstance().execute(() -> {
+			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §7"+message), false);
+		});
 	}
 
 	/**
@@ -22,7 +24,9 @@ public class Log {
 	 */
 	public static void debug(String message) {
 		if (!debugMode) return;
-		Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §e[DEBUG] §7"+message), false);
+		Minecraft.getInstance().execute(() -> {
+			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §e[DEBUG] §7"+message), false);
+		});
 	}
 
 	/**
@@ -30,7 +34,9 @@ public class Log {
 	 * @param message the message to print
 	 */
 	public static void pseudoDebug(String message) {
-		Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §e[DEBUG] §7"+message), false);
+		Minecraft.getInstance().execute(() -> {
+			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §e[DEBUG] §7"+message), false);
+		});
 	}
 
 	/**
@@ -38,7 +44,9 @@ public class Log {
 	 * @param message the message to print
 	 */
 	public static void error(String message) {
-		Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §4[ERROR] §7"+message), false);
+		Minecraft.getInstance().execute(() -> {
+			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §4[ERROR] §7"+message), false);
+		});
 	}
 
 	/**
@@ -46,7 +54,9 @@ public class Log {
 	 * @param message the message to print
 	 */
 	public static void warn(String message) {
-		Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §6[WARNING] §7"+message), false);
+		Minecraft.getInstance().execute(() -> {
+			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §6[WARNING] §7"+message), false);
+		});
 	}
 
 	/**

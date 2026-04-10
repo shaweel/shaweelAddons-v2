@@ -10,6 +10,8 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
+import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidget;
 import me.shaweel.shaweeladdons.config.widgets.Category;
 import me.shaweel.shaweeladdons.utils.Log;
 import net.fabricmc.loader.api.FabricLoader;
@@ -56,7 +58,12 @@ public class ConfigFile {
 		for (ConfigWidget<?, ?> widget : widgets) {
 			String entry = widget.getName();
 			Object value = widget.getValue();
-			Boolean expanded = widget.getExpanded();
+			Boolean expanded;
+			if (widget instanceof ExpandableConfigWidget expandableConfigWidget) {
+				expanded = expandableConfigWidget.getExpanded();
+			} else {
+				expanded = null;
+			}
 
 			map.put(entry, new HashMap<>());
 

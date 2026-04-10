@@ -1,14 +1,13 @@
-package me.shaweel.shaweeladdons.config;
+package me.shaweel.shaweeladdons.config.widgetTypes;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.shaweel.shaweeladdons.config.widgets.Category;
 
-public abstract class ExpandableWidgetWithLastLayerChildren implements ConfigWidget<Category, Boolean> {
+public abstract class ExpandableConfigWidgetWithLastLayerChildren implements ConfigWidget<Category, Boolean> {
 	protected String name;
 	protected Category parent;
-
 	private List<LastLayerChild> children = new ArrayList<>();
 
 	public void registerChild(LastLayerChild child) {

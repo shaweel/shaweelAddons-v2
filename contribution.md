@@ -1,0 +1,12 @@
+# Contribution Guidelines
+- Use tabs for indentation. With this the recommended tab size is 8 spaces
+- Under no circumstances shall you ever nest more than three times in a method. If you need to do so, there's something terribly wrong with your code.
+- Do not abbreviate anything, ever.
+- Do not leave out important information in names.
+- If something doesn't need abstraction. DO NOT ABSTRACT IT.
+- A method should do one thing and it should do it well.
+- Good code expresses it's intent better than comments about said code
+- Documentation is important, JavaDoc exists, use it.
+- Use pascalCase
+- Code you write, yet don't understand is bad code
+- Don't use Kotlin

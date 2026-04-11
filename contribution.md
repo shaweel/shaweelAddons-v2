@@ -10,3 +10,4 @@
 - Use pascalCase
 - Code you write, yet don't understand is bad code
 - Don't use Kotlin
+- Follow [Conventional Commits](https://www.conventionalcommits.org/)

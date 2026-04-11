@@ -154,6 +154,6 @@ public class ConfigGui extends Screen {
 	}
 
 	public static float getExpandingAnimationDuration() {
-		return OPTION_PADDING;
+		return EXPANDING_ANIMATION_DURATION;
 	}
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import me.shaweel.shaweeladdons.config.widgets.Category;
 
-public abstract class ExpandableConfigWidgetWithLastLayerWidgetren implements ConfigWidget<Category, Boolean> {
+public abstract class ExpandableConfigWidgetWithLastLayerWidgets implements ConfigWidget<Category, Boolean> {
 	protected String name;
 	protected Category parent;
 	protected List<LastLayerWidget<?>> children = new ArrayList<>();

@@ -4,13 +4,13 @@ import org.lwjgl.glfw.GLFW;
 
 import me.shaweel.shaweeladdons.config.ConfigFile;
 import me.shaweel.shaweeladdons.config.ConfigGui;
-import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgetren;
+import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgets;
 import me.shaweel.shaweeladdons.config.widgetTypes.LastLayerWidget;
 import me.shaweel.shaweeladdons.utils.Animation;
 import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
-public class Feature extends ExpandableConfigWidgetWithLastLayerWidgetren {
+public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 	private int index;
 
 	private static final int FONT_SIZE = 9;

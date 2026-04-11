@@ -36,7 +36,7 @@ public class ConfigGui extends Screen {
 
 	private static final int CATEGORY_FONT_WEIGHT = 400;
 	private static final int FEATURE_FONT_WEIGHT = 500;
-	private static final int OPTION_FONT_WEIGHT = 300;
+	private static final int OPTION_FONT_WEIGHT = 400;
 
 	//Animations
 	private static final float FEATURE_TOGGLE_ANIMATION_DURATION = 50;

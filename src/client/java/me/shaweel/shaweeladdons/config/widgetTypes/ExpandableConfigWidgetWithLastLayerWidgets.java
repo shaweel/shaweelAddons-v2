@@ -24,13 +24,16 @@ public abstract class ExpandableConfigWidgetWithLastLayerWidgets implements Conf
 	}
 
 	protected float getLowestExpandedPoint() {
+		if (this.children.size() == 0) {
+			return this.getMaxY();
+		}
 		float lowestExpandedPoint = this.getMaxY();
 		for (LastLayerWidget<?> child : this.children) {
 			float lowestChildPoint = child.getMaxY();
 			if (lowestChildPoint > lowestExpandedPoint) lowestExpandedPoint = lowestChildPoint;
 		}
 
-		return lowestExpandedPoint;
+		return lowestExpandedPoint + 1;
 	}
 
 	protected float getLowestUnexpandedPoint() { return this.getMaxY(); }

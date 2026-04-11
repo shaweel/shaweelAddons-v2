@@ -17,7 +17,6 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 	private static final int FONT_WEIGHT = 500;
 	private static final float MAX_HOVERED_OPACITY = 20;
 	private static final float ANIMATION_DURATION = 50;
-	private static final float EXPAND_ANIMATION_DURATION = 250;
 
 	private float minX;
 	private float maxX;
@@ -36,15 +35,11 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 	private Animation hoveringAnimation = new Animation(0, 0, 0, null);
 	private Animation unhoveringAnimation = new Animation(0, 0, 0, null);
 
-	private float lowestPoint;
-	private Boolean expanded = false;
-	private Animation expandingAnimation = new Animation(0, 0, 0, null);
-
 	public Feature(String name, Category parent) {
 		this.name = name;
 		this.parent = parent;
 		this.toggled = (boolean) ConfigFile.readFromConfig(parent.getName() + "." + name + ".value", false);
-		this.expanded = (boolean) ConfigFile.readFromConfig(name + ".expanded", false);
+		this.expanded = (boolean) ConfigFile.readFromConfig(parent.getName() + "." + name + ".expanded", false);
 
 		Boolean alreadyExists = false;
 
@@ -90,15 +85,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 			this.hoveredOpacity = 0;
 		}
 
-		if (this.expanded && !this.expandingAnimation.isRunning()) {
-			this.lowestPoint = this.getLowestExpandedPoint();
-		} else if (!this.expanded && !this.expandingAnimation.isRunning()) {
-			this.lowestPoint = this.getLowestUnexpandedPoint();
-		}
-	}
-
-	public float getLowestPoint() {
-		return this.lowestPoint;
+		this.calculateLowestPoint();
 	}
 
 	private void applyLowestPointScissor() {
@@ -131,7 +118,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 
 	@Override
 	public void render() {
-		this.expandingAnimation.update();
+		this.updateExpandingAnimation();
 		this.hoveringAnimation.update();
 		this.unhoveringAnimation.update();
 		this.togglingAnimation.update();
@@ -156,10 +143,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 	}
 
 	private void onRightClick() {
-		this.expanded = !this.expanded;
-		this.expandingAnimation = new Animation(this.lowestPoint, this.expanded ? this.getLowestExpandedPoint() : this.getLowestUnexpandedPoint(), 
-		EXPAND_ANIMATION_DURATION, value -> this.lowestPoint = value);
-		this.expandingAnimation.start();
+		this.expand();
 
 		ConfigFile.updateConfig();
 	}
@@ -241,19 +225,5 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 
 	public float getHoveredOpacity() {
 		return hoveredOpacity;
-	}
-
-	private float getLowestExpandedPoint() {
-		float lowestExpandedPoint = this.maxY;
-		for (LastLayerWidget<?> child : this.children) {
-			float lowestChildPoint = child.getMaxY();
-			if (lowestChildPoint > lowestExpandedPoint) lowestExpandedPoint = lowestChildPoint;
-		}
-
-		return lowestExpandedPoint;
-	}
-
-	private float getLowestUnexpandedPoint() {
-		return this.maxY;
 	}
 }

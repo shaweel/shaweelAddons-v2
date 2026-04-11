@@ -21,6 +21,7 @@ jobs:
         run: | 
           chmod +x ./gradlew
           ./gradlew build
+          mv build/libs/shaweeladdons-${{ env.MOD_VERSION }}.jar build/libs/shaweeladdons-v${{ env.MOD_VERSION }}-build${{ github.run_number }}.jar
 
       - name: Fetch modVersion from gradle.properties
         run: |
@@ -29,6 +30,5 @@ jobs:
       - name: Upload the shaweelAddons .jar file
         uses: actions/upload-artifact@v6
         with:
-          name: "shaweelAddons-v${{ env.MOD_VERSION }}-build${{ github.run_number }}.jar"
-          path: build/libs/shaweeladdons-${{ env.MOD_VERSION }}.jar
+          path: build/libs/shaweeladdons-${{ env.MOD_VERSION }}-build${{ github.run_number }}.jar
           archive: false

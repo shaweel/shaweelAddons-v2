@@ -25,6 +25,9 @@ public class ConfigGui extends Screen {
 	private static final float CORNER_OFFSET = 7;
 	private static final float X_PADDING = 15;
 	private static final float Y_PADDING = 3;
+
+	//Animation duration
+	private static final float EXPANDING_ANIMATION_DURATION = 250;
 	//Make these configurable in the future.
 
 	//The actual class starts here... good luck future me
@@ -147,6 +150,10 @@ public class ConfigGui extends Screen {
 	}
 
 	public static float getOptionPadding() {
+		return OPTION_PADDING;
+	}
+
+	public static float getExpandingAnimationDuration() {
 		return OPTION_PADDING;
 	}
 }

@@ -3,14 +3,13 @@ package me.shaweel.shaweeladdons.config.widgetTypes;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.shaweel.shaweeladdons.config.ConfigGui;
 import me.shaweel.shaweeladdons.config.widgets.Category;
 import me.shaweel.shaweeladdons.utils.Animation;
 
 public abstract class ExpandableConfigWidgetWithLastLayerWidgets implements ConfigWidget<Category, Boolean>, ExpandableConfigWidget {
 	protected String name;
 	protected Category parent;
-
-	private static final float EXPAND_ANIMATION_DURATION = 250;
 
 	protected float lowestPoint;
 	private Animation expandingAnimation = new Animation(0, 0, 0, null);
@@ -20,7 +19,7 @@ public abstract class ExpandableConfigWidgetWithLastLayerWidgets implements Conf
 	protected void expand() {
 		this.expanded = !this.expanded;
 		this.expandingAnimation = new Animation(this.lowestPoint, this.expanded ? this.getLowestExpandedPoint() : this.getLowestUnexpandedPoint(), 
-		EXPAND_ANIMATION_DURATION, value -> this.lowestPoint = value);
+		ConfigGui.getExpandingAnimationDuration(), value -> this.lowestPoint = value);
 		this.expandingAnimation.start();
 	}
 

@@ -28,7 +28,6 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	private static final int FONT_WEIGHT = 400;
 
 	private static final float INDICATOR_LINE_Y = 2;
-	private static final float ANIMATION_DURATION = 250;
 
 	private float minX;
 	private float maxX;
@@ -141,7 +140,7 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 
 		this.expanded = !this.expanded;
 		this.expandingAnimation = new Animation(this.lowestPoint, this.expanded ? this.getLowestExpandedPoint() : this.getLowestUnexpandedPoint(), 
-		ANIMATION_DURATION, value -> this.lowestPoint = value);
+		ConfigGui.getExpandingAnimationDuration(), value -> this.lowestPoint = value);
 		this.expandingAnimation.start();
 
 		ConfigFile.updateConfig();

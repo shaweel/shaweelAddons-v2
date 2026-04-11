@@ -13,6 +13,7 @@ import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 public class SwitchButton extends LastLayerWidget<Boolean> {
 	private static final int FONT_SIZE = 7;
 	private static final int FONT_WEIGHT = 400;
+	private static final float BUTTON_WIDTH = 20;
 
 	private float minX;
 	private float maxX;
@@ -21,6 +22,12 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 	private float textX;
 	private float textY;
+
+	private float switchMinX;
+	private float switchMaxX;
+	private float switchMinY;
+	private float switchMaxY;
+	private float switchRectangleRadius;
 	
 	public SwitchButton(String name, ExpandableConfigWidgetWithLastLayerWidgetren parent) {
 		super(name, parent);
@@ -68,6 +75,12 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 		this.textX = this.minX + ConfigGui.getOptionPadding();
 		this.textY = this.minY + ConfigGui.getYPadding();
+
+		this.switchMaxX = this.maxX - ConfigGui.getOptionPadding();
+		this.switchMinX = this.switchMaxX - BUTTON_WIDTH; 
+		this.switchMinY = this.minY + ConfigGui.getYPadding();
+		this.switchMaxY = this.maxY - ConfigGui.getYPadding();
+		this.switchRectangleRadius = (this.switchMaxY - this.switchMinY) / 2;
 	}
 
 	private void renderRectangle() {
@@ -78,11 +91,17 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		NanoVGRenderer.drawString(this.name, this.textX, this.textY, FONT_SIZE, FONT_WEIGHT, ConfigGui.getTextColor());
 	}
 
+	private void renderButton() {
+		NanoVGRenderer.drawRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, 
+			this.switchRectangleRadius, ConfigGui.getPrimaryColor());
+	}
+
 	@Override
 	public void render() {
 		this.calculateCoordinates();
 		this.renderRectangle();
 		this.renderName();
+		this.renderButton();
 	}
 
 

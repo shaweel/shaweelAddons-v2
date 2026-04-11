@@ -7,7 +7,7 @@
 - A method should do one thing and it should do it well.
 - Good code expresses it's intent better than comments about said code
 - Documentation is important, JavaDoc exists, use it.
-- Use pascalCase
+- Use camelCase
 - Code you write, yet don't understand is bad code
 - Don't use Kotlin
 - Follow [Conventional Commits](https://www.conventionalcommits.org/)

@@ -26,10 +26,10 @@ jobs:
         run: | 
           chmod +x ./gradlew
           ./gradlew build
-          mv build/libs/shaweeladdons-${{ env.MOD_VERSION }}.jar build/libs/shaweeladdons-mc${{ env.MINECRAFT_VERSION }}-v${{ env.MOD_VERSION }}+b${{ github.run_number }}.jar
+          mv build/libs/shaweeladdons-${{ env.MOD_VERSION }}.jar build/libs/shaweelAddons-mc${{ env.MINECRAFT_VERSION }}-v${{ env.MOD_VERSION }}+b${{ github.run_number }}.jar
 
       - name: Upload the shaweelAddons .jar file
         uses: actions/upload-artifact@v7
         with:
-          path: build/libs/shaweeladdons-mc${{ env.MINECRAFT_VERSION }}-v${{ env.MOD_VERSION }}+b${{ github.run_number }}.jar
+          path: build/libs/shaweelAddons-mc${{ env.MINECRAFT_VERSION }}-v${{ env.MOD_VERSION }}+b${{ github.run_number }}.jar
           archive: false

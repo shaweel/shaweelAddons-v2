@@ -18,13 +18,14 @@ public class ConfigGui extends Screen {
 	private static int PRIMARY_COLOR = 0xff3c093c;
 	private static int BACKGROUND_COLOR = 0xff141414;
 	private static int HOVERED_COLOR = 0xffffffff;
-	private static int TEXT_COLOR = 0xffffffff;
+	private static int TEXT_COLOR = 0xffd0d0d0;
 
 	//Padding
 	private static float CATEGORY_Y_PADDING = 3.5f;
 	private static float FEATURE_Y_PADDING = 3;
 	private static float OPTION_TEXT_VERTICAL_MARGIN = 2.5f;
 	private static float OPTION_HORIZONTAL_MARGIN = 2;
+	private static float SWITCH_CIRCLE_MARGIN = 2;
 	private static float SWITCH_VERTICAL_MARGIN = 1.5f;
 	private static float CORNER_OFFSET = 7;
 	private static float CATEGORY_X_PADDING = 15;
@@ -153,6 +154,7 @@ public class ConfigGui extends Screen {
 	public static float getOptionTextVerticalMargin() { return OPTION_TEXT_VERTICAL_MARGIN; }
 	public static float getOptionHorizontalMargin() { return OPTION_HORIZONTAL_MARGIN; }
 	public static float getSwitchVerticalMargin() { return SWITCH_VERTICAL_MARGIN; }
+	public static float getSwitchCircleMargin() { return SWITCH_CIRCLE_MARGIN; }
 	public static float getCornerOffset() { return CORNER_OFFSET; }
 	public static float getCategoryXPadding() { return CATEGORY_X_PADDING; }
 

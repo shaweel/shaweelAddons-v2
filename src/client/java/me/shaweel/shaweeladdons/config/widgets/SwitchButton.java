@@ -24,6 +24,9 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 	private float switchMinY;
 	private float switchMaxY;
 	private float switchRectangleRadius;
+
+	private float circleX;
+	private float circleY;
 	
 	public SwitchButton(String name, ExpandableConfigWidgetWithLastLayerWidgets parent) {
 		super(name, parent);
@@ -77,6 +80,8 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		this.switchMinY = this.minY + ConfigGui.getSwitchVerticalMargin();
 		this.switchMaxY = this.maxY - ConfigGui.getSwitchVerticalMargin();
 		this.switchRectangleRadius = (this.switchMaxY - this.switchMinY) / 2;
+		this.circleX = this.switchMaxX - this.switchRectangleRadius*2;
+		this.circleY = this.switchMinY + 1;
 	}
 
 	private void renderRectangle() {
@@ -87,9 +92,10 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		NanoVGRenderer.drawString(this.name, this.textX, this.textY, ConfigGui.getOptionFontSize(), ConfigGui.getOptionFontWeight(), ConfigGui.getTextColor());
 	}
 
-	private void renderButton() {
+	private void renderSwitch() {
 		NanoVGRenderer.drawRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, 
 			this.switchRectangleRadius, ConfigGui.getPrimaryColor());
+		NanoVGRenderer.drawCircle(this.circleX, this.circleY, this.switchRectangleRadius - 1, ConfigGui.getTextColor());
 	}
 
 	@Override
@@ -97,7 +103,7 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		this.calculateCoordinates();
 		this.renderRectangle();
 		this.renderName();
-		this.renderButton();
+		this.renderSwitch();
 	}
 
 

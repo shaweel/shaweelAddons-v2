@@ -21,9 +21,9 @@ public class ConfigGui extends Screen {
 	private static final int TEXT_COLOR = 0xffffffff;
 
 	//Padding
-	private static final float CATEGORY_Y_PADDING = 2;
-	private static final float FEATURE_Y_PADDING = 2;
-	private static final float OPTION_TEXT_VERTICAL_MARGIN = 2;
+	private static final float CATEGORY_Y_PADDING = 3.5f;
+	private static final float FEATURE_Y_PADDING = 3;
+	private static final float OPTION_TEXT_VERTICAL_MARGIN = 2.5f;
 	private static final float OPTION_HORIZONTAL_MARGIN = 2;
 	private static final float SWITCH_VERTICAL_MARGIN = 1.5f;
 	private static final float CORNER_OFFSET = 7;
@@ -46,7 +46,7 @@ public class ConfigGui extends Screen {
 	//Miscellaneous
 	private static final float SWITCH_WIDTH = 20;
 	private static final float FEATURE_MAX_HOVERED_OPACITY = 20;
-	private static final float CATEGORY_INDICATOR_LINE_SIZE = 3;
+	private static final float CATEGORY_INDICATOR_LINE_SIZE = 2;
 
 	//Make these configurable in the future.
 

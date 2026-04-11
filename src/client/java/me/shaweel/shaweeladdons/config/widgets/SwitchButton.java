@@ -5,7 +5,7 @@ import java.util.List;
 
 import me.shaweel.shaweeladdons.config.ConfigGui;
 import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
-import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgetren;
+import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgets;
 import me.shaweel.shaweeladdons.config.widgetTypes.LastLayerWidget;
 import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
@@ -29,7 +29,7 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 	private float switchMaxY;
 	private float switchRectangleRadius;
 	
-	public SwitchButton(String name, ExpandableConfigWidgetWithLastLayerWidgetren parent) {
+	public SwitchButton(String name, ExpandableConfigWidgetWithLastLayerWidgets parent) {
 		super(name, parent);
 	}
 

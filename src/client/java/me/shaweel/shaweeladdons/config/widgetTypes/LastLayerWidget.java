@@ -3,14 +3,14 @@ package me.shaweel.shaweeladdons.config.widgetTypes;
 import me.shaweel.shaweeladdons.config.ConfigFile;
 import me.shaweel.shaweeladdons.utils.Log;
 
-public abstract class LastLayerWidget<T> implements ConfigWidget<ExpandableConfigWidgetWithLastLayerWidgetren, T> {
+public abstract class LastLayerWidget<T> implements ConfigWidget<ExpandableConfigWidgetWithLastLayerWidgets, T> {
 	protected String name;
 	protected int index;
-	protected ExpandableConfigWidgetWithLastLayerWidgetren parent;
+	protected ExpandableConfigWidgetWithLastLayerWidgets parent;
 	protected T value;
 
 	@SuppressWarnings("unchecked")
-	public LastLayerWidget(String name, ExpandableConfigWidgetWithLastLayerWidgetren parent) {
+	public LastLayerWidget(String name, ExpandableConfigWidgetWithLastLayerWidgets parent) {
 		this.name = name;
 		this.parent = parent;		
 		this.value = (T) ConfigFile.readFromConfig(parent.getName() + "." + name + ".value", false);
@@ -37,7 +37,7 @@ public abstract class LastLayerWidget<T> implements ConfigWidget<ExpandableConfi
 		return value;
 	}
 
-	public ExpandableConfigWidgetWithLastLayerWidgetren getParent() {
+	public ExpandableConfigWidgetWithLastLayerWidgets getParent() {
 		return parent;
 	}
 }

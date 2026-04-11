@@ -31,3 +31,4 @@ jobs:
         with:
           name: "shaweelAddons-v${{ env.MOD_VERSION }}-build${{ github.run_number }}"
           path: build/libs/shaweeladdons-${{ env.MOD_VERSION }}.jar
+          archive: false

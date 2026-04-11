@@ -27,7 +27,7 @@ jobs:
           echo "MOD_VERSION=$(./gradlew properties -q | grep '^mod_version:' | awk '{print $2}')" >> $GITHUB_ENV
 
       - name: Upload the shaweelAddons .jar file
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: "shaweelAddons-v${{ env.MOD_VERSION }}-build${{ github.run_number }}"
           path: build/libs/shaweeladdons-${{ env.MOD_VERSION }}.jar

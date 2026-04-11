@@ -68,10 +68,10 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 			this.minY += (this.parent.getChildren().get(i).getLowestPoint() - this.parent.getChildren().get(i).getMinY()) - 1;
 		}
 
-		this.maxY = this.minY + ConfigGui.getYPadding()*2 + FONT_SIZE;
+		this.maxY = this.minY + ConfigGui.getFeatureYPadding()*2 + FONT_SIZE;
 
 		this.textX = (this.maxX+this.minX)/2 - NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT)/2;
-		this.textY = this.minY + ConfigGui.getYPadding();
+		this.textY = this.minY + ConfigGui.getFeatureYPadding();
 
 		if (this.toggled && !this.togglingAnimation.isRunning()) {
 			this.toggledOpacity = 255;

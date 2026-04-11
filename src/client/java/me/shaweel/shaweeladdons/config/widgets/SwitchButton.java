@@ -68,18 +68,18 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		this.minY = this.parent.getMaxY() - 1;
 
 		for (int i = 0; i < index; i++) {
-			this.minY += ConfigGui.getYPadding() * 2 + FONT_SIZE - 1;
+			this.minY += ConfigGui.getOptionTextVerticalMargin() * 2 + FONT_SIZE - 1;
 		}
 
-		this.maxY = this.minY + ConfigGui.getYPadding() * 2 + FONT_SIZE;
+		this.maxY = this.minY + ConfigGui.getOptionTextVerticalMargin() * 2 + FONT_SIZE;
 
-		this.textX = this.minX + ConfigGui.getOptionPadding();
-		this.textY = this.minY + ConfigGui.getYPadding();
+		this.textX = this.minX + ConfigGui.getOptionHorizontalMargin();
+		this.textY = this.minY + ConfigGui.getOptionTextVerticalMargin();
 
-		this.switchMaxX = this.maxX - ConfigGui.getOptionPadding();
+		this.switchMaxX = this.maxX - ConfigGui.getOptionHorizontalMargin();
 		this.switchMinX = this.switchMaxX - BUTTON_WIDTH; 
-		this.switchMinY = this.minY + ConfigGui.getYPadding();
-		this.switchMaxY = this.maxY - ConfigGui.getYPadding();
+		this.switchMinY = this.minY + ConfigGui.getSwitchVerticalMargin();
+		this.switchMaxY = this.maxY - ConfigGui.getSwitchVerticalMargin();
 		this.switchRectangleRadius = (this.switchMaxY - this.switchMinY) / 2;
 	}
 

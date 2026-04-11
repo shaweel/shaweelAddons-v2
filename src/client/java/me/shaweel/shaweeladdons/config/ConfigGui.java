@@ -21,10 +21,13 @@ public class ConfigGui extends Screen {
 	private static final int TEXT_COLOR = 0xffffffff;
 
 	//Padding
-	private static final float OPTION_PADDING = 2;
+	private static final float CATEGORY_Y_PADDING = 2;
+	private static final float FEATURE_Y_PADDING = 2;
+	private static final float OPTION_TEXT_VERTICAL_MARGIN = 2;
+	private static final float OPTION_HORIZONTAL_MARGIN = 2;
+	private static final float SWITCH_VERTICAL_MARGIN = 1.5f;
 	private static final float CORNER_OFFSET = 7;
-	private static final float X_PADDING = 15;
-	private static final float Y_PADDING = 3;
+	private static final float CATEGORY_X_PADDING = 15;
 
 	//Animation duration
 	private static final float EXPANDING_ANIMATION_DURATION = 150;
@@ -121,39 +124,21 @@ public class ConfigGui extends Screen {
 		return widest;
 	}
 
-	public static float getXPadding() {
-		return X_PADDING;
-	}
+	//Colors
+	public static int getBackgroundColor() { return BACKGROUND_COLOR; }
+	public static int getPrimaryColor() { return PRIMARY_COLOR; }
+	public static int getTextColor() { return TEXT_COLOR; }
+	public static int getHoveredColor() { return HOVERED_COLOR; }
 
-	public static float getYPadding() {
-		return Y_PADDING;
-	}
+	//Padding
+	public static float getCategoryYPadding() { return CATEGORY_Y_PADDING; }
+	public static float getFeatureYPadding() { return FEATURE_Y_PADDING; }
+	public static float getOptionTextVerticalMargin() { return OPTION_TEXT_VERTICAL_MARGIN; }
+	public static float getOptionHorizontalMargin() { return OPTION_HORIZONTAL_MARGIN; }
+	public static float getSwitchVerticalMargin() { return SWITCH_VERTICAL_MARGIN; }
+	public static float getCornerOffset() { return CORNER_OFFSET; }
+	public static float getCategoryXPadding() { return CATEGORY_X_PADDING; }
 
-	public static float getCornerOffset() {
-		return CORNER_OFFSET;
-	}
-
-	public static int getBackgroundColor() {
-		return BACKGROUND_COLOR;
-	}
-
-	public static int getPrimaryColor() {
-		return PRIMARY_COLOR;
-	}
-
-	public static int getTextColor() {
-		return TEXT_COLOR;
-	}
-
-	public static int getHoveredColor() {
-		return HOVERED_COLOR;
-	}
-
-	public static float getOptionPadding() {
-		return OPTION_PADDING;
-	}
-
-	public static float getExpandingAnimationDuration() {
-		return EXPANDING_ANIMATION_DURATION;
-	}
+	//Animations
+	public static float getExpandingAnimationDuration() { return EXPANDING_ANIMATION_DURATION; }
 }

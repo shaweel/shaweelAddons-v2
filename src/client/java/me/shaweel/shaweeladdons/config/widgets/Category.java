@@ -48,18 +48,18 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 		this.index = categories.indexOf(this);
 
 		this.minY = ConfigGui.getCornerOffset();
-		this.maxY = this.minY + ConfigGui.getYPadding()*2 + FONT_SIZE;
+		this.maxY = this.minY + ConfigGui.getCategoryYPadding()*2 + FONT_SIZE;
 
 		this.minX = ConfigGui.getCornerOffset() * (this.index + 1);
 
 		for (int i = 0; i < this.index; i++) {
-			this.minX += this.parent.getWidestContentWidth() + ConfigGui.getXPadding();
+			this.minX += this.parent.getWidestContentWidth() + ConfigGui.getCategoryXPadding();
 		}
 
-		this.maxX = this.minX + ConfigGui.getXPadding() + this.parent.getWidestContentWidth();
+		this.maxX = this.minX + ConfigGui.getCategoryXPadding() + this.parent.getWidestContentWidth();
 
 		this.textX = (this.maxX+this.minX)/2 - NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT)/2;
-		this.textY = this.minY + ConfigGui.getYPadding();
+		this.textY = this.minY + ConfigGui.getCategoryYPadding();
 
 		if (this.expanded && !this.expandingAnimation.isRunning()) {
 			this.lowestPoint = this.getLowestExpandedPoint();

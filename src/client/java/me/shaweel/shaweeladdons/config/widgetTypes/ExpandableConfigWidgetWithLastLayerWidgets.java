@@ -33,9 +33,7 @@ public abstract class ExpandableConfigWidgetWithLastLayerWidgets implements Conf
 		return lowestExpandedPoint;
 	}
 
-	protected float getLowestUnexpandedPoint() {
-		return this.getMaxY();
-	}
+	protected float getLowestUnexpandedPoint() { return this.getMaxY(); }
 
 	protected void updateExpandingAnimation() {
 		this.expandingAnimation.update();
@@ -49,27 +47,17 @@ public abstract class ExpandableConfigWidgetWithLastLayerWidgets implements Conf
 		}
 	}
 
-	public float getLowestPoint() {
-		return this.lowestPoint;
-	}
+	public float getLowestPoint() { return this.lowestPoint; }
 
-	public Boolean getExpanded() {
-		return this.expanded;
-	}
+	public Boolean getExpanded() { return this.expanded; }
 
 	public void registerChild(LastLayerWidget<?> child) {
 		this.children.add(child);
 	}
 
-	public List<LastLayerWidget<?>> getChildren() {
-		return children;
-	}
+	public List<LastLayerWidget<?>> getChildren() { return children; }
 
-	public String getName() {
-		return this.name;
-	}
+	public String getName() { return this.name; }
 
-	public Category getParent() {
-		return this.parent;
-	}
+	public Category getParent() { return this.parent; }
 }

@@ -29,15 +29,9 @@ public abstract class LastLayerWidget<T> implements ConfigWidget<ExpandableConfi
 		this.index = this.parent.getChildren().indexOf(this);
 	}
 	
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
-	public T getValue() {
-		return value;
-	}
+	public T getValue() { return value; }
 
-	public ExpandableConfigWidgetWithLastLayerWidgets getParent() {
-		return parent;
-	}
+	public ExpandableConfigWidgetWithLastLayerWidgets getParent() { return parent; }
 }

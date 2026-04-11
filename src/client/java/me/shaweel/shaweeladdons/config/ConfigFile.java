@@ -108,7 +108,5 @@ public class ConfigFile {
 		return result; 
 	}
 
-	static {
-		load();
-	}
+	static { load(); }
 }

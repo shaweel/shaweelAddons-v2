@@ -163,9 +163,8 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	}
 
 	@Override
-	public Void getValue() {
-		return null;
-	}
+	public Void getValue() { return null; }
+ 
 
 	private float getLowestExpandedPoint() {
 		float lowestExpandedPoint = this.maxY;
@@ -177,9 +176,7 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 		return lowestExpandedPoint;
 	}
 
-	private float getLowestUnexpandedPoint() {
-		return this.maxY;
-	}
+	private float getLowestUnexpandedPoint() { return this.maxY; }
 
 	private void renderAllFeatures() {
 		this.sortFeatures();
@@ -190,46 +187,27 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	}
 
 	@Override
-	public float getMinX() {
-		return this.minX;
-	}
+	public float getMinX() { return this.minX; }
 
 	@Override
-	public float getMaxX() {
-		return this.maxX;
-	}
+	public float getMaxX() { return this.maxX; }
 
 	@Override
-	public float getMinY() {
-		return this.minY;
-	}
+	public float getMinY() { return this.minY; }
 
 	@Override
-	public float getMaxY() {
-		return this.maxY;
-	}
+	public float getMaxY() { return this.maxY; }
 
-	public float getTextX() {
-		return this.textX;
-	}
-
-	public float getTextY() {
-		return this.textY;
-	}
+	public float getTextX() { return this.textX; }
+	public float getTextY() { return this.textY; }
 
 	@Override
-	public String getName() {
-		return this.name;
-	}
+	public String getName() { return this.name; }
 
 	@Override
-	public Boolean getExpanded() {
-		return this.expanded;
-	}
+	public Boolean getExpanded() { return this.expanded; }
 
-	public float getLowestPoint() {
-		return this.lowestPoint;
-	}
+	public float getLowestPoint() { return this.lowestPoint; }
 
 	private void sortFeatures() {
 		this.children.sort(Comparator.comparingDouble(Feature::getContentWidth).reversed());
@@ -255,14 +233,10 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	}
 
 	@Override
-	public List<Feature> getChildren() {
-		return this.children;
-	}
+	public List<Feature> getChildren() { return this.children; }
 	
 	@Override
-	public ConfigGui getParent() {
-		return this.parent;
-	}
+	public ConfigGui getParent() { return this.parent; }
 
 	@Override
 	public float getContentWidth() {

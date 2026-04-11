@@ -106,27 +106,17 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 
 	@Override
-	public float getMinX() {
-		return this.minX;
-	}
+	public float getMinX() { return this.minX; }
 
 	@Override
-	public float getMinY() {
-		return this.minY;
-	}
+	public float getMinY() { return this.minY; }
 
 	@Override
-	public float getMaxX() {
-		return this.maxX;
-	}
+	public float getMaxX() { return this.maxX; }
 
 	@Override
-	public float getMaxY() {
-		return this.maxY;
-	}
+	public float getMaxY() { return this.maxY; }
 
 	@Override
-	public List<ConfigWidget<?, ?>> getChildren() {
-		return null;
-	}
+	public List<ConfigWidget<?, ?>> getChildren() { return null; }
 }

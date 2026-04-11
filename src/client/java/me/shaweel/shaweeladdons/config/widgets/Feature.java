@@ -181,10 +181,6 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 			y > this.minY && y < this.maxY && y < this.parent.getLowestPoint());
 	}
 
-	@Override
-	public Boolean getValue() {
-		return this.toggled;
-	}
 
 	@Override
 	public float getContentWidth() {
@@ -192,38 +188,23 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 	}
 
 	@Override
-	public float getMinX() {
-		return this.minX;
-	}
+	public Boolean getValue() { return this.toggled; }
 
 	@Override
-	public float getMaxX() {
-		return this.maxX;
-	}
+	public float getMinX() { return this.minX; }
 
 	@Override
-	public float getMinY() {
-		return this.minY;
-	}
+	public float getMaxX() { return this.maxX; }
 
 	@Override
-	public float getMaxY() {
-		return this.maxY;
-	}
+	public float getMinY() { return this.minY; }
 
-	public float getTextX() {
-		return this.textX;
-	}
+	@Override
+	public float getMaxY() { return this.maxY; }
 
-	public float getTextY() {
-		return this.textY;
-	}
+	public float getTextX() { return this.textX; }
+	public float getTextY() { return this.textY; }
 
-	public float getToggledOpacity() {
-		return toggledOpacity;
-	}
-
-	public float getHoveredOpacity() {
-		return hoveredOpacity;
-	}
+	public float getToggledOpacity() { return toggledOpacity; }
+	public float getHoveredOpacity() { return hoveredOpacity; }
 }

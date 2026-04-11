@@ -24,11 +24,6 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	private final String name;
 	private float index;
 
-	private static final int FONT_SIZE = 12; 
-	private static final int FONT_WEIGHT = 400;
-
-	private static final float INDICATOR_LINE_Y = 2;
-
 	private float minX;
 	private float maxX;
 	private float minY;
@@ -48,7 +43,7 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 		this.index = categories.indexOf(this);
 
 		this.minY = ConfigGui.getCornerOffset();
-		this.maxY = this.minY + ConfigGui.getCategoryYPadding()*2 + FONT_SIZE;
+		this.maxY = this.minY + ConfigGui.getCategoryYPadding()*2 + ConfigGui.getCategoryFontSize();
 
 		this.minX = ConfigGui.getCornerOffset() * (this.index + 1);
 
@@ -58,7 +53,7 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 
 		this.maxX = this.minX + ConfigGui.getCategoryXPadding() + this.parent.getWidestContentWidth();
 
-		this.textX = (this.maxX+this.minX)/2 - NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT)/2;
+		this.textX = (this.maxX+this.minX)/2 - NanoVGRenderer.getStringWidth(this.name, ConfigGui.getCategoryFontSize(), ConfigGui.getCategoryFontWeight())/2;
 		this.textY = this.minY + ConfigGui.getCategoryYPadding();
 
 		if (this.expanded && !this.expandingAnimation.isRunning()) {
@@ -92,17 +87,17 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	}
 
 	private void drawCategoryName() {
-		NanoVGRenderer.drawString(this.name, this.textX, this.textY, FONT_SIZE, FONT_WEIGHT, ConfigGui.getTextColor());
+		NanoVGRenderer.drawString(this.name, this.textX, this.textY, ConfigGui.getCategoryFontSize(), ConfigGui.getCategoryFontWeight(), ConfigGui.getTextColor());
 	}
 
 	private void drawIndicatorLine() {
-		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint - 1, this.maxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, ConfigGui.getBackgroundColor());
+		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint - 1, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), ConfigGui.getBackgroundColor());
 
 		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.children.getLast().getToggledOpacity() << 24);
-		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint - 1, this.maxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, toggledColor);
+		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint - 1, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), toggledColor);
 
 		int hoveredColor = (ConfigGui.getHoveredColor() & 0x00FFFFFF) | ((int) this.children.getLast().getHoveredOpacity() << 24);
-		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint - 1, this.maxX, this.lowestPoint - 1 + INDICATOR_LINE_Y, hoveredColor);
+		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint - 1, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), hoveredColor);
 	}
 
 	@Override
@@ -240,7 +235,7 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 
 	@Override
 	public float getContentWidth() {
-		return NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT);
+		return NanoVGRenderer.getStringWidth(this.name, ConfigGui.getCategoryFontSize(), ConfigGui.getCategoryFontWeight());
 	}
 }
   

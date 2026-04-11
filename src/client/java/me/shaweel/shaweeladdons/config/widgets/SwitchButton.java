@@ -11,10 +11,6 @@ import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
 public class SwitchButton extends LastLayerWidget<Boolean> {
-	private static final int FONT_SIZE = 7;
-	private static final int FONT_WEIGHT = 400;
-	private static final float BUTTON_WIDTH = 20;
-
 	private float minX;
 	private float maxX;
 	private float minY;
@@ -57,7 +53,7 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 	@Override
 	public float getContentWidth() {
-		return NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT);
+		return NanoVGRenderer.getStringWidth(this.name, ConfigGui.getOptionFontSize(), ConfigGui.getOptionFontWeight());
 	}
 
 	@Override
@@ -68,16 +64,16 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		this.minY = this.parent.getMaxY() - 1;
 
 		for (int i = 0; i < index; i++) {
-			this.minY += ConfigGui.getOptionTextVerticalMargin() * 2 + FONT_SIZE - 1;
+			this.minY += ConfigGui.getOptionTextVerticalMargin() * 2 + ConfigGui.getOptionFontSize() - 1;
 		}
 
-		this.maxY = this.minY + ConfigGui.getOptionTextVerticalMargin() * 2 + FONT_SIZE;
+		this.maxY = this.minY + ConfigGui.getOptionTextVerticalMargin() * 2 + ConfigGui.getOptionFontSize();
 
 		this.textX = this.minX + ConfigGui.getOptionHorizontalMargin();
 		this.textY = this.minY + ConfigGui.getOptionTextVerticalMargin();
 
 		this.switchMaxX = this.maxX - ConfigGui.getOptionHorizontalMargin();
-		this.switchMinX = this.switchMaxX - BUTTON_WIDTH; 
+		this.switchMinX = this.switchMaxX - ConfigGui.getSwitchWidth();
 		this.switchMinY = this.minY + ConfigGui.getSwitchVerticalMargin();
 		this.switchMaxY = this.maxY - ConfigGui.getSwitchVerticalMargin();
 		this.switchRectangleRadius = (this.switchMaxY - this.switchMinY) / 2;
@@ -88,7 +84,7 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 	}
 
 	private void renderName() {
-		NanoVGRenderer.drawString(this.name, this.textX, this.textY, FONT_SIZE, FONT_WEIGHT, ConfigGui.getTextColor());
+		NanoVGRenderer.drawString(this.name, this.textX, this.textY, ConfigGui.getOptionFontSize(), ConfigGui.getOptionFontWeight(), ConfigGui.getTextColor());
 	}
 
 	private void renderButton() {

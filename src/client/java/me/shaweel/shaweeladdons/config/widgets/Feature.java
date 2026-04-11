@@ -13,11 +13,6 @@ import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 	private int index;
 
-	private static final int FONT_SIZE = 9;
-	private static final int FONT_WEIGHT = 500;
-	private static final float MAX_HOVERED_OPACITY = 20;
-	private static final float ANIMATION_DURATION = 50;
-
 	private float minX;
 	private float maxX;
 	private float minY;
@@ -68,9 +63,9 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 			this.minY += (this.parent.getChildren().get(i).getLowestPoint() - this.parent.getChildren().get(i).getMinY()) - 1;
 		}
 
-		this.maxY = this.minY + ConfigGui.getFeatureYPadding()*2 + FONT_SIZE;
+		this.maxY = this.minY + ConfigGui.getFeatureYPadding()*2 + ConfigGui.getFeatureFontSize();
 
-		this.textX = (this.maxX+this.minX)/2 - NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT)/2;
+		this.textX = (this.maxX+this.minX)/2 - NanoVGRenderer.getStringWidth(this.name, ConfigGui.getFeatureFontSize(), ConfigGui.getFeatureFontWeight())/2;
 		this.textY = this.minY + ConfigGui.getFeatureYPadding();
 
 		if (this.toggled && !this.togglingAnimation.isRunning()) {
@@ -80,7 +75,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 		}
 
 		if (this.hovered && !this.hoveringAnimation.isRunning()) {
-			this.hoveredOpacity = MAX_HOVERED_OPACITY;
+			this.hoveredOpacity = ConfigGui.getFeatureMaxHoveredOpacity();
 		} else if (!this.toggled && !this.unhoveringAnimation.isRunning()) {
 			this.hoveredOpacity = 0;
 		}
@@ -107,7 +102,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 	}
 
 	private void drawFeatureName() {
-		NanoVGRenderer.drawString(this.name, this.textX, this.textY, FONT_SIZE, FONT_WEIGHT, ConfigGui.getTextColor());
+		NanoVGRenderer.drawString(this.name, this.textX, this.textY, ConfigGui.getFeatureFontSize(), ConfigGui.getFeatureFontWeight(), ConfigGui.getTextColor());
 	}
 
 	private void renderAllChildren() {
@@ -136,7 +131,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 
 	private void onLeftClick() {
 		this.toggled = !this.toggled;
-		this.togglingAnimation = new Animation(this.toggledOpacity, this.toggled ? 255 : 0, ANIMATION_DURATION, value -> this.toggledOpacity = value);
+		this.togglingAnimation = new Animation(this.toggledOpacity, this.toggled ? 255 : 0, ConfigGui.getFeatureToggleAnimationDuration(), value -> this.toggledOpacity = value);
 		this.togglingAnimation.start();
 
 		ConfigFile.updateConfig();
@@ -164,14 +159,14 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 	@Override
 	public void onHoverEnter() {
 		this.hovered = true;
-		this.hoveringAnimation = new Animation(this.hoveredOpacity, MAX_HOVERED_OPACITY, ANIMATION_DURATION, value -> this.hoveredOpacity = value);
+		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getFeatureMaxHoveredOpacity(), ConfigGui.getFeatureHoverAnimationDuration(), value -> this.hoveredOpacity = value);
 		this.hoveringAnimation.start();
 	}
 
 	@Override
 	public void onHoverExit() {
 		this.hovered = false;
-		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ANIMATION_DURATION, value -> this.hoveredOpacity = value);
+		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getFeatureHoverAnimationDuration(), value -> this.hoveredOpacity = value);
 		this.unhoveringAnimation.start();
 	}
 
@@ -184,7 +179,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 
 	@Override
 	public float getContentWidth() {
-		return NanoVGRenderer.getStringWidth(this.name, FONT_SIZE, FONT_WEIGHT);
+		return NanoVGRenderer.getStringWidth(this.name, ConfigGui.getFeatureFontSize(), ConfigGui.getFeatureFontWeight());
 	}
 
 	@Override

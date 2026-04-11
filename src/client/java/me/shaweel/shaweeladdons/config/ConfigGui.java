@@ -29,8 +29,25 @@ public class ConfigGui extends Screen {
 	private static final float CORNER_OFFSET = 7;
 	private static final float CATEGORY_X_PADDING = 15;
 
-	//Animation duration
+	//Fonts
+	private static final int CATEGORY_FONT_SIZE = 12;
+	private static final int FEATURE_FONT_SIZE = 9;
+	private static final int OPTION_FONT_SIZE = 7;
+
+	private static final int CATEGORY_FONT_WEIGHT = 400;
+	private static final int FEATURE_FONT_WEIGHT = 500;
+	private static final int OPTION_FONT_WEIGHT = 300;
+
+	//Animations
+	private static final float FEATURE_TOGGLE_ANIMATION_DURATION = 50;
+	private static final float FEATURE_HOVER_ANIMATION_DURATION = 50;
 	private static final float EXPANDING_ANIMATION_DURATION = 150;
+
+	//Miscellaneous
+	private static final float SWITCH_WIDTH = 20;
+	private static final float FEATURE_MAX_HOVERED_OPACITY = 20;
+	private static final float CATEGORY_INDICATOR_LINE_SIZE = 3;
+
 	//Make these configurable in the future.
 
 	//The actual class starts here... good luck future me
@@ -139,6 +156,22 @@ public class ConfigGui extends Screen {
 	public static float getCornerOffset() { return CORNER_OFFSET; }
 	public static float getCategoryXPadding() { return CATEGORY_X_PADDING; }
 
+	//Fonts
+	public static int getCategoryFontSize() { return CATEGORY_FONT_SIZE; }
+	public static int getFeatureFontSize() { return FEATURE_FONT_SIZE; }
+	public static int getOptionFontSize() { return OPTION_FONT_SIZE; }
+
+	public static int getCategoryFontWeight() { return CATEGORY_FONT_WEIGHT; }
+	public static int getFeatureFontWeight() { return FEATURE_FONT_WEIGHT; }
+	public static int getOptionFontWeight() { return OPTION_FONT_WEIGHT; }
+
 	//Animations
+	public static float getFeatureToggleAnimationDuration() { return FEATURE_TOGGLE_ANIMATION_DURATION; }
+	public static float getFeatureHoverAnimationDuration() { return FEATURE_HOVER_ANIMATION_DURATION; }
 	public static float getExpandingAnimationDuration() { return EXPANDING_ANIMATION_DURATION; }
+
+	//Miscellaneous
+	public static float getSwitchWidth() { return SWITCH_WIDTH; }
+	public static float getFeatureMaxHoveredOpacity() { return FEATURE_MAX_HOVERED_OPACITY; }
+	public static float getCategoryIndicatorLineSize() { return CATEGORY_INDICATOR_LINE_SIZE; }
 }

@@ -142,6 +142,18 @@ public class NanoVGRenderer {
 		nvgClosePath(vg);
 	}
 
+	public static void drawCircle(float x, float y, float r, int color) {
+		x += r;
+		y += r;
+		
+		applyColor(color);
+		nvgBeginPath(vg);
+		nvgCircle(vg, x, y, r);
+		nvgFillColor(vg, nvgColor);
+		nvgFill(vg);
+		nvgClosePath(vg);
+	}
+
 	public static void drawString(String string, float x, float y, int size, int weight, int color) {
 		if (!validWeights.contains(weight)) {
 			Log.error(String.format("Invalid weight: %s, valid weights: %s", weight, validWeights));

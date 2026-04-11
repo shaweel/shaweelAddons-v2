@@ -27,7 +27,7 @@ public class ConfigGui extends Screen {
 	private static final float Y_PADDING = 3;
 
 	//Animation duration
-	private static final float EXPANDING_ANIMATION_DURATION = 250;
+	private static final float EXPANDING_ANIMATION_DURATION = 150;
 	//Make these configurable in the future.
 
 	//The actual class starts here... good luck future me

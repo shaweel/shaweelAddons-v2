@@ -1,13 +1,11 @@
 package me.shaweel.shaweeladdons.config;
 
-import java.util.Arrays;
 import java.util.List;
 
 import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
 import me.shaweel.shaweeladdons.config.widgets.Category;
 import me.shaweel.shaweeladdons.config.widgets.Feature;
 import me.shaweel.shaweeladdons.config.widgets.SwitchButton;
-import me.shaweel.shaweeladdons.utils.Log;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;

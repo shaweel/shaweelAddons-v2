@@ -12,7 +12,7 @@ import com.mojang.blaze3d.platform.Window;
 
 import me.shaweel.shaweeladdons.utils.Log;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class NanoVGRenderer {
 	private static long vg;
@@ -22,7 +22,7 @@ public class NanoVGRenderer {
 
 	private static int loadttf(String ttf) {
 		try (InputStream stream = Minecraft.getInstance().getResourceManager()
-		.getResource(ResourceLocation.parse(String.format("shaweeladdons:fonts/%s.ttf", ttf))).get().open()) {
+		.getResource(Identifier.parse(String.format("shaweeladdons:fonts/%s.ttf", ttf))).get().open()) {
 			byte[] bytes = stream.readAllBytes();
 			ByteBuffer byteBuffer = BufferUtils.createByteBuffer(bytes.length);
 			byteBuffer.put(bytes).flip();

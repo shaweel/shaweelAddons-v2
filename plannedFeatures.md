@@ -1,4 +1,4 @@
-# Features planned for shaweelAddons-v2 on Fabric 1.21.10
+# Features planned for shaweelAddons-v2 on Fabric 1.21.11
 - Party Finder Highlight
 - Couldn't Find Notifier
 - Crypt Reminder

@@ -15,38 +15,38 @@ import net.minecraft.network.chat.Component;
 public class ConfigGui extends Screen {
 	//----------------STATIC VARIABLES----------------
 	//Colors
-	private static final int PRIMARY_COLOR = 0xff3c093c;
-	private static final int BACKGROUND_COLOR = 0xff141414;
-	private static final int HOVERED_COLOR = 0xffffffff;
-	private static final int TEXT_COLOR = 0xffffffff;
+	private static int PRIMARY_COLOR = 0xff3c093c;
+	private static int BACKGROUND_COLOR = 0xff141414;
+	private static int HOVERED_COLOR = 0xffffffff;
+	private static int TEXT_COLOR = 0xffffffff;
 
 	//Padding
-	private static final float CATEGORY_Y_PADDING = 3.5f;
-	private static final float FEATURE_Y_PADDING = 3;
-	private static final float OPTION_TEXT_VERTICAL_MARGIN = 2.5f;
-	private static final float OPTION_HORIZONTAL_MARGIN = 2;
-	private static final float SWITCH_VERTICAL_MARGIN = 1.5f;
-	private static final float CORNER_OFFSET = 7;
-	private static final float CATEGORY_X_PADDING = 15;
+	private static float CATEGORY_Y_PADDING = 3.5f;
+	private static float FEATURE_Y_PADDING = 3;
+	private static float OPTION_TEXT_VERTICAL_MARGIN = 2.5f;
+	private static float OPTION_HORIZONTAL_MARGIN = 2;
+	private static float SWITCH_VERTICAL_MARGIN = 1.5f;
+	private static float CORNER_OFFSET = 7;
+	private static float CATEGORY_X_PADDING = 15;
 
 	//Fonts
-	private static final int CATEGORY_FONT_SIZE = 12;
-	private static final int FEATURE_FONT_SIZE = 9;
-	private static final int OPTION_FONT_SIZE = 7;
+	private static int CATEGORY_FONT_SIZE = 12;
+	private static int FEATURE_FONT_SIZE = 9;
+	private static int OPTION_FONT_SIZE = 7;
 
-	private static final int CATEGORY_FONT_WEIGHT = 400;
-	private static final int FEATURE_FONT_WEIGHT = 500;
-	private static final int OPTION_FONT_WEIGHT = 400;
+	private static int CATEGORY_FONT_WEIGHT = 400;
+	private static int FEATURE_FONT_WEIGHT = 500;
+	private static int OPTION_FONT_WEIGHT = 400;
 
 	//Animations
-	private static final float FEATURE_TOGGLE_ANIMATION_DURATION = 50;
-	private static final float FEATURE_HOVER_ANIMATION_DURATION = 50;
-	private static final float EXPANDING_ANIMATION_DURATION = 150;
+	private static float FEATURE_TOGGLE_ANIMATION_DURATION = 50;
+	private static float FEATURE_HOVER_ANIMATION_DURATION = 50;
+	private static float EXPANDING_ANIMATION_DURATION = 150;
 
 	//Miscellaneous
-	private static final float SWITCH_WIDTH = 20;
-	private static final float FEATURE_MAX_HOVERED_OPACITY = 20;
-	private static final float CATEGORY_INDICATOR_LINE_SIZE = 2;
+	private static float SWITCH_WIDTH = 20;
+	private static float FEATURE_MAX_HOVERED_OPACITY = 20;
+	private static float CATEGORY_INDICATOR_LINE_SIZE = 2;
 
 	//Make these configurable in the future.
 

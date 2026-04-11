@@ -91,13 +91,13 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	}
 
 	private void drawIndicatorLine() {
-		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint - 1, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), ConfigGui.getBackgroundColor());
+		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), ConfigGui.getBackgroundColor());
 
 		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.children.getLast().getToggledOpacity() << 24);
-		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint - 1, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), toggledColor);
+		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), toggledColor);
 
 		int hoveredColor = (ConfigGui.getHoveredColor() & 0x00FFFFFF) | ((int) this.children.getLast().getHoveredOpacity() << 24);
-		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint - 1, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), hoveredColor);
+		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), hoveredColor);
 	}
 
 	@Override

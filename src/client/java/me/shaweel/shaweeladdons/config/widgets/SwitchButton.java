@@ -61,10 +61,10 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		this.minX = this.parent.getMinX();
 		this.maxX = this.parent.getMaxX();
 
-		this.minY = this.parent.getMaxY() - 1;
+		this.minY = this.parent.getMaxY();
 
 		for (int i = 0; i < index; i++) {
-			this.minY += ConfigGui.getOptionTextVerticalMargin() * 2 + ConfigGui.getOptionFontSize() - 1;
+			this.minY += ConfigGui.getOptionTextVerticalMargin() * 2 + ConfigGui.getOptionFontSize();
 		}
 
 		this.maxY = this.minY + ConfigGui.getOptionTextVerticalMargin() * 2 + ConfigGui.getOptionFontSize();

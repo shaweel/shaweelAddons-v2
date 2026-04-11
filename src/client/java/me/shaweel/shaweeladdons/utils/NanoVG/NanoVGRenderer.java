@@ -103,6 +103,7 @@ public class NanoVGRenderer {
 	}
 
 	public static void drawRectangle(float minX, float minY, float maxX, float maxY, int color) {
+		nvgShapeAntiAlias(vg, false);
 		final WidthHeight widthHeight = getWidthAndHeight(minX, minY, maxX, maxY);
 		final float width = widthHeight.width;
 		final float height = widthHeight.height;
@@ -113,6 +114,7 @@ public class NanoVGRenderer {
 		nvgFillColor(vg, nvgColor);
 		nvgFill(vg);
 		nvgClosePath(vg);
+		nvgShapeAntiAlias(vg, true);
 	}
 
 	public static void drawRectangle(float minX, float minY, float maxX, float maxY, float radius, int color) {

@@ -57,10 +57,10 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 		this.minX = this.parent.getMinX();
 		this.maxX = this.parent.getMaxX();
 
-		this.minY = this.parent.getMaxY() - 1;
+		this.minY = this.parent.getMaxY();
 
 		for (int i = 0; i < index; i++) {
-			this.minY += (this.parent.getChildren().get(i).getLowestPoint() - this.parent.getChildren().get(i).getMinY()) - 1;
+			this.minY += (this.parent.getChildren().get(i).getLowestPoint() - this.parent.getChildren().get(i).getMinY());
 		}
 
 		this.maxY = this.minY + ConfigGui.getFeatureYPadding()*2 + ConfigGui.getFeatureFontSize();
@@ -84,7 +84,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 	}
 
 	private void applyLowestPointScissor() {
-		NanoVGRenderer.applyScissor(this.minX, this.parent.getMinY(), this.maxX, this.parent.getLowestPoint());
+		NanoVGRenderer.applyScissor(this.minX, this.parent.getMinY(), this.maxX, this.parent.getLowestPoint() + 1);
 	}
 
 	private void drawMainRectangle() {

@@ -50,8 +50,8 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 	@Override
 	public Boolean isInHitbox(double x, double y) {
-		Log.error("Unimplemented method 'isInHitbox'");
-		return false;
+		return (x > this.switchMinX && x < this.switchMaxX &&
+			y > this.switchMinY && y < this.switchMaxY && y < this.parent.getLowestPoint() && y < this.parent.getParent().getLowestPoint());
 	}
 
 	@Override

@@ -76,7 +76,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 
 		if (this.hovered && !this.hoveringAnimation.isRunning()) {
 			this.hoveredOpacity = ConfigGui.getFeatureMaxHoveredOpacity();
-		} else if (!this.toggled && !this.unhoveringAnimation.isRunning()) {
+		} else if (!this.hovered && !this.unhoveringAnimation.isRunning()) {
 			this.hoveredOpacity = 0;
 		}
 

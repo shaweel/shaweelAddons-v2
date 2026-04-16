@@ -7,6 +7,7 @@ import me.shaweel.shaweeladdons.config.ConfigGui;
 import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
 import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgets;
 import me.shaweel.shaweeladdons.config.widgetTypes.LastLayerWidget;
+import me.shaweel.shaweeladdons.utils.Animation;
 import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
@@ -27,6 +28,11 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 	private float circleX;
 	private float circleY;
+
+	private float hoveredOpacity = 0;
+	private boolean hovered = false;
+	private Animation hoveringAnimation = new Animation(0, 0, 0, null);
+	private Animation unhoveringAnimation = new Animation(0, 0, 0, null);
 	
 	public SwitchButton(String name, ExpandableConfigWidgetWithLastLayerWidgets parent) {
 		super(name, parent);
@@ -40,12 +46,16 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 	@Override
 	public void onHoverEnter() {
-		Log.error("Unimplemented method 'onHoverEnter'");
+		this.hovered = true;
+		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getFeatureMaxHoveredOpacity(), ConfigGui.getFeatureHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.hoveringAnimation.start();
 	}
 
 	@Override
 	public void onHoverExit() {
-		Log.error("Unimplemented method 'onHoverExit'");
+		this.hovered = false;
+		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getFeatureHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.unhoveringAnimation.start();
 	}
 
 	@Override
@@ -82,6 +92,12 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		this.switchRectangleRadius = (this.switchMaxY - this.switchMinY) / 2;
 		this.circleX = this.switchMaxX - this.switchRectangleRadius*2;
 		this.circleY = this.switchMinY + 1;
+
+		if (this.hovered && !this.hoveringAnimation.isRunning()) {
+			this.hoveredOpacity = ConfigGui.getFeatureMaxHoveredOpacity();
+		} else if (!this.hovered && !this.unhoveringAnimation.isRunning()) {
+			this.hoveredOpacity = 0;
+		}
 	}
 
 	private void renderRectangle() {
@@ -92,6 +108,12 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		NanoVGRenderer.drawString(this.name, this.textX, this.textY, ConfigGui.getOptionFontSize(), ConfigGui.getOptionFontWeight(), ConfigGui.getTextColor());
 	}
 
+	private void renderHoveredSwitch() {
+		int hoveredColor = (ConfigGui.getHoveredColor() & 0x00FFFFFF) | ((int) this.hoveredOpacity << 24);
+		NanoVGRenderer.drawRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, 
+			this.switchRectangleRadius, hoveredColor);
+	}
+
 	private void renderSwitch() {
 		NanoVGRenderer.drawRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, 
 			this.switchRectangleRadius, ConfigGui.getPrimaryColor());
@@ -100,10 +122,13 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 	@Override
 	public void render() {
+		this.hoveringAnimation.update();
+		this.unhoveringAnimation.update();
 		this.calculateCoordinates();
 		this.renderRectangle();
 		this.renderName();
 		this.renderSwitch();
+		this.renderHoveredSwitch();
 	}
 
 

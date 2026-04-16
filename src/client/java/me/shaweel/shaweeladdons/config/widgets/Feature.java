@@ -26,7 +26,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 	private Animation togglingAnimation = new Animation(0, 0, 0, null);
 
 	private float hoveredOpacity = 0;
-	private Boolean hovered = false;
+	private boolean hovered = false;
 	private Animation hoveringAnimation = new Animation(0, 0, 0, null);
 	private Animation unhoveringAnimation = new Animation(0, 0, 0, null);
 

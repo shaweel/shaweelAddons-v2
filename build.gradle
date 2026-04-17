@@ -31,6 +31,8 @@ repositories {
 		name = "ParchmentMC"
 		url = "https://maven.parchmentmc.org"
 	}
+	maven { url = "https://maven.terraformersmc.com" }
+	maven { url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1" }
 }
 
 dependencies {
@@ -45,6 +47,7 @@ dependencies {
 
 	include implementation("org.lwjgl:lwjgl-nanovg:${project.lwjgl_version}")
 	runtimeOnly "org.lwjgl:lwjgl-nanovg:${project.lwjgl_version}:${lwjglNatives}"
+	runtimeOnly "me.djtheredstoner:DevAuth-fabric:${project.devauth_version}"
 }
 
 processResources {
@@ -105,6 +108,8 @@ loom {
 	runs {
 		client {
 			vmArgs "-XX:+AllowEnhancedClassRedefinition"
+			vmArgs "-Ddevauth.enabled=true"
+			vmArgs "-Ddevauth.account=main"
 		}
 	}
 }

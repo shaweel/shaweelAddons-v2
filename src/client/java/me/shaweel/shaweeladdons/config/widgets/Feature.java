@@ -75,7 +75,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 		}
 
 		if (this.hovered && !this.hoveringAnimation.isRunning()) {
-			this.hoveredOpacity = ConfigGui.getFeatureMaxHoveredOpacity();
+			this.hoveredOpacity = ConfigGui.getMaxHoveredOpacity();
 		} else if (!this.hovered && !this.unhoveringAnimation.isRunning()) {
 			this.hoveredOpacity = 0;
 		}
@@ -131,7 +131,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 
 	private void onLeftClick() {
 		this.toggled = !this.toggled;
-		this.togglingAnimation = new Animation(this.toggledOpacity, this.toggled ? 255 : 0, ConfigGui.getFeatureToggleAnimationDuration(), value -> this.toggledOpacity = value);
+		this.togglingAnimation = new Animation(this.toggledOpacity, this.toggled ? 255 : 0, ConfigGui.getToggleAnimationDuration(), value -> this.toggledOpacity = value);
 		this.togglingAnimation.start();
 
 		ConfigFile.updateConfig();
@@ -159,14 +159,14 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 	@Override
 	public void onHoverEnter() {
 		this.hovered = true;
-		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getFeatureMaxHoveredOpacity(), ConfigGui.getFeatureHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getMaxHoveredOpacity(), ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value);
 		this.hoveringAnimation.start();
 	}
 
 	@Override
 	public void onHoverExit() {
 		this.hovered = false;
-		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getFeatureHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value);
 		this.unhoveringAnimation.start();
 	}
 

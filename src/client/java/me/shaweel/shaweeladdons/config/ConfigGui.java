@@ -17,6 +17,7 @@ public class ConfigGui extends Screen {
 	//Colors
 	private static int PRIMARY_COLOR = 0xff3c093c;
 	private static int BACKGROUND_COLOR = 0xff141414;
+	private static int SECONDARY_BACKGROUND_COLOR = 0xff202020;
 	private static int HOVERED_COLOR = 0xffffffff;
 	private static int TEXT_COLOR = 0xffd0d0d0;
 
@@ -25,6 +26,7 @@ public class ConfigGui extends Screen {
 	private static float FEATURE_Y_PADDING = 3;
 	private static float OPTION_TEXT_VERTICAL_MARGIN = 2.5f;
 	private static float OPTION_HORIZONTAL_MARGIN = 2;
+	private static float SWITCH_PADDING = 1;
 	private static float SWITCH_CIRCLE_MARGIN = 2;
 	private static float SWITCH_VERTICAL_MARGIN = 1.5f;
 	private static float CORNER_OFFSET = 7;
@@ -40,13 +42,13 @@ public class ConfigGui extends Screen {
 	private static int OPTION_FONT_WEIGHT = 400;
 
 	//Animations
-	private static float FEATURE_TOGGLE_ANIMATION_DURATION = 50;
-	private static float FEATURE_HOVER_ANIMATION_DURATION = 50;
+	private static float TOGGLE_ANIMATION_DURATION = 50;
+	private static float HOVER_ANIMATION_DURATION = 50;
 	private static float EXPANDING_ANIMATION_DURATION = 150;
 
 	//Miscellaneous
 	private static float SWITCH_WIDTH = 18;
-	private static float FEATURE_MAX_HOVERED_OPACITY = 20;
+	private static float MAX_HOVERED_OPACITY = 20;
 	private static float CATEGORY_INDICATOR_LINE_SIZE = 2;
 
 	//Make these configurable in the future.
@@ -144,6 +146,7 @@ public class ConfigGui extends Screen {
 
 	//Colors
 	public static int getBackgroundColor() { return BACKGROUND_COLOR; }
+	public static int getSecondaryBackgroundColor() { return SECONDARY_BACKGROUND_COLOR; }
 	public static int getPrimaryColor() { return PRIMARY_COLOR; }
 	public static int getTextColor() { return TEXT_COLOR; }
 	public static int getHoveredColor() { return HOVERED_COLOR; }
@@ -155,6 +158,7 @@ public class ConfigGui extends Screen {
 	public static float getOptionHorizontalMargin() { return OPTION_HORIZONTAL_MARGIN; }
 	public static float getSwitchVerticalMargin() { return SWITCH_VERTICAL_MARGIN; }
 	public static float getSwitchCircleMargin() { return SWITCH_CIRCLE_MARGIN; }
+	public static float getSwitchPadding() { return SWITCH_PADDING; }
 	public static float getCornerOffset() { return CORNER_OFFSET; }
 	public static float getCategoryXPadding() { return CATEGORY_X_PADDING; }
 
@@ -168,12 +172,12 @@ public class ConfigGui extends Screen {
 	public static int getOptionFontWeight() { return OPTION_FONT_WEIGHT; }
 
 	//Animations
-	public static float getFeatureToggleAnimationDuration() { return FEATURE_TOGGLE_ANIMATION_DURATION; }
-	public static float getFeatureHoverAnimationDuration() { return FEATURE_HOVER_ANIMATION_DURATION; }
+	public static float getToggleAnimationDuration() { return TOGGLE_ANIMATION_DURATION; }
+	public static float getHoverAnimationDuration() { return HOVER_ANIMATION_DURATION; }
 	public static float getExpandingAnimationDuration() { return EXPANDING_ANIMATION_DURATION; }
 
 	//Miscellaneous
 	public static float getSwitchWidth() { return SWITCH_WIDTH; }
-	public static float getFeatureMaxHoveredOpacity() { return FEATURE_MAX_HOVERED_OPACITY; }
+	public static float getMaxHoveredOpacity() { return MAX_HOVERED_OPACITY; }
 	public static float getCategoryIndicatorLineSize() { return CATEGORY_INDICATOR_LINE_SIZE; }
 }

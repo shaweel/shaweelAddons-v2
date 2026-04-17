@@ -1,7 +1,8 @@
 package me.shaweel.shaweeladdons.config.widgets;
 
-
 import java.util.List;
+
+import org.lwjgl.glfw.GLFW;
 
 import me.shaweel.shaweeladdons.config.ConfigGui;
 import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
@@ -25,6 +26,10 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 	private float switchMinY;
 	private float switchMaxY;
 	private float switchRectangleRadius;
+	private float switchCircleRadius;
+
+	private float circleMinX;
+	private float circleMaxX;
 
 	private float circleX;
 	private float circleY;
@@ -33,6 +38,10 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 	private boolean hovered = false;
 	private Animation hoveringAnimation = new Animation(0, 0, 0, null);
 	private Animation unhoveringAnimation = new Animation(0, 0, 0, null);
+
+	private float toggledOpacity = 0;
+	private Animation togglingCircleAnimation = new Animation(0, 0, 0, null);
+	private Animation togglingOpacityAnimation = new Animation(0, 0, 0, null);
 	
 	public SwitchButton(String name, ExpandableConfigWidgetWithLastLayerWidgets parent) {
 		super(name, parent);
@@ -40,21 +49,31 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 	@Override
 	public Boolean onClick(int button) {
-		Log.error("Unimplemented method 'onClick'");
-		return false;
+		if (button != GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+			return false;
+		}
+
+		this.value = !this.value;
+		this.togglingCircleAnimation = new Animation(this.circleX, this.value ? this.circleMaxX : this.circleMinX, ConfigGui.getToggleAnimationDuration(), value -> this.circleX = value);
+		this.togglingCircleAnimation.start();
+
+		this.togglingOpacityAnimation = new Animation(this.toggledOpacity, this.value ? 255 : 0, ConfigGui.getToggleAnimationDuration(), value -> this.toggledOpacity = value);
+		this.togglingOpacityAnimation.start();
+
+		return true;
 	}
 
 	@Override
 	public void onHoverEnter() {
 		this.hovered = true;
-		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getFeatureMaxHoveredOpacity(), ConfigGui.getFeatureHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getMaxHoveredOpacity(), ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value);
 		this.hoveringAnimation.start();
 	}
 
 	@Override
 	public void onHoverExit() {
 		this.hovered = false;
-		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getFeatureHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value);
 		this.unhoveringAnimation.start();
 	}
 
@@ -90,11 +109,22 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		this.switchMinY = this.minY + ConfigGui.getSwitchVerticalMargin();
 		this.switchMaxY = this.maxY - ConfigGui.getSwitchVerticalMargin();
 		this.switchRectangleRadius = (this.switchMaxY - this.switchMinY) / 2;
-		this.circleX = this.switchMaxX - this.switchRectangleRadius*2;
-		this.circleY = this.switchMinY + 1;
+		this.switchCircleRadius = this.switchRectangleRadius - ConfigGui.getSwitchPadding();
+		this.circleY = this.switchMinY + ConfigGui.getSwitchPadding();
 
+		this.circleMaxX = this.switchMaxX - switchCircleRadius*2 - ConfigGui.getSwitchPadding();
+		this.circleMinX = this.switchMinX + ConfigGui.getSwitchPadding();
+
+		if (this.value && !this.togglingCircleAnimation.isRunning() && !this.togglingOpacityAnimation.isRunning()) {
+			this.circleX = circleMaxX;
+			this.toggledOpacity = 255;
+		} else if (!this.value && !this.togglingCircleAnimation.isRunning() && !this.togglingOpacityAnimation.isRunning()) {
+			this.circleX = circleMinX;
+			this.toggledOpacity = 0;
+		}
+		
 		if (this.hovered && !this.hoveringAnimation.isRunning()) {
-			this.hoveredOpacity = ConfigGui.getFeatureMaxHoveredOpacity();
+			this.hoveredOpacity = ConfigGui.getMaxHoveredOpacity();
 		} else if (!this.hovered && !this.unhoveringAnimation.isRunning()) {
 			this.hoveredOpacity = 0;
 		}
@@ -108,27 +138,43 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		NanoVGRenderer.drawString(this.name, this.textX, this.textY, ConfigGui.getOptionFontSize(), ConfigGui.getOptionFontWeight(), ConfigGui.getTextColor());
 	}
 
-	private void renderHoveredSwitch() {
+	private void renderHoveredSwitchRectangle() {
 		int hoveredColor = (ConfigGui.getHoveredColor() & 0x00FFFFFF) | ((int) this.hoveredOpacity << 24);
 		NanoVGRenderer.drawRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, 
 			this.switchRectangleRadius, hoveredColor);
 	}
 
-	private void renderSwitch() {
+	private void renderToggledSwitchRectangle() {
+		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.toggledOpacity << 24);
 		NanoVGRenderer.drawRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, 
-			this.switchRectangleRadius, ConfigGui.getPrimaryColor());
-		NanoVGRenderer.drawCircle(this.circleX, this.circleY, this.switchRectangleRadius - 1, ConfigGui.getTextColor());
+			this.switchRectangleRadius, toggledColor);
+	}
+
+	private void renderSwitchRectangle() {
+		NanoVGRenderer.drawRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, 
+			this.switchRectangleRadius, ConfigGui.getSecondaryBackgroundColor());
+	}
+
+	private void renderSwitchCircle() {
+		NanoVGRenderer.drawCircle(this.circleX, this.circleY, this.switchCircleRadius, ConfigGui.getTextColor());
 	}
 
 	@Override
 	public void render() {
 		this.hoveringAnimation.update();
 		this.unhoveringAnimation.update();
+		this.togglingCircleAnimation.update();
+		this.togglingOpacityAnimation.update();
+		Log.debug(Float.toString(this.toggledOpacity));
+		Log.debug(Float.toString(this.circleX));
+
 		this.calculateCoordinates();
 		this.renderRectangle();
 		this.renderName();
-		this.renderSwitch();
-		this.renderHoveredSwitch();
+		this.renderSwitchRectangle();
+		this.renderToggledSwitchRectangle();
+		this.renderHoveredSwitchRectangle();
+		this.renderSwitchCircle();
 	}
 
 

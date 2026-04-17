@@ -45,7 +45,7 @@ public class ConfigGui extends Screen {
 	private static float EXPANDING_ANIMATION_DURATION = 150;
 
 	//Miscellaneous
-	private static float SWITCH_WIDTH = 20;
+	private static float SWITCH_WIDTH = 18;
 	private static float FEATURE_MAX_HOVERED_OPACITY = 20;
 	private static float CATEGORY_INDICATOR_LINE_SIZE = 2;
 

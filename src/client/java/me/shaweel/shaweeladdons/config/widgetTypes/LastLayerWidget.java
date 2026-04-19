@@ -12,8 +12,8 @@ public abstract class LastLayerWidget<T> implements ConfigWidget<ExpandableConfi
 	@SuppressWarnings("unchecked")
 	public LastLayerWidget(String name, ExpandableConfigWidgetWithLastLayerWidgets parent) {
 		this.name = name;
-		this.parent = parent;		
-		this.value = (T) ConfigFile.readFromConfig(parent.getName() + "." + name + ".value", false);
+		this.parent = parent;
+		this.value = (T) ConfigFile.readFromConfig(this.parent.getParent().getName() + "." + parent.getName() + "." + name + ".value", false);
 
 		Boolean alreadyExists = false;
 

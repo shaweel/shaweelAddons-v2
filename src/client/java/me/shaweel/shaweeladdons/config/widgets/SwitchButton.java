@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
+import me.shaweel.shaweeladdons.config.ConfigFile;
 import me.shaweel.shaweeladdons.config.ConfigGui;
 import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
 import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgets;
 import me.shaweel.shaweeladdons.config.widgetTypes.LastLayerWidget;
 import me.shaweel.shaweeladdons.utils.Animation;
-import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
 public class SwitchButton extends LastLayerWidget<Boolean> {
@@ -59,6 +59,8 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 		this.togglingOpacityAnimation = new Animation(this.toggledOpacity, this.value ? 255 : 0, ConfigGui.getToggleAnimationDuration(), value -> this.toggledOpacity = value);
 		this.togglingOpacityAnimation.start();
+
+		ConfigFile.updateConfig();
 
 		return true;
 	}
@@ -165,8 +167,6 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		this.unhoveringAnimation.update();
 		this.togglingCircleAnimation.update();
 		this.togglingOpacityAnimation.update();
-		Log.debug(Float.toString(this.toggledOpacity));
-		Log.debug(Float.toString(this.circleX));
 
 		this.calculateCoordinates();
 		this.renderRectangle();

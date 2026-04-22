@@ -63,10 +63,10 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 			this.minY += (this.parent.getChildren().get(i).getLowestPoint() - this.parent.getChildren().get(i).getMinY());
 		}
 
-		this.maxY = this.minY + ConfigGui.getFeatureYPadding()*2 + ConfigGui.getFeatureFontSize();
+		this.maxY = this.minY + ConfigGui.getFeatureYMargin()*2 + ConfigGui.getFeatureFontSize();
 
 		this.textX = (this.maxX+this.minX)/2 - NanoVGRenderer.getStringWidth(this.name, ConfigGui.getFeatureFontSize(), ConfigGui.getFeatureFontWeight())/2;
-		this.textY = this.minY + ConfigGui.getFeatureYPadding();
+		this.textY = this.minY + ConfigGui.getFeatureYMargin();
 
 		if (this.toggled && !this.togglingAnimation.isRunning()) {
 			this.toggledOpacity = 255;
@@ -179,7 +179,7 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 
 	@Override
 	public float getContentWidth() {
-		return NanoVGRenderer.getStringWidth(this.name, ConfigGui.getFeatureFontSize(), ConfigGui.getFeatureFontWeight());
+		return NanoVGRenderer.getStringWidth(this.name, ConfigGui.getFeatureFontSize(), ConfigGui.getFeatureFontWeight()) + ConfigGui.getFeatureXMargin() * 2;
 	}
 
 	@Override

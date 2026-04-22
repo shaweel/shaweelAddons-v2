@@ -10,6 +10,7 @@ import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
 import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgets;
 import me.shaweel.shaweeladdons.config.widgetTypes.LastLayerWidget;
 import me.shaweel.shaweeladdons.utils.Animation;
+import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
 public class SwitchButton extends LastLayerWidget<Boolean> {
@@ -87,7 +88,10 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 	@Override
 	public float getContentWidth() {
-		return NanoVGRenderer.getStringWidth(this.name, ConfigGui.getOptionFontSize(), ConfigGui.getOptionFontWeight());
+		return NanoVGRenderer.getStringWidth(this.name, ConfigGui.getOptionFontSize(), ConfigGui.getOptionFontWeight())
+		 + ConfigGui.getLastLayerWidgetXMargin() * 2
+		 + ConfigGui.getSwitchWidth() 
+		 + ConfigGui.getSwitchTextPadding();
 	}
 
 	@Override
@@ -98,18 +102,18 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		this.minY = this.parent.getMaxY();
 
 		for (int i = 0; i < index; i++) {
-			this.minY += ConfigGui.getOptionPadding() * 2 + ConfigGui.getOptionFontSize();
+			this.minY += ConfigGui.getSwitchYMargin() * 2 + ConfigGui.getOptionFontSize();
 		}
 
-		this.maxY = this.minY + ConfigGui.getOptionPadding() * 2 + ConfigGui.getOptionFontSize();
+		this.maxY = this.minY + ConfigGui.getSwitchYMargin() * 2 + ConfigGui.getOptionFontSize();
 
-		this.textX = this.minX + ConfigGui.getOptionPadding();
-		this.textY = this.minY + ConfigGui.getOptionPadding();
+		this.textX = this.minX + ConfigGui.getLastLayerWidgetXMargin();
+		this.textY = this.minY + ConfigGui.getLastLayerWidgetXMargin();
 
-		this.switchMaxX = this.maxX - ConfigGui.getOptionPadding();
+		this.switchMaxX = this.maxX - ConfigGui.getLastLayerWidgetXMargin();
 		this.switchMinX = this.switchMaxX - ConfigGui.getSwitchWidth();
-		this.switchMinY = this.minY + ConfigGui.getSwitchVerticalMargin();
-		this.switchMaxY = this.maxY - ConfigGui.getSwitchVerticalMargin();
+		this.switchMinY = this.minY + ConfigGui.getSwitchYMargin();
+		this.switchMaxY = this.maxY - ConfigGui.getSwitchYMargin();
 
 		this.squareMinY = this.switchMinY + ConfigGui.getSwitchSquarePadding();
 		this.squareMaxY = this.switchMaxY - ConfigGui.getSwitchSquarePadding();
@@ -134,6 +138,13 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		}
 
 		this.squareMaxX = this.squareMinX + squareSideLength;
+
+		Log.debug("maxX="+this.maxX);
+		Log.debug("minX="+this.minX);
+		Log.debug("w="+(this.maxX-this.minX));
+		Log.debug("switchWidth="+ConfigGui.getSwitchWidth());
+		Log.debug("text width="+NanoVGRenderer.getStringWidth(this.name, ConfigGui.getOptionFontSize(), ConfigGui.getOptionFontWeight()));
+		Log.debug((this.switchMaxX - this.switchMinX) == ConfigGui.getSwitchWidth());
 	}
 
 	private void renderRectangle() {

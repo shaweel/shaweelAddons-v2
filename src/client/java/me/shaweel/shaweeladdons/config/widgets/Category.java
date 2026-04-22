@@ -42,19 +42,19 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	public void calculateCoordinates() {
 		this.index = categories.indexOf(this);
 
-		this.minY = ConfigGui.getCornerOffset();
-		this.maxY = this.minY + ConfigGui.getCategoryYPadding()*2 + ConfigGui.getCategoryFontSize();
+		this.minY = ConfigGui.getCornerYOffset();
+		this.maxY = this.minY + ConfigGui.getCategoryYMargin()*2 + ConfigGui.getCategoryFontSize();
 
-		this.minX = ConfigGui.getCornerOffset() * (this.index + 1);
+		this.minX = ConfigGui.getCornerXOffset();
 
 		for (int i = 0; i < this.index; i++) {
 			this.minX += this.parent.getWidestContentWidth() + ConfigGui.getCategoryXPadding();
 		}
 
-		this.maxX = this.minX + ConfigGui.getCategoryXPadding() + this.parent.getWidestContentWidth();
+		this.maxX = this.minX + this.parent.getWidestContentWidth();
 
 		this.textX = (this.maxX+this.minX)/2 - NanoVGRenderer.getStringWidth(this.name, ConfigGui.getCategoryFontSize(), ConfigGui.getCategoryFontWeight())/2;
-		this.textY = this.minY + ConfigGui.getCategoryYPadding();
+		this.textY = this.minY + ConfigGui.getCategoryYMargin();
 
 		if (this.expanded && !this.expandingAnimation.isRunning()) {
 			this.lowestPoint = this.getLowestExpandedPoint();
@@ -235,7 +235,7 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 
 	@Override
 	public float getContentWidth() {
-		return NanoVGRenderer.getStringWidth(this.name, ConfigGui.getCategoryFontSize(), ConfigGui.getCategoryFontWeight());
+		return NanoVGRenderer.getStringWidth(this.name, ConfigGui.getCategoryFontSize(), ConfigGui.getCategoryFontWeight()) + ConfigGui.getCategoryXMargin() * 2;
 	}
 }
   

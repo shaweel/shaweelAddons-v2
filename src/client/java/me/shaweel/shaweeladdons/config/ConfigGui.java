@@ -14,24 +14,36 @@ import net.minecraft.network.chat.Component;
 
 public class ConfigGui extends Screen {
 	//----------------STATIC VARIABLES----------------
-	//Colors
+	//----------Colors----------
 	private static int PRIMARY_COLOR = 0xff3c093c;
 	private static int BACKGROUND_COLOR = 0xff141414;
 	private static int SECONDARY_BACKGROUND_COLOR = 0xff202020;
 	private static int HOVERED_COLOR = 0xffffffff;
 	private static int TEXT_COLOR = 0xffd0d0d0;
 
-	//Padding
-	private static float CATEGORY_Y_PADDING = 3.5f;
-	private static float FEATURE_Y_PADDING = 3;
-	private static float OPTION_PADDING = 2;
-	private static float SWITCH_SQUARE_PADDING = 1;
-	private static float SWITCH_TEXT_PADDING = 2;
-	private static float SWITCH_VERTICAL_MARGIN = 1.5f;
-	private static float CORNER_OFFSET = 7;
-	private static float CATEGORY_X_PADDING = 15;
+	//----------Padding----------
+	//General
+	private static float CORNER_X_OFFSET = 7; //The amount of space between the absolute top of the screen and the first Category
+	private static float CORNER_Y_OFFSET = 7; //The amount of space between the absolute left of the screen and the first Category
 
-	//Fonts
+	//Category
+	private static float CATEGORY_Y_MARGIN = 3.5f; //The amount of space between the Category's name and the top most and bottom most point of the Category
+	private static float CATEGORY_X_MARGIN = 2;  //The minimum amount of space between the Category's name and the left most and right most point of the Category
+	private static float CATEGORY_X_PADDING = 15; //The amount of space between individual Categories on the X axis
+
+	//Feature
+	private static float FEATURE_Y_MARGIN = 3; //The amount of space between the Feature's name and the top most and bottom most point of the Feature
+	private static float FEATURE_X_MARGIN = 2; //The minimum amount of space between the Feature's name and the left most and right most point of the Feature
+
+	//LastLayerWidget
+	private static float LAST_LAYER_WIDGET_X_MARGIN = 2; //The amount of space between the LastLayerWidget's content and the left most and right most point of the LastLayerWidget
+
+	//Switch
+	private static float SWITCH_SQUARE_PADDING = 1; //The amount of space between the Switch's rectangle and the square inside said rectangle
+	private static float SWITCH_TEXT_PADDING = 2; //The minimum amount of space between the Switch's name and the actual switch next to the name
+	private static float SWITCH_Y_MARGIN = 1.5f; //The amount of space between the Switch's name and the top most and bottom most point of the Switch
+
+	//----------Fonts----------
 	private static int CATEGORY_FONT_SIZE = 12;
 	private static int FEATURE_FONT_SIZE = 9;
 	private static int OPTION_FONT_SIZE = 7;
@@ -40,17 +52,17 @@ public class ConfigGui extends Screen {
 	private static int FEATURE_FONT_WEIGHT = 500;
 	private static int OPTION_FONT_WEIGHT = 400;
 
-	//Animations
+	//----------Animations----------
 	private static float TOGGLE_ANIMATION_DURATION = 50;
 	private static float HOVER_ANIMATION_DURATION = 50;
 	private static float EXPANDING_ANIMATION_DURATION = 150;
 
-	//Miscellaneous
+	//----------Miscellaneous----------
 	private static float SWITCH_WIDTH = 18;
 	private static float MAX_HOVERED_OPACITY = 20;
 	private static float CATEGORY_INDICATOR_LINE_SIZE = 2;
 
-	//Make these configurable in the future.
+	//TODO: Make these configurable in the future.
 
 	//The actual class starts here... good luck future me
 	private Boolean openConfig = false;
@@ -143,24 +155,37 @@ public class ConfigGui extends Screen {
 		return widest;
 	}
 
-	//Colors
+	//----------------GETTER FUNCTIONS----------------
+	//----------Colors----------
+	public static int getPrimaryColor() { return PRIMARY_COLOR; }
 	public static int getBackgroundColor() { return BACKGROUND_COLOR; }
 	public static int getSecondaryBackgroundColor() { return SECONDARY_BACKGROUND_COLOR; }
-	public static int getPrimaryColor() { return PRIMARY_COLOR; }
-	public static int getTextColor() { return TEXT_COLOR; }
 	public static int getHoveredColor() { return HOVERED_COLOR; }
+	public static int getTextColor() { return TEXT_COLOR; }
 
-	//Padding
-	public static float getCategoryYPadding() { return CATEGORY_Y_PADDING; }
-	public static float getFeatureYPadding() { return FEATURE_Y_PADDING; }
-	public static float getOptionPadding() { return OPTION_PADDING; }
-	public static float getSwitchVerticalMargin() { return SWITCH_VERTICAL_MARGIN; }
-	public static float getSwitchSquarePadding() { return SWITCH_SQUARE_PADDING; }
-	public static float getSwitchTextPadding() { return SWITCH_TEXT_PADDING; }
-	public static float getCornerOffset() { return CORNER_OFFSET; }
+	//----------Padding----------
+	//General
+	public static float getCornerXOffset() { return CORNER_X_OFFSET; }
+	public static float getCornerYOffset() { return CORNER_Y_OFFSET; }
+
+	//Category
+	public static float getCategoryYMargin() { return CATEGORY_Y_MARGIN; }
+	public static float getCategoryXMargin() { return CATEGORY_X_MARGIN; }
 	public static float getCategoryXPadding() { return CATEGORY_X_PADDING; }
 
-	//Fonts
+	//Feature
+	public static float getFeatureYMargin() { return FEATURE_Y_MARGIN; }
+	public static float getFeatureXMargin() { return FEATURE_X_MARGIN; }
+
+	//LastLayerWidget
+	public static float getLastLayerWidgetXMargin() { return LAST_LAYER_WIDGET_X_MARGIN; }
+
+	//Switch
+	public static float getSwitchSquarePadding() { return SWITCH_SQUARE_PADDING; }
+	public static float getSwitchTextPadding() { return SWITCH_TEXT_PADDING; }
+	public static float getSwitchYMargin() { return SWITCH_Y_MARGIN; }
+
+	//----------Fonts----------
 	public static int getCategoryFontSize() { return CATEGORY_FONT_SIZE; }
 	public static int getFeatureFontSize() { return FEATURE_FONT_SIZE; }
 	public static int getOptionFontSize() { return OPTION_FONT_SIZE; }
@@ -169,12 +194,12 @@ public class ConfigGui extends Screen {
 	public static int getFeatureFontWeight() { return FEATURE_FONT_WEIGHT; }
 	public static int getOptionFontWeight() { return OPTION_FONT_WEIGHT; }
 
-	//Animations
+	//----------Animations----------
 	public static float getToggleAnimationDuration() { return TOGGLE_ANIMATION_DURATION; }
 	public static float getHoverAnimationDuration() { return HOVER_ANIMATION_DURATION; }
 	public static float getExpandingAnimationDuration() { return EXPANDING_ANIMATION_DURATION; }
 
-	//Miscellaneous
+	//----------Miscellaneous----------
 	public static float getSwitchWidth() { return SWITCH_WIDTH; }
 	public static float getMaxHoveredOpacity() { return MAX_HOVERED_OPACITY; }
 	public static float getCategoryIndicatorLineSize() { return CATEGORY_INDICATOR_LINE_SIZE; }

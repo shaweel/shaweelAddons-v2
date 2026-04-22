@@ -117,45 +117,6 @@ public class NanoVGRenderer {
 		nvgShapeAntiAlias(vg, true);
 	}
 
-	public static void drawRectangle(float minX, float minY, float maxX, float maxY, float radius, int color) {
-		final WidthHeight widthHeight = getWidthAndHeight(minX, minY, maxX, maxY);
-		final float width = widthHeight.width;
-		final float height = widthHeight.height;
-		
-		applyColor(color);
-		nvgBeginPath(vg);
-		nvgRoundedRect(vg, minX, minY, width, height, radius);
-		nvgFillColor(vg, nvgColor);
-		nvgFill(vg);
-		nvgClosePath(vg);
-	}
-
-	public static void drawRectangle(float minX, float minY, float maxX, float maxY, 
-		float radiusTopLeft, float radiusTopRight, float radiusBottomLeft, float radiusBottomRight, int color) {
-		final WidthHeight widthHeight = getWidthAndHeight(minX, minY, maxX, maxY);
-		final float width = widthHeight.width;
-		final float height = widthHeight.height;
-		
-		applyColor(color);
-		nvgBeginPath(vg);
-		nvgRoundedRectVarying(vg, minX, minY, width, height, radiusTopLeft, radiusTopRight, radiusBottomRight, radiusBottomLeft);
-		nvgFillColor(vg, nvgColor);
-		nvgFill(vg);
-		nvgClosePath(vg);
-	}
-
-	public static void drawCircle(float x, float y, float r, int color) {
-		x += r;
-		y += r;
-		
-		applyColor(color);
-		nvgBeginPath(vg);
-		nvgCircle(vg, x, y, r);
-		nvgFillColor(vg, nvgColor);
-		nvgFill(vg);
-		nvgClosePath(vg);
-	}
-
 	public static void drawString(String string, float x, float y, int size, int weight, int color) {
 		if (!validWeights.contains(weight)) {
 			Log.error(String.format("Invalid weight: %s, valid weights: %s", weight, validWeights));

@@ -24,10 +24,9 @@ public class ConfigGui extends Screen {
 	//Padding
 	private static float CATEGORY_Y_PADDING = 3.5f;
 	private static float FEATURE_Y_PADDING = 3;
-	private static float OPTION_TEXT_VERTICAL_MARGIN = 2.5f;
-	private static float OPTION_HORIZONTAL_MARGIN = 2;
-	private static float SWITCH_PADDING = 1;
-	private static float SWITCH_CIRCLE_MARGIN = 2;
+	private static float OPTION_PADDING = 2;
+	private static float SWITCH_SQUARE_PADDING = 1;
+	private static float SWITCH_TEXT_PADDING = 2;
 	private static float SWITCH_VERTICAL_MARGIN = 1.5f;
 	private static float CORNER_OFFSET = 7;
 	private static float CATEGORY_X_PADDING = 15;
@@ -101,7 +100,7 @@ public class ConfigGui extends Screen {
 		new SwitchButton("Test12", placeholderFeature);
 		new SwitchButton("Test13", placeholderFeature);
 		new SwitchButton("Test14", placeholderFeature);
-		new SwitchButton("asdsadasdasdsa", clickGuiFeature);
+		new SwitchButton("jknksjdfoisdfjoisdjfiodssadfsdf", clickGuiFeature);
 	}
 
 	@Override
@@ -154,11 +153,10 @@ public class ConfigGui extends Screen {
 	//Padding
 	public static float getCategoryYPadding() { return CATEGORY_Y_PADDING; }
 	public static float getFeatureYPadding() { return FEATURE_Y_PADDING; }
-	public static float getOptionTextVerticalMargin() { return OPTION_TEXT_VERTICAL_MARGIN; }
-	public static float getOptionHorizontalMargin() { return OPTION_HORIZONTAL_MARGIN; }
+	public static float getOptionPadding() { return OPTION_PADDING; }
 	public static float getSwitchVerticalMargin() { return SWITCH_VERTICAL_MARGIN; }
-	public static float getSwitchCircleMargin() { return SWITCH_CIRCLE_MARGIN; }
-	public static float getSwitchPadding() { return SWITCH_PADDING; }
+	public static float getSwitchSquarePadding() { return SWITCH_SQUARE_PADDING; }
+	public static float getSwitchTextPadding() { return SWITCH_TEXT_PADDING; }
 	public static float getCornerOffset() { return CORNER_OFFSET; }
 	public static float getCategoryXPadding() { return CATEGORY_X_PADDING; }
 

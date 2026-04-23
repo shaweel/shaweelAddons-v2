@@ -18,6 +18,7 @@ public abstract class LastLayerWidget<T> implements ConfigWidget<ExpandableConfi
 		this.parent.registerChild(this);
 	}
 
+	@Override
 	public void setId(int newId) {
 		String caller = Thread.currentThread().getStackTrace()[2].getClassName();
 		if (caller.equals(this.parent.getClass().getName())) {
@@ -28,11 +29,15 @@ public abstract class LastLayerWidget<T> implements ConfigWidget<ExpandableConfi
 		this.id = newId;
 	}
 
+	@Override
 	public int getId() { return this.id; }
 
+	@Override
 	public String getName() { return this.name; }
 
+	@Override
 	public T getValue() { return this.value; }
 
+	@Override
 	public ExpandableConfigWidgetWithLastLayerWidgets getParent() { return parent; }
 }

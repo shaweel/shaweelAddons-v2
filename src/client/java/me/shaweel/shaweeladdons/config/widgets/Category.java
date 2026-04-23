@@ -22,7 +22,7 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 
 	private final ConfigGui parent;
 	private final String name;
-	private float index;
+	private int id;
 
 	private float minX;
 	private float maxX;
@@ -40,14 +40,14 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 
 	@Override
 	public void calculateCoordinates() {
-		this.index = categories.indexOf(this);
+		this.id = categories.indexOf(this);
 
 		this.minY = ConfigGui.getCornerYOffset();
 		this.maxY = this.minY + ConfigGui.getCategoryYMargin()*2 + ConfigGui.getCategoryFontSize();
 
 		this.minX = ConfigGui.getCornerXOffset();
 
-		for (int i = 0; i < this.index; i++) {
+		for (int i = 0; i < this.id; i++) {
 			this.minX += this.parent.getWidestContentWidth() + ConfigGui.getCategoryXPadding();
 		}
 
@@ -66,7 +66,7 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	public Category(String name, ConfigGui parent) {
 		this.name = name;
 		this.parent = parent;
-		this.expanded = (boolean) ConfigFile.readFromConfig(name + ".expanded", false);
+		this.expanded = (boolean) ConfigFile.readFromConfig(name + ".expanded", true);
 
 		Boolean alreadyExists = false;
 
@@ -79,7 +79,7 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 		}
 
 		categories.add(this);
-		this.index = categories.indexOf(this);
+		this.id = categories.indexOf(this);
 	}
 
 	private void renderMainRectangle() {
@@ -236,6 +236,30 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	@Override
 	public float getContentWidth() {
 		return NanoVGRenderer.getStringWidth(this.name, ConfigGui.getCategoryFontSize(), ConfigGui.getCategoryFontWeight()) + ConfigGui.getCategoryXMargin() * 2;
+	}
+
+	public Feature getChildById(int id) {
+		for (Feature child : this.children) {
+			if (child.getId() == id) return child;
+		}
+		
+		return null;
+	}
+
+	@Override
+	public int getId() {
+		return this.id;
+	}
+
+	@Override
+	public void setId(int newId) {
+		String caller = Thread.currentThread().getStackTrace()[2].getClassName();
+		if (caller.equals(this.parent.getClass().getName())) {
+			Log.error("The id of a ConfigWidget can only be set by itself or it's parent.");
+			return;
+		}
+
+		this.id = newId;
 	}
 }
   

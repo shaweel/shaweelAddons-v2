@@ -117,22 +117,6 @@ public class NanoVGRenderer {
 		nvgShapeAntiAlias(vg, true);
 	}
 
-	public static void renderRectangleOutline(float minX, float minY, float maxX, float maxY, float thickness, int color) {
-		nvgShapeAntiAlias(vg, false);
-		final WidthHeight widthHeight = getWidthAndHeight(minX, minY, maxX, maxY);
-		final float width = widthHeight.width;
-		final float height = widthHeight.height;
-		
-		applyColor(color);
-		nvgBeginPath(vg);
-		nvgRect(vg, minX, minY, width, height);
-		nvgStrokeWidth(vg, thickness);
-		nvgStrokeColor(vg, nvgColor);
-		nvgStroke(vg);
-		nvgClosePath(vg);
-		nvgShapeAntiAlias(vg, true);
-	}
-
 	public static void renderString(String string, float x, float y, int size, int weight, int color) {
 		if (!validWeights.contains(weight)) {
 			Log.error(String.format("Invalid weight: %s, valid weights: %s", weight, validWeights));
@@ -143,6 +127,21 @@ public class NanoVGRenderer {
 		nvgFontFaceId(vg, notoSerif[weight/100-1]);
 		applyColor(color);
 		nvgFillColor(vg, nvgColor);
+		nvgTextAlign(vg, NVG_ALIGN_LEFT | NVG_ALIGN_TOP);
+		nvgText(vg, x, y, string);
+	}
+
+	public static void renderCenteredString(String string, float x, float y, int size, int weight, int color) {
+		if (!validWeights.contains(weight)) {
+			Log.error(String.format("Invalid weight: %s, valid weights: %s", weight, validWeights));
+			return;
+		}
+		
+		nvgFontSize(vg, size);
+		nvgFontFaceId(vg, notoSerif[weight/100-1]);
+		applyColor(color);
+		nvgFillColor(vg, nvgColor);
+		nvgTextAlign(vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
 		nvgText(vg, x, y, string);
 	}
 

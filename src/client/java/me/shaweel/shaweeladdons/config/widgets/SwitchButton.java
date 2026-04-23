@@ -196,4 +196,7 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 	@Override
 	public List<ConfigWidget<?, ?>> getChildren() { return null; }
+
+	@Override
+	public ConfigWidget<?, ?> getChildById(int id) { return null; }
 }

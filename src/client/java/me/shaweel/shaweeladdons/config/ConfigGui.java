@@ -7,6 +7,7 @@ import me.shaweel.shaweeladdons.config.widgets.Button;
 import me.shaweel.shaweeladdons.config.widgets.Category;
 import me.shaweel.shaweeladdons.config.widgets.Feature;
 import me.shaweel.shaweeladdons.config.widgets.SwitchButton;
+import me.shaweel.shaweeladdons.utils.Log;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -29,12 +30,12 @@ public class ConfigGui extends Screen {
 
 	//Category
 	private static float CATEGORY_Y_MARGIN = 3.5f; //The amount of space between the Category's name and the Category's top most and bottom most point
-	private static float CATEGORY_X_MARGIN = 2; //The minimum amount of space between the Category's name and the Category's left most and right most point
+	private static float CATEGORY_X_MARGIN = 5; //The minimum amount of space between the Category's name and the Category's left most and right most point
 	private static float CATEGORY_X_PADDING = 15; //The amount of horizontal space between individual Categories
 
 	//Feature
 	private static float FEATURE_Y_MARGIN = 3; //The amount of space between the Feature's name and the Feature's top most and bottom most point
-	private static float FEATURE_X_MARGIN = 2; //The minimum amount of space between the Feature's name and the Feature's left most and right most point
+	private static float FEATURE_X_MARGIN = 3; //The minimum amount of space between the Feature's name and the Feature's left most and right most point
 
 	//SwitchButton
 	private static float SWITCH_SQUARE_PADDING = 1; //The amount of space between the actual switch's rectangle and the square inside that rectangle
@@ -45,6 +46,8 @@ public class ConfigGui extends Screen {
 	//Button
 	private static float BUTTON_Y_MARGIN = 1; //The amount of space between the actual button and the button container(row inside the Feature)'s top most and bottom most point
 	private static float BUTTON_X_MARGIN = 2; //The amount of space between the actual button and the button container(row inside the Feature)'s left most and right most point
+	private static float BUTTON_TEXT_X_PADDING = 3; //The minimum amount of space between the Button's text and the Button's left most and right most point
+	private static float BUTTON_TEXT_Y_PADDING = 2.5f; //The minimum amount of space between the Button's text and the Button's top most and bottom most point
 
 	//----------Fonts----------
 	private static int CATEGORY_FONT_SIZE = 12;
@@ -58,11 +61,13 @@ public class ConfigGui extends Screen {
 	//----------Animations----------
 	private static float TOGGLE_ANIMATION_DURATION = 50;
 	private static float HOVER_ANIMATION_DURATION = 50;
+	private static float CLICK_ANIMATION_DURATION = 250;
 	private static float EXPANDING_ANIMATION_DURATION = 150;
 
 	//----------Miscellaneous----------
 	private static float SWITCH_WIDTH = 18;
 	private static float MAX_HOVERED_OPACITY = 20;
+	private static float MAX_CLICK_OPACITY = 255;
 	private static float CATEGORY_INDICATOR_LINE_SIZE = 2;
 
 	//TODO: Make these configurable in the future.
@@ -110,12 +115,12 @@ public class ConfigGui extends Screen {
 		new SwitchButton("Test6", placeholderFeature);
 		new SwitchButton("Test7", placeholderFeature);
 		new SwitchButton("Test8", placeholderFeature);
-		new Button("Test9", placeholderFeature);
-		new Button("Test11", placeholderFeature);
-		new Button("Test12", placeholderFeature);
-		new Button("Test13", placeholderFeature);
-		new Button("Test14", placeholderFeature);
-		new Button("oogaboogaomaousdhuojasdo", placeholderFeature);
+		new Button("Test9", placeholderFeature, () -> Log.debug("pressed test9"));
+		new Button("Test11", placeholderFeature, () -> Log.debug("pressed test10"));
+		new Button("Test12", placeholderFeature, () -> Log.debug("pressed test12"));
+		new Button("Test13", placeholderFeature, () -> Log.debug("pressed test13"));
+		new Button("Test14", placeholderFeature, () -> Log.debug("pressed test14"));
+		new Button("oogaboogaomaousdhuojasdo", placeholderFeature, () -> Log.debug("pressed ooasdoihasoid"));
 	}
 
 	@Override
@@ -189,6 +194,8 @@ public class ConfigGui extends Screen {
 	//Button
 	public static float getButtonYMargin() { return BUTTON_Y_MARGIN; }
 	public static float getButtonXMargin() { return BUTTON_X_MARGIN; }
+	public static float getButtonTextXPadding() { return BUTTON_TEXT_X_PADDING; }
+	public static float getButtonTextYPadding() { return BUTTON_TEXT_Y_PADDING; }
 
 	//----------Fonts----------
 	public static int getCategoryFontSize() { return CATEGORY_FONT_SIZE; }
@@ -201,11 +208,13 @@ public class ConfigGui extends Screen {
 
 	//----------Animations----------
 	public static float getToggleAnimationDuration() { return TOGGLE_ANIMATION_DURATION; }
+	public static float getClickAnimationDuration() { return CLICK_ANIMATION_DURATION; }
 	public static float getHoverAnimationDuration() { return HOVER_ANIMATION_DURATION; }
 	public static float getExpandingAnimationDuration() { return EXPANDING_ANIMATION_DURATION; }
 
 	//----------Miscellaneous----------
 	public static float getSwitchWidth() { return SWITCH_WIDTH; }
 	public static float getMaxHoveredOpacity() { return MAX_HOVERED_OPACITY; }
+	public static float getMaxClickOpacity() { return MAX_CLICK_OPACITY; }
 	public static float getCategoryIndicatorLineSize() { return CATEGORY_INDICATOR_LINE_SIZE; }
 }

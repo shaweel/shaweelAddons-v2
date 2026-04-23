@@ -14,6 +14,9 @@ public interface ConfigWidget<P, T> {
 
 	List<? extends ConfigWidget<?, ?>> getChildren();
 	P getParent();
+	int getId();
+	void setId(int newId);
+	ConfigWidget<?, ?> getChildById(int id); 
 	T getValue();
 	String getName();
 

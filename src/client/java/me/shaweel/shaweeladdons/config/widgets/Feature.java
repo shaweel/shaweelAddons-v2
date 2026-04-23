@@ -11,7 +11,7 @@ import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
 public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
-	private int index;
+	private int id;
 
 	private float minX;
 	private float maxX;
@@ -47,19 +47,18 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 		}
 
 		this.parent.registerChild(this);
-		this.index = this.parent.getChildren().indexOf(this);
 	}
 
 	@Override
 	public void calculateCoordinates() {
-		this.index = this.parent.getChildren().indexOf(this);
+		this.id = this.parent.getChildren().indexOf(this);
 
 		this.minX = this.parent.getMinX();
 		this.maxX = this.parent.getMaxX();
 
 		this.minY = this.parent.getMaxY();
 
-		for (int i = 0; i < index; i++) {
+		for (int i = 0; i < id; i++) {
 			this.minY += (this.parent.getChildren().get(i).getLowestPoint() - this.parent.getChildren().get(i).getMinY());
 		}
 
@@ -202,4 +201,20 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 
 	public float getToggledOpacity() { return toggledOpacity; }
 	public float getHoveredOpacity() { return hoveredOpacity; }
+
+	@Override
+	public int getId() {
+		return this.id;
+	}
+
+	@Override
+	public void setId(int newId) {
+		String caller = Thread.currentThread().getStackTrace()[2].getClassName();
+		if (caller.equals(this.parent.getClass().getName())) {
+			Log.error("The id of a ConfigWidget can only be set by itself or it's parent.");
+			return;
+		}
+
+		this.id = newId;
+	}
 }

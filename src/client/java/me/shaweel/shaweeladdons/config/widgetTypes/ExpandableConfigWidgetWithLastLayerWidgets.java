@@ -6,20 +6,21 @@ import java.util.List;
 import me.shaweel.shaweeladdons.config.ConfigGui;
 import me.shaweel.shaweeladdons.config.widgets.Category;
 import me.shaweel.shaweeladdons.utils.Animation;
+import me.shaweel.shaweeladdons.utils.Easing;
 
 public abstract class ExpandableConfigWidgetWithLastLayerWidgets implements ConfigWidget<Category, Boolean>, ExpandableConfigWidget {
 	protected String name;
 	protected Category parent;
 
 	protected float lowestPoint;
-	private Animation expandingAnimation = new Animation(0, 0, 0, null);
+	private Animation expandingAnimation = new Animation(0, 0, 0, null, null);
 	protected boolean expanded;
 	protected List<LastLayerWidget<?>> children = new ArrayList<>();
 
 	protected void expand() {
 		this.expanded = !this.expanded;
 		this.expandingAnimation = new Animation(this.lowestPoint, this.expanded ? this.getLowestExpandedPoint() : this.getLowestUnexpandedPoint(), 
-		ConfigGui.getExpandingAnimationDuration(), value -> this.lowestPoint = value);
+		ConfigGui.getExpandingAnimationDuration(), value -> this.lowestPoint = value, this.expanded ? Easing.EASE_OUT_QUAD : Easing.EASE_IN_QUAD);
 		this.expandingAnimation.start();
 	}
 

@@ -9,6 +9,7 @@ import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
 import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgets;
 import me.shaweel.shaweeladdons.config.widgetTypes.LastLayerWidget;
 import me.shaweel.shaweeladdons.utils.Animation;
+import me.shaweel.shaweeladdons.utils.Easing;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
 public class Button extends LastLayerWidget<Void> {
@@ -29,12 +30,12 @@ public class Button extends LastLayerWidget<Void> {
 
 	private float hoveredOpacity = 0;
 	private boolean hovered = false;
-	private Animation hoveringAnimation = new Animation(0, 0, 0, null);
-	private Animation unhoveringAnimation = new Animation(0, 0, 0, null);
+	private Animation hoveringAnimation = new Animation(0, 0, 0, null, null);
+	private Animation unhoveringAnimation = new Animation(0, 0, 0, null, null);
 
 	private float pulseOpacity = 0;
-	private Animation pulseAnimation = new Animation(0, 0, 0, null);
-	private Animation unpulseAnimation = new Animation(0, 0, 0, null);
+	private Animation pulseAnimation = new Animation(0, 0, 0, null, null);
+	private Animation unpulseAnimation = new Animation(0, 0, 0, null, null);
 	
 	public Button(String name, ExpandableConfigWidgetWithLastLayerWidgets parent, Runnable action) {
 		super(name, parent);
@@ -115,14 +116,14 @@ public class Button extends LastLayerWidget<Void> {
 	@Override
 	public void onHoverEnter() {
 		this.hovered = true;
-		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getMaxHoveredOpacity(), ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getMaxHoveredOpacity(), ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value, Easing.EASE_OUT_QUAD);
 		this.hoveringAnimation.start();
 	}
 
 	@Override
 	public void onHoverExit() {
 		this.hovered = false;
-		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value, Easing.EASE_IN_QUAD);
 		this.unhoveringAnimation.start();
 	}
 
@@ -141,10 +142,10 @@ public class Button extends LastLayerWidget<Void> {
 
 		new Thread(() -> {
 			try {
-				this.pulseAnimation = new Animation(this.pulseOpacity, 255, ConfigGui.getClickAnimationDuration() / 2, value -> this.pulseOpacity = value);
+				this.pulseAnimation = new Animation(this.pulseOpacity, 255, ConfigGui.getClickAnimationDuration() / 2, value -> this.pulseOpacity = value, Easing.EASE_OUT_QUAD);
 				this.pulseAnimation.start();
 				Thread.sleep((long) ConfigGui.getClickAnimationDuration() / 2);
-				this.unpulseAnimation = new Animation(this.pulseOpacity, 0, ConfigGui.getClickAnimationDuration() / 2, value -> this.pulseOpacity = value);
+				this.unpulseAnimation = new Animation(this.pulseOpacity, 0, ConfigGui.getClickAnimationDuration() / 2, value -> this.pulseOpacity = value, Easing.EASE_IN_QUAD);
 				this.unpulseAnimation.start();
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();

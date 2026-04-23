@@ -12,6 +12,7 @@ import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
 import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidget;
 import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.Animation;
+import me.shaweel.shaweeladdons.utils.Easing;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGPiPRenderer;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 import net.minecraft.client.gui.GuiGraphics;
@@ -34,14 +35,14 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 
 	private float lowestPoint = Float.POSITIVE_INFINITY;
 
-	private Animation expandingAnimation = new Animation(0, 0, 0, null);
+	private Animation expandingAnimation = new Animation(0, 0, 0, null, null);
 
 	private Boolean expanded = false;
 
 	private float hoveredOpacity = 0;
 	private boolean hovered = false;
-	private Animation hoveringAnimation = new Animation(0, 0, 0, null);
-	private Animation unhoveringAnimation = new Animation(0, 0, 0, null);
+	private Animation hoveringAnimation = new Animation(0, 0, 0, null, null);
+	private Animation unhoveringAnimation = new Animation(0, 0, 0, null, null);
 
 	@Override
 	public void calculateCoordinates() {
@@ -154,7 +155,7 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 
 		this.expanded = !this.expanded;
 		this.expandingAnimation = new Animation(this.lowestPoint, this.expanded ? this.getLowestExpandedPoint() : this.getLowestUnexpandedPoint(), 
-		ConfigGui.getExpandingAnimationDuration(), value -> this.lowestPoint = value);
+		ConfigGui.getExpandingAnimationDuration(), value -> this.lowestPoint = value, this.expanded ? Easing.EASE_OUT_QUAD : Easing.EASE_IN_QUAD);
 		this.expandingAnimation.start();
 
 		ConfigFile.updateConfig();
@@ -164,14 +165,14 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	@Override
 	public void onHoverEnter() {
 		this.hovered = true;
-		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getMaxHoveredOpacity(), ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getMaxHoveredOpacity(), ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value, Easing.EASE_OUT_QUAD);
 		this.hoveringAnimation.start();
 	}
 
 	@Override
 	public void onHoverExit() {
 		this.hovered = false;
-		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value, Easing.EASE_IN_QUAD);
 		this.unhoveringAnimation.start();
 	}
 

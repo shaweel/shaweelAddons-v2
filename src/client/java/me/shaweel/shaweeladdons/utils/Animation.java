@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 
 public class Animation {
+	private final Easing easing;
 	private final float DURATION;
 	private final Consumer<Float> setter;
 
@@ -15,7 +16,8 @@ public class Animation {
 
 	private boolean running;
 	
-	public Animation(float start, float goal, float duration, Consumer<Float> setter) {
+	public Animation(float start, float goal, float duration, Consumer<Float> setter, Easing easing) {
+		this.easing = easing;
 		this.toggleTime = System.currentTimeMillis();
 		this.value = start;
 		this.lastValue = start;
@@ -43,7 +45,7 @@ public class Animation {
 		if (!this.running) return;
 
 		final long elapsed = System.currentTimeMillis() - toggleTime;
-		final float progress = Math.min(elapsed / DURATION, 1f);
+		final float progress = easing.get(Math.min(elapsed / DURATION, 1f));
 
 		if (progress >= 1) {
 			this.value = this.goal;

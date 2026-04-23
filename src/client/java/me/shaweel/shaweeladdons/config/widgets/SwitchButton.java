@@ -10,6 +10,7 @@ import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
 import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgets;
 import me.shaweel.shaweeladdons.config.widgetTypes.LastLayerWidget;
 import me.shaweel.shaweeladdons.utils.Animation;
+import me.shaweel.shaweeladdons.utils.Easing;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
 public class SwitchButton extends LastLayerWidget<Boolean> {
@@ -36,12 +37,12 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 
 	private float hoveredOpacity = 0;
 	private boolean hovered = false;
-	private Animation hoveringAnimation = new Animation(0, 0, 0, null);
-	private Animation unhoveringAnimation = new Animation(0, 0, 0, null);
+	private Animation hoveringAnimation = new Animation(0, 0, 0, null, null);
+	private Animation unhoveringAnimation = new Animation(0, 0, 0, null, null);
 
 	private float toggledOpacity = 0;
-	private Animation togglingSquareAnimation = new Animation(0, 0, 0, null);
-	private Animation togglingOpacityAnimation = new Animation(0, 0, 0, null);
+	private Animation togglingSquareAnimation = new Animation(0, 0, 0, null, null);
+	private Animation togglingOpacityAnimation = new Animation(0, 0, 0, null, null);
 	
 	public SwitchButton(String name, ExpandableConfigWidgetWithLastLayerWidgets parent) {
 		super(name, parent);
@@ -54,10 +55,10 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		}
 
 		this.value = !this.value;
-		this.togglingSquareAnimation = new Animation(this.squareMinX, this.value ? this.squareMaxMinX : this.squareMinMinX, ConfigGui.getToggleAnimationDuration(), value -> this.squareMinX = value);
+		this.togglingSquareAnimation = new Animation(this.squareMinX, this.value ? this.squareMaxMinX : this.squareMinMinX, ConfigGui.getToggleAnimationDuration(), value -> this.squareMinX = value, this.value ? Easing.EASE_OUT_QUAD : Easing.EASE_IN_QUAD);
 		this.togglingSquareAnimation.start();
 
-		this.togglingOpacityAnimation = new Animation(this.toggledOpacity, this.value ? 255 : 0, ConfigGui.getToggleAnimationDuration(), value -> this.toggledOpacity = value);
+		this.togglingOpacityAnimation = new Animation(this.toggledOpacity, this.value ? 255 : 0, ConfigGui.getToggleAnimationDuration(), value -> this.toggledOpacity = value, this.value ? Easing.EASE_OUT_QUAD : Easing.EASE_IN_QUAD);
 		this.togglingOpacityAnimation.start();
 
 		ConfigFile.updateConfig();
@@ -68,14 +69,14 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 	@Override
 	public void onHoverEnter() {
 		this.hovered = true;
-		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getMaxHoveredOpacity(), ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getMaxHoveredOpacity(), ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value, Easing.EASE_OUT_QUAD);
 		this.hoveringAnimation.start();
 	}
 
 	@Override
 	public void onHoverExit() {
 		this.hovered = false;
-		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value, Easing.EASE_IN_QUAD);
 		this.unhoveringAnimation.start();
 	}
 

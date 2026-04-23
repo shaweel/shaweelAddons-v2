@@ -61,8 +61,8 @@ public class ConfigGui extends Screen {
 	//----------Animations----------
 	private static float TOGGLE_ANIMATION_DURATION = 50;
 	private static float HOVER_ANIMATION_DURATION = 50;
-	private static float CLICK_ANIMATION_DURATION = 250;
-	private static float EXPANDING_ANIMATION_DURATION = 150;
+	private static float CLICK_ANIMATION_DURATION = 200;
+	private static float EXPANDING_ANIMATION_DURATION = 250;
 
 	//----------Miscellaneous----------
 	private static float SWITCH_WIDTH = 18;

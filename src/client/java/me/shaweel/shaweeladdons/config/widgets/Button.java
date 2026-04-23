@@ -9,7 +9,6 @@ import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
 import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgets;
 import me.shaweel.shaweeladdons.config.widgetTypes.LastLayerWidget;
 import me.shaweel.shaweeladdons.utils.Animation;
-import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
 public class Button extends LastLayerWidget<Void> {
@@ -74,7 +73,6 @@ public class Button extends LastLayerWidget<Void> {
 		this.unhoveringAnimation.update();
 		this.pulseAnimation.update();
 		this.unpulseAnimation.update();
-		Log.debug(this.pulseOpacity);
 		this.calculateCoordinates();
 
 		this.renderRectangle();

@@ -38,6 +38,11 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 
 	private Boolean expanded = false;
 
+	private float hoveredOpacity = 0;
+	private boolean hovered = false;
+	private Animation hoveringAnimation = new Animation(0, 0, 0, null);
+	private Animation unhoveringAnimation = new Animation(0, 0, 0, null);
+
 	@Override
 	public void calculateCoordinates() {
 		this.id = categories.indexOf(this);
@@ -60,6 +65,12 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 			this.lowestPoint = this.getLowestExpandedPoint();
 		} else if (!this.expanded && !this.expandingAnimation.isRunning()) {
 			this.lowestPoint = this.getLowestUnexpandedPoint();
+		}
+
+		if (this.hovered && !this.hoveringAnimation.isRunning()) {
+			this.hoveredOpacity = ConfigGui.getMaxHoveredOpacity();
+		} else if (!this.hovered && !this.unhoveringAnimation.isRunning()) {
+			this.hoveredOpacity = 0;
 		}
 	}
 	
@@ -86,6 +97,11 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 		NanoVGRenderer.renderRectangle(this.minX, this.minY, this.maxX, this.maxY, ConfigGui.getBackgroundColor());
 	}
 
+	private void renderHoveredRectangle() {
+		int hoveredColor = (ConfigGui.getHoveredColor() & 0x00FFFFFF) | ((int) this.hoveredOpacity << 24);
+		NanoVGRenderer.renderRectangle(this.minX, this.minY, this.maxX, this.maxY, hoveredColor);
+	}
+
 	private void renderCategoryName() {
 		NanoVGRenderer.renderString(this.name, this.textX, this.textY, ConfigGui.getCategoryFontSize(), ConfigGui.getCategoryFontWeight(), ConfigGui.getTextColor());
 	}
@@ -103,9 +119,12 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	@Override
 	public void render() {
 		this.expandingAnimation.update();
+		this.hoveringAnimation.update();
+		this.unhoveringAnimation.update();
 
 		this.calculateCoordinates();
 		this.renderMainRectangle();
+		this.renderHoveredRectangle();
 		this.renderCategoryName();
 		this.renderAllFeatures();
 		this.renderIndicatorLine();
@@ -144,12 +163,16 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 
 	@Override
 	public void onHoverEnter() {
-		return;
+		this.hovered = true;
+		this.hoveringAnimation = new Animation(this.hoveredOpacity, ConfigGui.getMaxHoveredOpacity(), ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.hoveringAnimation.start();
 	}
 
 	@Override
 	public void onHoverExit() {
-		return;
+		this.hovered = false;
+		this.unhoveringAnimation = new Animation(this.hoveredOpacity, 0, ConfigGui.getHoverAnimationDuration(), value -> this.hoveredOpacity = value);
+		this.unhoveringAnimation.start();
 	}
 
 	@Override

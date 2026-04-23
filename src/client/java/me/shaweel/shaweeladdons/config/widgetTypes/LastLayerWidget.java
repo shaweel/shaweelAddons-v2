@@ -5,7 +5,7 @@ import me.shaweel.shaweeladdons.utils.Log;
 
 public abstract class LastLayerWidget<T> implements ConfigWidget<ExpandableConfigWidgetWithLastLayerWidgets, T> {
 	protected String name;
-	protected int index;
+	protected int id;
 	protected ExpandableConfigWidgetWithLastLayerWidgets parent;
 	protected T value;
 
@@ -15,23 +15,24 @@ public abstract class LastLayerWidget<T> implements ConfigWidget<ExpandableConfi
 		this.parent = parent;
 		this.value = (T) ConfigFile.readFromConfig(this.parent.getParent().getName() + "." + parent.getName() + "." + name + ".value", false);
 
-		Boolean alreadyExists = false;
-
-		for (ConfigWidget<?, ?> widget : this.parent.getChildren()) {
-			if (widget.getName().equals(this.name)) alreadyExists = true;
-		}
-
-		if (alreadyExists) {
-			Log.error(String.format("You've created a duplicate child of Feature %s, this is highly discouraged. EXPECT EVERYTHING TO BREAK!", this.parent.getName()));
-		}
-
 		this.parent.registerChild(this);
-		this.index = this.parent.getChildren().indexOf(this);
 	}
-	
-	public String getName() { return name; }
 
-	public T getValue() { return value; }
+	public void setId(int newId) {
+		String caller = Thread.currentThread().getStackTrace()[2].getClassName();
+		if (caller.equals(this.parent.getClass().getName())) {
+			Log.error("The id of a ConfigWidget can only be set by itself or it's parent.");
+			return;
+		}
+
+		this.id = newId;
+	}
+
+	public int getId() { return this.id; }
+
+	public String getName() { return this.name; }
+
+	public T getValue() { return this.value; }
 
 	public ExpandableConfigWidgetWithLastLayerWidgets getParent() { return parent; }
 }

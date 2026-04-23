@@ -102,7 +102,7 @@ public class NanoVGRenderer {
 		nvgRGBAf(r, g, b, a, nvgColor);
 	}
 
-	public static void drawRectangle(float minX, float minY, float maxX, float maxY, int color) {
+	public static void renderRectangle(float minX, float minY, float maxX, float maxY, int color) {
 		nvgShapeAntiAlias(vg, false);
 		final WidthHeight widthHeight = getWidthAndHeight(minX, minY, maxX, maxY);
 		final float width = widthHeight.width;
@@ -117,7 +117,23 @@ public class NanoVGRenderer {
 		nvgShapeAntiAlias(vg, true);
 	}
 
-	public static void drawString(String string, float x, float y, int size, int weight, int color) {
+	public static void renderRectangleOutline(float minX, float minY, float maxX, float maxY, float thickness, int color) {
+		nvgShapeAntiAlias(vg, false);
+		final WidthHeight widthHeight = getWidthAndHeight(minX, minY, maxX, maxY);
+		final float width = widthHeight.width;
+		final float height = widthHeight.height;
+		
+		applyColor(color);
+		nvgBeginPath(vg);
+		nvgRect(vg, minX, minY, width, height);
+		nvgStrokeWidth(vg, thickness);
+		nvgStrokeColor(vg, nvgColor);
+		nvgStroke(vg);
+		nvgClosePath(vg);
+		nvgShapeAntiAlias(vg, true);
+	}
+
+	public static void renderString(String string, float x, float y, int size, int weight, int color) {
 		if (!validWeights.contains(weight)) {
 			Log.error(String.format("Invalid weight: %s, valid weights: %s", weight, validWeights));
 			return;

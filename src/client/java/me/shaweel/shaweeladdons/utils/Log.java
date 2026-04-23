@@ -12,9 +12,9 @@ public class Log {
 	 * Prints a message with the [shaweelAddons] prefix to chat.
 	 * @param message the message to print
 	 */
-	public static void info(String message) {
+	public static void info(Object message) {
 		Minecraft.getInstance().execute(() -> {
-			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §7"+message), false);
+			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §7"+String.valueOf(message)), false);
 		});
 	}
 
@@ -22,10 +22,10 @@ public class Log {
 	 * Prints a message with the [shaweelAddons] [DEBUG] prefix to chat if debugMode is on.
 	 * @param message the message to print
 	 */
-	public static void debug(String message) {
+	public static void debug(Object message) {
 		if (!debugMode) return;
 		Minecraft.getInstance().execute(() -> {
-			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §e[DEBUG] §7"+message), false);
+			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §e[DEBUG] §7"+String.valueOf(message)), false);
 		});
 	}
 
@@ -33,9 +33,9 @@ public class Log {
 	 * Prints a message with the [shaweelAddons] [DEBUG] prefix to chat even if debugMode is off.
 	 * @param message the message to print
 	 */
-	public static void pseudoDebug(String message) {
+	public static void pseudoDebug(Object message) {
 		Minecraft.getInstance().execute(() -> {
-			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §e[DEBUG] §7"+message), false);
+			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §e[DEBUG] §7"+String.valueOf(message)), false);
 		});
 	}
 
@@ -43,9 +43,9 @@ public class Log {
 	 * Prints a message with the [shaweelAddons] [ERROR] prefix to chat.
 	 * @param message the message to print
 	 */
-	public static void error(String message) {
+	public static void error(Object message) {
 		Minecraft.getInstance().execute(() -> {
-			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §4[ERROR] §7"+message), false);
+			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §4[ERROR] §7"+String.valueOf(message)), false);
 		});
 	}
 
@@ -53,9 +53,9 @@ public class Log {
 	 * Prints a message with the [shaweelAddons] [WARN] prefix to chat.
 	 * @param message the message to print
 	 */
-	public static void warn(String message) {
+	public static void warn(Object message) {
 		Minecraft.getInstance().execute(() -> {
-			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §6[WARNING] §7"+message), false);
+			Minecraft.getInstance().player.displayClientMessage(Component.literal("§d[shaweelAddons] §6[WARNING] §7"+String.valueOf(message)), false);
 		});
 	}
 

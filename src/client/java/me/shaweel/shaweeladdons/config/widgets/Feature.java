@@ -87,22 +87,22 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 		NanoVGRenderer.applyScissor(this.minX, this.parent.getMinY(), this.maxX, this.parent.getLowestPoint() + 1);
 	}
 
-	private void drawMainRectangle() {
-		NanoVGRenderer.drawRectangle(this.minX, this.minY, this.maxX, this.maxY, ConfigGui.getBackgroundColor());
+	private void renderMainRectangle() {
+		NanoVGRenderer.renderRectangle(this.minX, this.minY, this.maxX, this.maxY, ConfigGui.getBackgroundColor());
 	}
 
-	private void drawToggledRectangle() {
+	private void renderToggledRectangle() {
 		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.toggledOpacity << 24);
-		NanoVGRenderer.drawRectangle(this.minX, this.minY, this.maxX, this.maxY, toggledColor);
+		NanoVGRenderer.renderRectangle(this.minX, this.minY, this.maxX, this.maxY, toggledColor);
 	}
 
-	private void drawHoveredRectangle() {
+	private void renderHoveredRectangle() {
 		int hoveredColor = (ConfigGui.getHoveredColor() & 0x00FFFFFF) | ((int) this.hoveredOpacity << 24);
-		NanoVGRenderer.drawRectangle(this.minX, this.minY, this.maxX, this.maxY, hoveredColor);
+		NanoVGRenderer.renderRectangle(this.minX, this.minY, this.maxX, this.maxY, hoveredColor);
 	}
 
-	private void drawFeatureName() {
-		NanoVGRenderer.drawString(this.name, this.textX, this.textY, ConfigGui.getFeatureFontSize(), ConfigGui.getFeatureFontWeight(), ConfigGui.getTextColor());
+	private void renderFeatureName() {
+		NanoVGRenderer.renderString(this.name, this.textX, this.textY, ConfigGui.getFeatureFontSize(), ConfigGui.getFeatureFontWeight(), ConfigGui.getTextColor());
 	}
 
 	private void renderAllChildren() {
@@ -120,10 +120,10 @@ public class Feature extends ExpandableConfigWidgetWithLastLayerWidgets {
 		this.calculateCoordinates();
 
 		this.applyLowestPointScissor();
-		this.drawMainRectangle();
-		this.drawToggledRectangle();
-		this.drawHoveredRectangle();
-		this.drawFeatureName();
+		this.renderMainRectangle();
+		this.renderToggledRectangle();
+		this.renderHoveredRectangle();
+		this.renderFeatureName();
 		this.renderAllChildren();
 
 		NanoVGRenderer.resetScissor();

@@ -10,7 +10,6 @@ import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
 import me.shaweel.shaweeladdons.config.widgetTypes.ExpandableConfigWidgetWithLastLayerWidgets;
 import me.shaweel.shaweeladdons.config.widgetTypes.LastLayerWidget;
 import me.shaweel.shaweeladdons.utils.Animation;
-import me.shaweel.shaweeladdons.utils.Log;
 import me.shaweel.shaweeladdons.utils.NanoVG.NanoVGRenderer;
 
 public class SwitchButton extends LastLayerWidget<Boolean> {
@@ -89,7 +88,7 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 	@Override
 	public float getContentWidth() {
 		return NanoVGRenderer.getStringWidth(this.name, ConfigGui.getOptionFontSize(), ConfigGui.getOptionFontWeight())
-		 + ConfigGui.getLastLayerWidgetXMargin() * 2
+		 + ConfigGui.getSwitchXMargin() * 2
 		 + ConfigGui.getSwitchWidth() 
 		 + ConfigGui.getSwitchTextPadding();
 	}
@@ -99,18 +98,18 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		this.minX = this.parent.getMinX();
 		this.maxX = this.parent.getMaxX();
 
-		this.minY = this.parent.getMaxY();
-
-		for (int i = 0; i < index; i++) {
-			this.minY += ConfigGui.getSwitchYMargin() * 2 + ConfigGui.getOptionFontSize();
+		if (this.id == 0) {
+			this.minY = this.parent.getMaxY();
+		} else {
+			this.minY = this.parent.getChildById(this.id - 1).getMaxY();
 		}
 
 		this.maxY = this.minY + ConfigGui.getSwitchYMargin() * 2 + ConfigGui.getOptionFontSize();
 
-		this.textX = this.minX + ConfigGui.getLastLayerWidgetXMargin();
-		this.textY = this.minY + ConfigGui.getLastLayerWidgetXMargin();
+		this.textX = this.minX + ConfigGui.getSwitchXMargin();
+		this.textY = this.minY + ConfigGui.getSwitchYMargin();
 
-		this.switchMaxX = this.maxX - ConfigGui.getLastLayerWidgetXMargin();
+		this.switchMaxX = this.maxX - ConfigGui.getSwitchXMargin();
 		this.switchMinX = this.switchMaxX - ConfigGui.getSwitchWidth();
 		this.switchMinY = this.minY + ConfigGui.getSwitchYMargin();
 		this.switchMaxY = this.maxY - ConfigGui.getSwitchYMargin();
@@ -138,39 +137,32 @@ public class SwitchButton extends LastLayerWidget<Boolean> {
 		}
 
 		this.squareMaxX = this.squareMinX + squareSideLength;
-
-		Log.debug("maxX="+this.maxX);
-		Log.debug("minX="+this.minX);
-		Log.debug("w="+(this.maxX-this.minX));
-		Log.debug("switchWidth="+ConfigGui.getSwitchWidth());
-		Log.debug("text width="+NanoVGRenderer.getStringWidth(this.name, ConfigGui.getOptionFontSize(), ConfigGui.getOptionFontWeight()));
-		Log.debug((this.switchMaxX - this.switchMinX) == ConfigGui.getSwitchWidth());
 	}
 
 	private void renderRectangle() {
-		NanoVGRenderer.drawRectangle(this.minX, this.minY, this.maxX, this.maxY, ConfigGui.getBackgroundColor());
+		NanoVGRenderer.renderRectangle(this.minX, this.minY, this.maxX, this.maxY, ConfigGui.getBackgroundColor());
 	}
 
 	private void renderName() {
-		NanoVGRenderer.drawString(this.name, this.textX, this.textY, ConfigGui.getOptionFontSize(), ConfigGui.getOptionFontWeight(), ConfigGui.getTextColor());
+		NanoVGRenderer.renderString(this.name, this.textX, this.textY, ConfigGui.getOptionFontSize(), ConfigGui.getOptionFontWeight(), ConfigGui.getTextColor());
 	}
 
 	private void renderHoveredSwitchRectangle() {
 		int hoveredColor = (ConfigGui.getHoveredColor() & 0x00FFFFFF) | ((int) this.hoveredOpacity << 24);
-		NanoVGRenderer.drawRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, hoveredColor);
+		NanoVGRenderer.renderRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, hoveredColor);
 	}
 
 	private void renderToggledSwitchRectangle() {
 		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.toggledOpacity << 24);
-		NanoVGRenderer.drawRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, toggledColor);
+		NanoVGRenderer.renderRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, toggledColor);
 	}
 
 	private void renderSwitchRectangle() {
-		NanoVGRenderer.drawRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, ConfigGui.getSecondaryBackgroundColor());
+		NanoVGRenderer.renderRectangle(this.switchMinX, this.switchMinY, this.switchMaxX, this.switchMaxY, ConfigGui.getSecondaryBackgroundColor());
 	}
 
 	private void renderSwitchSquare() {
-		NanoVGRenderer.drawRectangle(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, ConfigGui.getTextColor());
+		NanoVGRenderer.renderRectangle(this.squareMinX, this.squareMinY, this.squareMaxX, this.squareMaxY, ConfigGui.getTextColor());
 	}
 
 	@Override

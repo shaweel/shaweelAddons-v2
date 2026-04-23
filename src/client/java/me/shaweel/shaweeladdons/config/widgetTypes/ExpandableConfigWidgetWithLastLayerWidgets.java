@@ -56,6 +56,15 @@ public abstract class ExpandableConfigWidgetWithLastLayerWidgets implements Conf
 
 	public void registerChild(LastLayerWidget<?> child) {
 		this.children.add(child);
+		child.setId(this.children.size() - 1);
+	}
+
+	public LastLayerWidget<?> getChildById(int id) {
+		for (LastLayerWidget<?> child : this.children) {
+			if (child.getId() == id) return child;
+		}
+		
+		return null;
 	}
 
 	public List<LastLayerWidget<?>> getChildren() { return children; }

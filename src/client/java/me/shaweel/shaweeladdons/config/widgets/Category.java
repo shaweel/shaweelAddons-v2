@@ -82,22 +82,22 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 		this.index = categories.indexOf(this);
 	}
 
-	private void drawMainRectangle() {
-		NanoVGRenderer.drawRectangle(this.minX, this.minY, this.maxX, this.maxY, ConfigGui.getBackgroundColor());
+	private void renderMainRectangle() {
+		NanoVGRenderer.renderRectangle(this.minX, this.minY, this.maxX, this.maxY, ConfigGui.getBackgroundColor());
 	}
 
-	private void drawCategoryName() {
-		NanoVGRenderer.drawString(this.name, this.textX, this.textY, ConfigGui.getCategoryFontSize(), ConfigGui.getCategoryFontWeight(), ConfigGui.getTextColor());
+	private void renderCategoryName() {
+		NanoVGRenderer.renderString(this.name, this.textX, this.textY, ConfigGui.getCategoryFontSize(), ConfigGui.getCategoryFontWeight(), ConfigGui.getTextColor());
 	}
 
-	private void drawIndicatorLine() {
-		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), ConfigGui.getBackgroundColor());
+	private void renderIndicatorLine() {
+		NanoVGRenderer.renderRectangle(this.minX, this.lowestPoint, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), ConfigGui.getBackgroundColor());
 
 		int toggledColor = (ConfigGui.getPrimaryColor() & 0x00FFFFFF) | ((int) this.children.getLast().getToggledOpacity() << 24);
-		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), toggledColor);
+		NanoVGRenderer.renderRectangle(this.minX, this.lowestPoint, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), toggledColor);
 
 		int hoveredColor = (ConfigGui.getHoveredColor() & 0x00FFFFFF) | ((int) this.children.getLast().getHoveredOpacity() << 24);
-		NanoVGRenderer.drawRectangle(this.minX, this.lowestPoint, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), hoveredColor);
+		NanoVGRenderer.renderRectangle(this.minX, this.lowestPoint, this.maxX, this.lowestPoint + ConfigGui.getCategoryIndicatorLineSize(), hoveredColor);
 	}
 
 	@Override
@@ -105,10 +105,10 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 		this.expandingAnimation.update();
 
 		this.calculateCoordinates();
-		this.drawMainRectangle();
-		this.drawCategoryName();
+		this.renderMainRectangle();
+		this.renderCategoryName();
 		this.renderAllFeatures();
-		this.drawIndicatorLine();
+		this.renderIndicatorLine();
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class Category implements ConfigWidget<ConfigGui, Void>, ExpandableConfig
 	 * @param guiGraphics
 	 */
 	public static void renderAllCategories(GuiGraphics guiGraphics) {
-		NanoVGPiPRenderer.drawNanoVG(guiGraphics, () -> {
+		NanoVGPiPRenderer.renderNanoVG(guiGraphics, () -> {
 			for (Category category : categories) {
 				category.render();
 			}

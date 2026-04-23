@@ -3,6 +3,7 @@ package me.shaweel.shaweeladdons.config;
 import java.util.List;
 
 import me.shaweel.shaweeladdons.config.widgetTypes.ConfigWidget;
+import me.shaweel.shaweeladdons.config.widgets.Button;
 import me.shaweel.shaweeladdons.config.widgets.Category;
 import me.shaweel.shaweeladdons.config.widgets.Feature;
 import me.shaweel.shaweeladdons.config.widgets.SwitchButton;
@@ -27,21 +28,23 @@ public class ConfigGui extends Screen {
 	private static float CORNER_Y_OFFSET = 7; //The amount of space between the absolute left of the screen and the first Category
 
 	//Category
-	private static float CATEGORY_Y_MARGIN = 3.5f; //The amount of space between the Category's name and the top most and bottom most point of the Category
-	private static float CATEGORY_X_MARGIN = 2;  //The minimum amount of space between the Category's name and the left most and right most point of the Category
-	private static float CATEGORY_X_PADDING = 15; //The amount of space between individual Categories on the X axis
+	private static float CATEGORY_Y_MARGIN = 3.5f; //The amount of space between the Category's name and the Category's top most and bottom most point
+	private static float CATEGORY_X_MARGIN = 2; //The minimum amount of space between the Category's name and the Category's left most and right most point
+	private static float CATEGORY_X_PADDING = 15; //The amount of horizontal space between individual Categories
 
 	//Feature
-	private static float FEATURE_Y_MARGIN = 3; //The amount of space between the Feature's name and the top most and bottom most point of the Feature
-	private static float FEATURE_X_MARGIN = 2; //The minimum amount of space between the Feature's name and the left most and right most point of the Feature
+	private static float FEATURE_Y_MARGIN = 3; //The amount of space between the Feature's name and the Feature's top most and bottom most point
+	private static float FEATURE_X_MARGIN = 2; //The minimum amount of space between the Feature's name and the Feature's left most and right most point
 
-	//LastLayerWidget
-	private static float LAST_LAYER_WIDGET_X_MARGIN = 2; //The amount of space between the LastLayerWidget's content and the left most and right most point of the LastLayerWidget
+	//SwitchButton
+	private static float SWITCH_SQUARE_PADDING = 1; //The amount of space between the actual switch's rectangle and the square inside that rectangle
+	private static float SWITCH_TEXT_PADDING = 2; //The minimum amount of space between the SwitchButton's name and the actual clickable switch next to the name
+	private static float SWITCH_Y_MARGIN = 1.5f; //The amount of space between the SwitchButton's name and the SwitchButton container(row inside the Feature)'s top most and bottom most point
+	private static float SWITCH_X_MARGIN = 2; //The amount of space between the SwitchButton's content(name and the clickable switch itself) and the SwitchButton container(row inside the Feature)'s left most and right most point
 
-	//Switch
-	private static float SWITCH_SQUARE_PADDING = 1; //The amount of space between the Switch's rectangle and the square inside said rectangle
-	private static float SWITCH_TEXT_PADDING = 2; //The minimum amount of space between the Switch's name and the actual switch next to the name
-	private static float SWITCH_Y_MARGIN = 1.5f; //The amount of space between the Switch's name and the top most and bottom most point of the Switch
+	//Button
+	private static float BUTTON_Y_MARGIN = 1; //The amount of space between the actual button and the button container(row inside the Feature)'s top most and bottom most point
+	private static float BUTTON_X_MARGIN = 2; //The amount of space between the actual button and the button container(row inside the Feature)'s left most and right most point
 
 	//----------Fonts----------
 	private static int CATEGORY_FONT_SIZE = 12;
@@ -90,7 +93,7 @@ public class ConfigGui extends Screen {
 		Category dungeonsCategory = new Category("Dungeons", this);
 		Category idekCategory = new Category("idek atp", this);
 
-		Feature clickGuiFeature = new Feature("Click GUI", generalCategory);
+		new Feature("Click GUI", generalCategory);
 		Feature placeholderFeature = new Feature("Placeholder", generalCategory);
 
 		new Feature("idk", dungeonsCategory);
@@ -107,12 +110,12 @@ public class ConfigGui extends Screen {
 		new SwitchButton("Test6", placeholderFeature);
 		new SwitchButton("Test7", placeholderFeature);
 		new SwitchButton("Test8", placeholderFeature);
-		new SwitchButton("Test9", placeholderFeature);
-		new SwitchButton("Test11", placeholderFeature);
-		new SwitchButton("Test12", placeholderFeature);
-		new SwitchButton("Test13", placeholderFeature);
-		new SwitchButton("Test14", placeholderFeature);
-		new SwitchButton("jknksjdfoisdfjoisdjfiodssadfsdf", clickGuiFeature);
+		new Button("Test9", placeholderFeature);
+		new Button("Test11", placeholderFeature);
+		new Button("Test12", placeholderFeature);
+		new Button("Test13", placeholderFeature);
+		new Button("Test14", placeholderFeature);
+		new Button("oogaboogaomaousdhuojasdo", placeholderFeature);
 	}
 
 	@Override
@@ -177,13 +180,15 @@ public class ConfigGui extends Screen {
 	public static float getFeatureYMargin() { return FEATURE_Y_MARGIN; }
 	public static float getFeatureXMargin() { return FEATURE_X_MARGIN; }
 
-	//LastLayerWidget
-	public static float getLastLayerWidgetXMargin() { return LAST_LAYER_WIDGET_X_MARGIN; }
-
-	//Switch
+	//SwitchButton
 	public static float getSwitchSquarePadding() { return SWITCH_SQUARE_PADDING; }
 	public static float getSwitchTextPadding() { return SWITCH_TEXT_PADDING; }
 	public static float getSwitchYMargin() { return SWITCH_Y_MARGIN; }
+	public static float getSwitchXMargin() { return SWITCH_X_MARGIN; }
+
+	//Button
+	public static float getButtonYMargin() { return BUTTON_Y_MARGIN; }
+	public static float getButtonXMargin() { return BUTTON_X_MARGIN; }
 
 	//----------Fonts----------
 	public static int getCategoryFontSize() { return CATEGORY_FONT_SIZE; }

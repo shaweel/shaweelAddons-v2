@@ -101,7 +101,7 @@ public class NanoVGPiPRenderer extends PictureInPictureRenderer<NanoVGPiPRendere
 		public void render() { content.run(); }
 	}
 
-	public static void drawNanoVG(GuiGraphics guiGraphics, Runnable content) {		
+	public static void renderNanoVG(GuiGraphics guiGraphics, Runnable content) {		
 		final int width = guiGraphics.guiWidth();
 		final int height = guiGraphics.guiHeight();
 
